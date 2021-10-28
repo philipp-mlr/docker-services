@@ -55,12 +55,11 @@ services:
       - web
     environment:
       AUTH_TYPE: Basic
-      USERNAME: admin
-      PASSWORD: T5VOdQCg5vzmWqP94V0oxxXg9vaUwxdv4qu
       SERVER_NAMES: philipp.software
       LOCATION: /webdav
     volumes:
       - /home/webdav/data:/var/lib/dav
+      - /home/webdav/user.passwd:/user.passwd
     labels:
       #### Labels define the behavior and rules of the traefik proxy for this container ####
       - "traefik.enable=true" # <== Enable traefik to proxy this container
