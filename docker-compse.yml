@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  ################################################
+  ####        Traefik Proxy Setup           #####
+  ###############################################
+  traefik:
+    image: traefik:latest
+    restart: always
+    container_name: traefik
+    ports:
+      - "80:80" # <== http
+      - "8080:8080" # <== :8080 is where the dashboard runs on
+      - "443:443" # <== https
+    command:
+    #### These are the CLI commands that will configure Traefik and tell it how to work! ####
+      ## API Settings - https://docs.traefik.io/operations/api/, endpoints - https://docs.traefik.io/operations/api/#endpoints ##
+      - --api.insecure=true # <== Enabling insecure api, NOT RECOMMENDED FOR PRODUCTION
+      - --api.dashboard=true # <== Enabling the dashboard to view services, middlewares, routers, etc...
+      - --api.debug=true # <== Enabling additional endpoints for debugging and profiling
+      ## Log Settings (options: ERROR, DEBUG, PANIC, FATAL, WARN, INFO) - https://docs.traefik.io/observability/logs/ ##
+      - --log.level=DEBUG # <== Setting the level of the logs from traefik
+      ## Provider Settings - https://docs.traefik.io/providers/docker/#provider-configuration ##
+      - --providers.docker=true # <== Enabling docker as the provider for traefik
+      - --providers.docker.exposedbydefault=false # <== Don't expose every container to traefik, only expose enabled ones
+      - --providers.file.filename=/dynamic.yml # <== Referring to a dynamic configuration file
+      - --providers.docker.network=web # <== Operate on the docker network named web
+      ## Entrypoints Settings - https://docs.traefik.io/routing/entrypoints/#configuration ##
+      - --entrypoints.web.address=:80 # <== Defining an entrypoint for port :80 named web
+      - --entrypoints.web-secured.address=:443 # <== Defining an entrypoint for https on port :443 named web-secured
+      ## Certificate Settings (Let's Encrypt) -  https://docs.traefik.io/https/acme/#configuration-examples ##
+      - --certificatesresolvers.mytlschallenge.acme.tlschallenge=true # <== Enable TLS-ALPN-01 to generate and renew ACME certs
+      - --certificatesresolvers.mytlschallenge.acme.email=philipp.mue@protonmail.com # <== Setting email for certs
+      - --certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json # <== Defining acme file to store cert information
+    volumes:
+      - ./letsencrypt:/letsencrypt # <== Volume for certs (TLS)
+      - /var/run/docker.sock:/var/run/docker.sock # <== Volume for docker admin
+      - ./dynamic.yml:/dynamic.yml # <== Volume for dynamic conf file, **ref: line 27
+    networks:
+      - web # <== Placing traefik on the network named web, to access containers on this network
+    labels:
+    #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik on itself to view dashboard and assign subdomain to view it
+      - "traefik.http.routers.api.rule=Host(`monitor.philipp.software`)" # <== Setting the domain for the dashboard
+      - "traefik.http.routers.api.service=api@internal" # <== Enabling the api to be a service to access
+
+  ################################################
+  ####         Site Setup Container         #####
+  ##############################################
+  webdav:
+    image: bytemark/webdav:latest
+    container_name: webdav
+    restart: always
+    networks:
+      - web
+    environment:
+      AUTH_TYPE: Basic
+      USERNAME: admin
+      PASSWORD: T5VOdQCg5vzmWqP94V0oxxXg9vaUwxdv4qu
+      SERVER_NAMES: philipp.software
+      LOCATION: /webdav
+    volumes:
+      - /home/webdav/data:/var/lib/dav
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.webdav-web.rule=Host(`philipp.software`)" # <== Your Domain Name goes here for the http rule
+      - "traefik.http.routers.webdav-web.entrypoints=web" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.webdav-web.middlewares=redirect@file" # <== This is a middleware to redirect to https
+      - "traefik.http.routers.webdav-secured.rule=Host(`philipp.software`)" # <== Your Domain Name for the https rule 
+      - "traefik.http.routers.webdav-secured.entrypoints=web-secured" # <== Defining entrypoint for https, **ref: line 31
+      - "traefik.http.routers.webdav-secured.tls.certresolver=mytlschallenge" # <== Defining certsresolvers for https
+      
+networks:
+  web:
+    external: true
+  backend:
+    external: false
+    
+volumes:
+  webdav:
+    external: true
