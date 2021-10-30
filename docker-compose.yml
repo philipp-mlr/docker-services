@@ -15,7 +15,7 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
       - "./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml"
-      - "./traefik/letsencrypt:/etc/traefik/letsencrypt/acme.json"
+      - "./traefik/letsencrypt:/letsencrypt/acme.json"
     labels:
       - traefik.enable=true
       - traefik.http.routers.dashboard.entrypoints=websecure

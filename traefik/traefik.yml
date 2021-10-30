@@ -33,6 +33,6 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: "philipp.mue@protonmail.com"
-      storage: /etc/traefik/letsencrypt/acme.json
+      storage: /letsencrypt/acme.json
       httpChallenge:
         entryPoint: web
