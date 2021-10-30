@@ -36,8 +36,8 @@ services:
       LOCATION: /
       SERVER_NAMES: philipp.software,www.philipp.software
     volumes:
-      - ./webdav-data:/var/lib/dav
-      - ./user.passwd:/user.passwd
+      - ./webdav/data:/var/lib/dav
+      - ./webdav/user.passwd:/user.passwd
     labels:
       - traefik.enable=true
       - traefik.http.routers.webdav.entrypoints=websecure
