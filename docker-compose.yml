@@ -8,15 +8,15 @@ services:
     networks:
       - web
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - 80:80
+      - 443:443
+      - 8080:8080
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml"
-      - "./traefik/letsencrypt:/etc/traefik/letsencrypt/"
-      - "./traefik/user.passwd:/etc/traefik/user.passwd"
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
+      - ./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml
+      - ./traefik/letsencrypt:/etc/traefik/letsencrypt/
+      - ./traefik/user.passwd:/etc/traefik/user.passwd
     labels:
       - traefik.enable=true
       - traefik.http.routers.monitor.entrypoints=websecure
