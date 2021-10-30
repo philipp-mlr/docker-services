@@ -13,8 +13,8 @@ services:
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./treafik/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "./treafik/config.yml:/etc/traefik/dynamic_conf/config.yml"
+      - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml"
       - "./traefik/acme.json:/etc/traefik/acme.json"
     labels:
       - traefik.enable=true
