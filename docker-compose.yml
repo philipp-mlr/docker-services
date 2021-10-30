@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  traefik:
+    image: traefik:latest
+    restart: always
+    container_name: traefik
+    networks:
+      - web
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./treafik/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "./treafik/config.yml:/etc/traefik/dynamic_conf/config.yml"
+      - "./traefik/acme.json:/etc/traefik/acme.json"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dashboard.entrypoints=websecure
+      - traefik.http.routers.dashboard.rule=Host(`monitor.philipp.software`)
+      - traefik.http.routers.dashboard.service=api@internal
+      - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+
+  webdav:
+    image: bytemark/webdav
+    container_name: webdav
+    restart: always
+    ports:
+      - "1111:1111"
+    networks:
+      - web
+    environment:
+      AUTH_TYPE: Basic
+      LOCATION: /
+      SERVER_NAMES: philipp.software,www.philipp.software
+    volumes:
+      - ./webdav-data:/var/lib/dav
+      - ./user.passwd:/user.passwd
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.webdav.entrypoints=websecure
+      - traefik.http.routers.webdav.rule=(host(`webdav.philipp.software`) && PathPrefix(`/`))
+      - traefik.http.routers.webdav.tls.certresolver=letsencrypt
+
+networks:
+  web:
+    external: true
