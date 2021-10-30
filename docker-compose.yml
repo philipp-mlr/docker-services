@@ -16,12 +16,14 @@ services:
       - "./traefik/traefik.yml:/etc/traefik/traefik.yml:ro"
       - "./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml"
       - "./traefik/letsencrypt:/etc/traefik/letsencrypt/"
+      - "./traefik/user.passwd:/etc/traefik/user.passwd"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
-      - traefik.http.routers.dashboard.service=api@internal
-      - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
+      - traefik.http.routers.monitor.entrypoints=websecure
+      - traefik.http.routers.monitor.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
+      - traefik.http.routers.monitor.service=api@internal
+      - traefik.http.routers.monitor.tls.certresolver=letsencrypt
+      - traefik.http.routers.monitor.middlewares=monitor-auth
 
   webdav:
     image: bytemark/webdav

@@ -1,5 +1,5 @@
 http:
   middlewares:
-    dashboard-auth:
-      basicAuth:
+    monitor-auth:
+      digestAuth:
         usersFile: "/etc/traefik/user.passwd"
