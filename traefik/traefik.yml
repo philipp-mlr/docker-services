@@ -2,7 +2,7 @@ global:
   checkNewVersion: true
 
 log:
-  level: DEBUG
+  level: ERROR
 
 api:
   insecure: true
