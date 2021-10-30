@@ -19,7 +19,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.dashboard.entrypoints=websecure
-      - traefik.http.routers.dashboard.rule=Host(`monitor.philipp.software`)
+      - traefik.http.routers.dashboard.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
       - traefik.http.routers.dashboard.service=api@internal
       - traefik.http.routers.dashboard.tls.certresolver=letsencrypt
 
