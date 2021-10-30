@@ -1,2 +1,2 @@
-webdav/data*
-traefik/acme.json
+webdav/data/*
+traefik/letsencrypt

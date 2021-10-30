@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.monitor.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
       - traefik.http.routers.monitor.service=api@internal
       - traefik.http.routers.monitor.tls.certresolver=letsencrypt
-      - traefik.http.routers.monitor.middlewares=monitor-auth
+      - traefik.http.routers.monitor.middlewares=monitor-auth@file
 
   webdav:
     image: bytemark/webdav
