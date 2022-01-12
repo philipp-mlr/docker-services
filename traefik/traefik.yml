@@ -2,7 +2,7 @@ global:
   checkNewVersion: true
 
 log:
-  level: ERROR
+  level: debug
 
 api:
   insecure: false
@@ -28,11 +28,3 @@ providers:
   file:
     directory: /etc/traefik/dynamic_conf
     watch: true
-
-certificatesResolvers:
-  letsencrypt:
-    acme:
-      email: "philipp.mue@protonmail.com"
-      storage: /etc/traefik/letsencrypt/acme.json
-      httpChallenge:
-        entryPoint: web

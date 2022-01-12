@@ -14,16 +14,20 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml
+      - ./traefik/config:/etc/traefik/dynamic_conf/
       - ./traefik/letsencrypt:/etc/traefik/letsencrypt/
+      - /etc/ssl/philipp.software/:/etc/traefik/certs/
       - ./traefik/user.passwd:/etc/traefik/user.passwd
     labels:
       - traefik.enable=true
       - traefik.http.routers.monitor.entrypoints=websecure
       - traefik.http.routers.monitor.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
       - traefik.http.routers.monitor.service=api@internal
-      - traefik.http.routers.monitor.tls.certresolver=letsencrypt
+      - traefik.http.routers.monitor.tls=true      
       - traefik.http.routers.monitor.middlewares=monitor-auth@file
+      - traefik.http.routers.home.entrypoints=websecure
+      - traefik.http.routers.home.rule=(host(`philipp.software`) && PathPrefix(`/`))
+      - traefik.http.routers.home.tls=true     
 
   webdav:
     image: bytemark/webdav
@@ -44,7 +48,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.webdav.entrypoints=websecure
       - traefik.http.routers.webdav.rule=(host(`webdav.philipp.software`) && PathPrefix(`/`))
-      - traefik.http.routers.webdav.tls.certresolver=letsencrypt
+      - traefik.http.routers.webdav.tls=true
 
 networks:
   web:
