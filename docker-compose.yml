@@ -22,12 +22,9 @@ services:
       - traefik.enable=true
       - traefik.http.routers.monitor.entrypoints=websecure
       - traefik.http.routers.monitor.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
+      - traefik.http.routers.monitor.middlewares=monitor-auth@file
       - traefik.http.routers.monitor.service=api@internal
       - traefik.http.routers.monitor.tls=true      
-      - traefik.http.routers.monitor.middlewares=monitor-auth@file
-      - traefik.http.routers.home.entrypoints=websecure
-      - traefik.http.routers.home.rule=(host(`philipp.software`) && PathPrefix(`/`))
-      - traefik.http.routers.home.tls=true     
 
   webdav:
     image: bytemark/webdav
