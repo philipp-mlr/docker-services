@@ -11,7 +11,7 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
+#      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /etc/ssl/philipp.software/:/etc/traefik/certs/:ro
@@ -64,26 +64,31 @@ services:
   portainer-ce:
     image: portainer/portainer-ce:latest
     container_name: portainer
-    depends_on:
-      - traefik
+#    depends_on:
+#      - traefik
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
       - './portainer/data:/data'
     restart: always
-    ports:
-      - 9000:9000
     networks:
       - internal
     security_opt:
       - 'no-new-privileges:true'
     labels:
     - traefik.enable=true
-    - traefik.http.routers.portainer.entrypoints=websecure
-    - traefik.http.routers.portainer.rule=(host(`portainer.philipp.software`) && PathPrefix(`/`))
-    - traefik.http.routers.portainer.middlewares=portainer-auth@file
-    - traefik.http.services.portainer.loadbalancer.server.port=9000
-    - traefik.http.routers.portainer.service=portainer
-    - traefik.http.routers.portainer.tls=true
+    # Frontend
+    - traefik.http.routers.portainer-frontend.entrypoints=websecure
+    - traefik.http.routers.portainer-frontend.rule=Host(`portainer.philipp.software`)
+    - traefik.http.services.portainer-frontend.loadbalancer.server.port=9000
+    - traefik.http.routers.portainer-frontend.service=portainer-frontend
+    - traefik.http.routers.portainer-frontend.tls=true
+
+    # Edge
+    - traefik.http.routers.portainer-edge.rule=Host(`edge.philipp.software`)
+    - traefik.http.routers.portainer-edge.entrypoints=websecure
+    - traefik.http.services.portainer-edge.loadbalancer.server.port=8000
+    - traefik.http.routers.portainer-edge.service=portainer-edge
+    - traefik.http.routers.portainer-edge.tls=true
 
 networks:
   web:

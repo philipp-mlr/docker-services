@@ -21,7 +21,7 @@ entryPoints:
     address: :443
   
   minecraft-tcp:
-    address: :25565/tcp
+    address: :
 
   minecraft-udp:
     address: :19132/udp
