@@ -2,7 +2,7 @@ global:
   checkNewVersion: true
 
 log:
-  level: ERROR
+  level: DEBUG
 
 api:
   insecure: false
@@ -19,6 +19,12 @@ entryPoints:
 
   websecure:
     address: :443
+  
+  minecraft-tcp:
+    address: :25565/tcp
+
+  minecraft-udp:
+    address: :19132/udp
 
 providers:
   docker:
@@ -28,11 +34,3 @@ providers:
   file:
     directory: /etc/traefik/dynamic_conf
     watch: true
-
-certificatesResolvers:
-  letsencrypt:
-    acme:
-      email: "philipp.mue@protonmail.com"
-      storage: /etc/traefik/letsencrypt/acme.json
-      httpChallenge:
-        entryPoint: web

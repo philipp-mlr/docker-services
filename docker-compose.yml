@@ -7,45 +7,90 @@ services:
     container_name: traefik
     networks:
       - web
+      - internal
     ports:
       - 80:80
       - 443:443
-      - 8080:8080
+#      - 8080:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/ssl/philipp.software/:/etc/traefik/certs/:ro
       - ./traefik/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./traefik/config.yml:/etc/traefik/dynamic_conf/config.yml
-      - ./traefik/letsencrypt:/etc/traefik/letsencrypt/
-      - ./traefik/user.passwd:/etc/traefik/user.passwd
+      - ./traefik/config:/etc/traefik/dynamic_conf/:ro
+      - ./traefik/user.passwd:/etc/traefik/middleware/user.passwd-traefik/:ro
+      - ./portainer/user.passwd:/etc/traefik/middleware/user.passwd-portainer:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.monitor.entrypoints=websecure
       - traefik.http.routers.monitor.rule=(host(`monitor.philipp.software`) && PathPrefix(`/`))
-      - traefik.http.routers.monitor.service=api@internal
-      - traefik.http.routers.monitor.tls.certresolver=letsencrypt
       - traefik.http.routers.monitor.middlewares=monitor-auth@file
+      - traefik.http.routers.monitor.service=api@internal
+      - traefik.http.routers.monitor.tls=true      
 
   webdav:
-    image: bytemark/webdav
+    image: bytemark/webdav:latest
     container_name: webdav
     restart: always
-    ports:
-      - "1111:1111"
+    depends_on: 
+      - traefik
     networks:
-      - web
+      - internal
     environment:
       AUTH_TYPE: Basic
       LOCATION: /
       SERVER_NAMES: philipp.software,www.philipp.software
     volumes:
       - ./webdav/data:/var/lib/dav
-      - ./webdav/user.passwd:/user.passwd
+      - ./webdav/user.passwd:/user.passwd:ro
     labels:
       - traefik.enable=true
       - traefik.http.routers.webdav.entrypoints=websecure
       - traefik.http.routers.webdav.rule=(host(`webdav.philipp.software`) && PathPrefix(`/`))
-      - traefik.http.routers.webdav.tls.certresolver=letsencrypt
+      - traefik.http.routers.webdav.tls=true
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    restart: always
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+      - WATCHTOWER_POLL_INTERVAL=43200
+ 
+  portainer-ce:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+#    depends_on:
+#      - traefik
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - './portainer/data:/data'
+    restart: always
+    networks:
+      - internal
+    security_opt:
+      - 'no-new-privileges:true'
+    labels:
+    - traefik.enable=true
+    # Frontend
+    - traefik.http.routers.portainer-frontend.entrypoints=websecure
+    - traefik.http.routers.portainer-frontend.rule=Host(`portainer.philipp.software`)
+    - traefik.http.services.portainer-frontend.loadbalancer.server.port=9000
+    - traefik.http.routers.portainer-frontend.service=portainer-frontend
+    - traefik.http.routers.portainer-frontend.tls=true
+
+    # Edge
+    - traefik.http.routers.portainer-edge.rule=Host(`edge.philipp.software`)
+    - traefik.http.routers.portainer-edge.entrypoints=websecure
+    - traefik.http.services.portainer-edge.loadbalancer.server.port=8000
+    - traefik.http.routers.portainer-edge.service=portainer-edge
+    - traefik.http.routers.portainer-edge.tls=true
 
 networks:
   web:
     external: true
+  internal:
