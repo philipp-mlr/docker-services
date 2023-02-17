@@ -1,5 +1,0 @@
-http:  
-  middlewares:
-    monitor-auth:
-      digestAuth:
-        usersFile: /etc/traefik/middleware/user.passwd-traefik
