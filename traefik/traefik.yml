@@ -16,15 +16,8 @@ entryPoints:
         entryPoint:
           to: websecure
           scheme: https
-
   websecure:
     address: :443
-  
-  minecraft-tcp:
-    address: :25565/tcp
-
-  minecraft-udp:
-    address: :19132/udp
 
 providers:
   docker:
