@@ -24,3 +24,6 @@ providers:
     endpoint: unix:///var/run/docker.sock
     network: web
     exposedByDefault: false
+  file:
+    directory: /etc/traefik/dynamic_conf
+    watch: true
