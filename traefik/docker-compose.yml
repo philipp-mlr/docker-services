@@ -26,7 +26,7 @@ services:
       - traefik.http.routers.monitor.middlewares=monitor-auth
       - traefik.http.routers.monitor.service=api@internal
       - traefik.http.routers.monitor.tls=true
-	    - traefik.http.middlewares.monitor-auth.digestauth.users=admin:traefik:06bd757ffdc84081be9217ccc2c015be
+      - traefik.http.middlewares.monitor-auth.digestauth.users=admin:traefik:06bd757ffdc84081be9217ccc2c015be
 
 networks:
   internal:
