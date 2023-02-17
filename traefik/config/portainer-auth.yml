@@ -1,5 +1,0 @@
-http:
-  middlewares:
-    portainer-auth:
-      digestAuth:
-        usersFile: /etc/traefik/middleware/user.passwd-portainer
