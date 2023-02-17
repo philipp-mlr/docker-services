@@ -1,0 +1,77 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: nextcloud_db
+    volumes:
+      - nextcloud-db:/var/lib/mysql
+    networks:
+      - internal
+    restart: always
+    environment:
+      TZ: UTC
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: /run/secrets/db_password
+
+  redis:
+    image: redis:latest
+    container_name: nextcloud_redis
+    restart: always
+    networks:
+      - internal
+    volumes:
+      - nextcloud-redis:/var/lib/redis
+
+  nextcloud:
+    depends_on:
+      - redis
+      - db
+    image: nextcloud:stable 
+    container_name: nextcloud
+    volumes:
+      - nextcloud-data:/var/www/html
+    networks:
+      - web
+      - internal
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.middlewares=nextcloud,nextcloud_redirect
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.rule=Host(`cloud.philipp.software`)
+      - traefik.http.middlewares.nextcloud.headers.customFrameOptionsValue=ALLOW-FROM https://philipp.sofware
+      - traefik.http.middlewares.nextcloud.headers.contentSecurityPolicy=frame-ancestors 'self' philipp.software *.philipp.software
+      - traefik.http.middlewares.nextcloud.headers.stsSeconds=155520011
+      - traefik.http.middlewares.nextcloud.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.nextcloud.headers.stsPreload=true
+      - traefik.http.middlewares.nextcloud.headers.customresponseheaders.X-Frame-Options=SAMEORIGIN
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.permanent=true
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.replacement=https://$${1}/remote.php/dav/
+    environment:
+      REDIS_HOST: redis
+      MYSQL_HOST: db:3306
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: /run/secrets/db_password
+      TRUSTED_PROXIES: 172.24.0.4
+
+networks:
+  internal:
+  web:
+    external: true
+
+volumes:
+  nextcloud-data:
+  nextcloud-db:
+  nextcloud-redis:
+
+secrets:
+   db_password:
+     file: db_password.txt
+   db_root_password:
+     file: db_root_password.txt
