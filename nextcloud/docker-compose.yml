@@ -61,7 +61,8 @@ services:
       TRUSTED_PROXIES: 172.24.0.4
 
 networks:
-  internal:
+  traefik:
+    external: true
   web:
     external: true
 

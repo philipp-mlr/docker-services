@@ -28,7 +28,8 @@ services:
     - traefik.http.routers.portainer-edge.tls=true
 
 networks:
-  internal:
+  traefik:
+    external: true
   
 volumes:
   portainer-data:

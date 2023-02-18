@@ -29,6 +29,7 @@ services:
       - traefik.http.middlewares.monitor-auth.digestauth.users=admin:traefik:06bd757ffdc84081be9217ccc2c015be
 
 networks:
-  internal:
+  traefik:
+    external: true
   web:
     external: true
