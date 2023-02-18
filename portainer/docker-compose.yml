@@ -8,7 +8,7 @@ services:
       - portainer-data:/data
     restart: always
     networks:
-      - internal
+      - web
     security_opt:
       - 'no-new-privileges:true'
     labels:
@@ -28,7 +28,7 @@ services:
     - traefik.http.routers.portainer-edge.tls=true
 
 networks:
-  traefik:
+  web:
     external: true
   
 volumes:

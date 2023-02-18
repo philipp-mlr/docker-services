@@ -7,7 +7,7 @@ services:
     volumes:
       - nextcloud-db:/var/lib/mysql
     networks:
-      - internal
+      - nextcloud
     restart: always
     environment:
       TZ: UTC
@@ -21,7 +21,7 @@ services:
     container_name: nextcloud_redis
     restart: always
     networks:
-      - internal
+      - nextcloud
     volumes:
       - nextcloud-redis:/var/lib/redis
 
@@ -35,7 +35,7 @@ services:
       - nextcloud-data:/var/www/html
     networks:
       - web
-      - internal
+      - nextcloud
     restart: always
     labels:
       - traefik.enable=true
@@ -61,8 +61,7 @@ services:
       TRUSTED_PROXIES: 172.24.0.4
 
 networks:
-  traefik:
-    external: true
+  nextcloud:
   web:
     external: true
 

@@ -7,7 +7,6 @@ services:
     container_name: traefik
     networks:
       - web
-      - internal
     ports:
       - 80:80
       - 443:443
@@ -29,7 +28,5 @@ services:
       - traefik.http.middlewares.monitor-auth.digestauth.users=admin:traefik:06bd757ffdc84081be9217ccc2c015be
 
 networks:
-  traefik:
-    external: true
   web:
     external: true
