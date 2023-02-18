@@ -42,7 +42,7 @@ services:
       - traefik.http.routers.nextcloud.middlewares=nextcloud,nextcloud_redirect
       - traefik.http.routers.nextcloud.entrypoints=websecure
       - traefik.http.routers.nextcloud.tls=true
-      - traefik.http.routers.nextcloud.rule=Host(`cloud.philipp.software`)
+      - traefik.http.routers.nextcloud.rule=Host(`nextcloud.philipp.software`)
       - traefik.http.middlewares.nextcloud.headers.customFrameOptionsValue=ALLOW-FROM https://philipp.software
       - traefik.http.middlewares.nextcloud.headers.contentSecurityPolicy=frame-ancestors 'self' philipp.software *.philipp.software
       - traefik.http.middlewares.nextcloud.headers.stsSeconds=155520011
