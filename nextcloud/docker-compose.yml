@@ -29,7 +29,7 @@ services:
     depends_on:
       - redis
       - db
-    image: nextcloud:stable 
+    image: nextcloud:latest
     container_name: nextcloud
     volumes:
       - nextcloud-data:/var/www/html
@@ -58,7 +58,8 @@ services:
       MYSQL_DATABASE: db
       MYSQL_USER: admin
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      TRUSTED_PROXIES: 172.24.0.4
+      TRUSTED_PROXIES: ${TRAEFIK_IP}
+      OVERWRITEPROTOCOL: https
 
 networks:
   nextcloud:
