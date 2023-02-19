@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+   bridge:
+      image: shenxn/protonmail-bridge:latest
+      container_name: protonmail_bridge
+      volumes:
+         - protonmail-bridge:/root
+      networks:
+         - web
+      restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.protonmail_bridge_smtp.entrypoints=smtp
+      - traefik.http.routers.protonmail_bridge_smtp.tls=true
+      - traefik.http.routers.protonmail_bridge_smtp.rule=Host(`smtp.philipp.software`)
+      - traefik.http.routers.protonmail_bridge_imap.entrypoints=imap
+      - traefik.http.routers.protonmail_bridge_imap.tls=true
+      - traefik.http.routers.protonmail_bridge_imap.rule=Host(`imap.philipp.software`)
+
+networks:
+  web:
+    external: true
+    
+volumes:
+   protonmail-bridge:

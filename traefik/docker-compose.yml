@@ -10,6 +10,8 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 25:25
+      - 143:143
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       # SSL certificates

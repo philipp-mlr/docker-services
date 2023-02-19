@@ -18,6 +18,10 @@ entryPoints:
           scheme: https
   websecure:
     address: :443
+  imap:
+    address: 143
+  smtp:
+    address: 25
 
 providers:
   docker:
