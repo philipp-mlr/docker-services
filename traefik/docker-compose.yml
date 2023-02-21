@@ -10,8 +10,6 @@ services:
     ports:
       - 80:80
       - 443:443
-      - 25:25
-      - 143:143
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       # SSL certificates
@@ -20,6 +18,7 @@ services:
       - ./traefik.yml:/etc/traefik/traefik.yml:ro
       # other dynamic configuration
       - ./dynamic_conf:/etc/traefik/dynamic_conf/:ro
+      - ./acme.json:/acme.json
     labels:
       - traefik.enable=true
       - traefik.http.routers.monitor.entrypoints=websecure
