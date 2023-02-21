@@ -24,15 +24,16 @@ services:
       - nextcloud
     volumes:
       - nextcloud-redis:/var/lib/redis
-
   nextcloud:
     depends_on:
       - redis
       - db
+
     image: nextcloud:latest
     container_name: nextcloud
     volumes:
       - nextcloud-data:/var/www/html
+      - /home/philipp/paperless/consume:/usr/src/paperless/consume #has to belong to www-data:www-data
     networks:
       - web
       - nextcloud
