@@ -349,7 +349,8 @@ services:
   # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
   # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
   # - accept enrollment: https://app.crowdsec.net/instances
-  # - updated acquis.yml
+  # - update acquis.yml in /home/USER/docker/appdata/crowdsec/config/acquis.yaml
+  # - move custom_whitelists.yaml to /home/USER/docker/appdata/crowdsec/config/parsers/s02-enrich/ 
   # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
   crowdsec:
     <<: *common-keys-core # See EXTENSION FIELDS at the top

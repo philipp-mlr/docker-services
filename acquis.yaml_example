@@ -1,4 +1,4 @@
-# /home/USER/docker/appdata/crowdsec/config/acquis.yml
+# /home/USER/docker/appdata/crowdsec/config/acquis.yaml
 filenames:
   - /var/log/auth.log
   - /var/log/syslog
