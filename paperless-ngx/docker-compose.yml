@@ -28,7 +28,16 @@ services:
       - db
       - redis
     healthcheck:
-      test: ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-fs",
+          "-S",
+          "--max-time",
+          "2",
+          "http://localhost:8000"
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -53,7 +62,7 @@ services:
       - traefik.http.routers.paperless.tls=true
       - traefik.http.routers.paperless.rule=Host(`dms.philipp.software`)
       - traefik.http.routers.paperless.service=paperless
-      - traefik.http.services.paperless.loadbalancer.server.port=8000
+      #- traefik.http.services.paperless.loadbalancer.server.port=8000
 
 networks:
   paperless:
