@@ -362,7 +362,7 @@ services:
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd fulljackz/proxmox"
       GID: "${GID-1000}"
       CUSTOM_HOSTNAME: vps
-      DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
+      #DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
       # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
       AGENT_USERNAME: $CROWDSEC_AGENT_USERNAME
       AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
