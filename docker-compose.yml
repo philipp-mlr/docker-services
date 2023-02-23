@@ -376,7 +376,9 @@ services:
 
   # CrowdSec Bouncer - Traefik
   # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
-  # -- add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add traefik-bouncer-HOSTNAME
+  # - add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add traefik-bouncer-HOSTNAME
+  # - update the api key for compose file
+  # - check bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers list
   traefik-bouncer:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: fbonalair/traefik-crowdsec-bouncer

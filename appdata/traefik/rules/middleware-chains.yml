@@ -3,7 +3,7 @@ http:
     chain-no-auth:
       chain:
         middlewares:
-          #- middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
@@ -20,7 +20,7 @@ http:
     chain-basic-auth:
       chain:
         middlewares:
-          #- middlewares-traefik-bouncer # leave this out if you are not using CrowdSec        
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec        
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
@@ -30,7 +30,7 @@ http:
     chain-oauth:
       chain:
         middlewares:
-          #- middlewares-traefik-bouncer # leave this out if you are not using CrowdSec        
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec        
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
@@ -40,7 +40,7 @@ http:
     chain-oauth-external:
       chain:
         middlewares:
-          #- middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
@@ -50,7 +50,7 @@ http:
     chain-authelia:
       chain:
         middlewares:
-          #- middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
