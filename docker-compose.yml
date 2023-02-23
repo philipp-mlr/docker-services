@@ -113,6 +113,7 @@ services:
   ############################# FRONTENDS
 
   # Traefik 2 - Reverse Proxy
+  # Cloudflare refs: https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
   # touch $DOCKERDIR/appdata/traefik2/acme/acme.json
   # chmod 600 $DOCKERDIR/appdata/traefik2/acme/acme.json
@@ -341,3 +342,37 @@ services:
       ## HTTP Services
       - "traefik.http.routers.oauth-rtr.service=oauth-svc"
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
+
+  # CrowdSec - Open-source & collaborative security IPS
+  # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  crowdsec:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    ports:
+      - "$CROWDSEC_API_PORT:8080"
+    # - "$ZEROTIER_IP_CLOUDSERVER:$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
+    environment:
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd fulljackz/proxmox"
+      GID: "${GID-1000}"
+      CUSTOM_HOSTNAME: strato
+      DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
+      # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
+      AGENT_USERNAME: $CROWDSEC_AGENT_USERNAME
+      AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
+      LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
+    volumes:
+      - $DOCKERDIR/logs/:/logs/:ro
+      - /var/log:/var/log:ro
+      - $DOCKERDIR/appdata/crowdsec/data:/var/lib/crowdsec/data
+      - $DOCKERDIR/appdata/crowdsec/config:/etc/crowdsec
+
+  # CrowdSec Bouncer - Traefik
+  traefik-bouncer:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: fbonalair/traefik-crowdsec-bouncer
+    container_name: traefik-bouncer
+    environment:
+      GIN_MODE: release # default is debug (more logs)
+      CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_BOUNCER_TRAEFIK_API_KEY
+      CROWDSEC_AGENT_HOST: $CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port
