@@ -1,0 +1,73 @@
+version: '3.7'
+
+services:
+  db:
+    image: mariadb:latest
+    container_name: nextcloud_db
+    volumes:
+      - nextcloud-db:/var/lib/mysql
+    networks:
+      - nextcloud
+    restart: always
+    environment:
+      TZ: UTC
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+
+  redis:
+    image: redis:latest
+    container_name: nextcloud_redis
+    restart: always
+    networks:
+      - nextcloud
+    volumes:
+      - nextcloud-redis:/var/lib/redis
+  nextcloud:
+    depends_on:
+      - redis
+      - db
+
+    image: nextcloud:latest
+    container_name: nextcloud
+    volumes:
+      - nextcloud-data:/var/www/html
+      - /home/philipp/paperless/consume:/usr/src/paperless/consume #has to belong to www-data:www-data
+    networks:
+      - web
+      - nextcloud
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nextcloud.middlewares=nextcloud,nextcloud_redirect
+      - traefik.http.routers.nextcloud.entrypoints=websecure
+      - traefik.http.routers.nextcloud.tls=true
+      - traefik.http.routers.nextcloud.rule=Host(`cloud.philipp.software`)
+      - traefik.http.middlewares.nextcloud.headers.customFrameOptionsValue=ALLOW-FROM https://philipp.software
+      - traefik.http.middlewares.nextcloud.headers.contentSecurityPolicy=frame-ancestors 'self' philipp.software *.philipp.software
+      - traefik.http.middlewares.nextcloud.headers.stsSeconds=155520011
+      - traefik.http.middlewares.nextcloud.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.nextcloud.headers.stsPreload=true
+      - traefik.http.middlewares.nextcloud.headers.customresponseheaders.X-Frame-Options=SAMEORIGIN
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.permanent=true
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.replacement=https://$${1}/remote.php/dav/
+    environment:
+      REDIS_HOST: redis
+      MYSQL_HOST: db:3306
+      MYSQL_DATABASE: db
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TRUSTED_PROXIES: ${TRAEFIK_IP}
+      OVERWRITEPROTOCOL: https
+      
+networks:
+  nextcloud:
+  web:
+    external: true
+
+volumes:
+  nextcloud-data:
+  nextcloud-db:
+  nextcloud-redis:
