@@ -1,4 +1,4 @@
-# /home/USER/docker/appdata/crowdsec/config/parsers/s02-enrich/ 
+# /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/ 
 name: crowdsecurity/whitelists
 description: "Whitelist events from my ip addresses"
 whitelist:

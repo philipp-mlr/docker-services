@@ -344,13 +344,13 @@ services:
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
 
   # CrowdSec - Open-source & collaborative security IPS
-  # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  # https://www.smarthomebeginner.com/crowdsec-docker-compose-1-fw-bouncer/
   # - check collections: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli collections list
   # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
   # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
   # - accept enrollment: https://app.crowdsec.net/instances
-  # - update acquis.yml in /home/USER/docker/appdata/crowdsec/config/acquis.yaml
-  # - move custom_whitelists.yaml to /home/USER/docker/appdata/crowdsec/config/parsers/s02-enrich/ 
+  # - update acquis.yml in /home/USER/docker-services/appdata/crowdsec/config/acquis.yaml
+  # - move custom_whitelists.yaml to /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/ 
   # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
   crowdsec:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
@@ -375,6 +375,8 @@ services:
       - $DOCKERDIR/appdata/crowdsec/config:/etc/crowdsec
 
   # CrowdSec Bouncer - Traefik
+  # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  # -- add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add traefik-bouncer-HOSTNAME
   traefik-bouncer:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: fbonalair/traefik-crowdsec-bouncer
