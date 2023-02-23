@@ -1,0 +1,11 @@
+# /home/USER/docker/appdata/crowdsec/config/parsers/s02-enrich/ 
+name: crowdsecurity/whitelists
+description: "Whitelist events from my ip addresses"
+whitelist:
+  reason: "my ip ranges"
+  ip:
+    - "127.0.0.1" # Local Host
+  cidr:
+    - "192.168.0.0/16" # Local IPs + ZeroTier Network
+    - "10.0.0.0/8" # Local IPs
+    - "172.16.0.0/12" # Local/Docker IPs
