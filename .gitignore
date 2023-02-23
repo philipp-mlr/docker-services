@@ -1,0 +1,4 @@
+appdata/traefik/acme
+secrets/*
+logs/*
+.env
