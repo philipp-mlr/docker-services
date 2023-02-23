@@ -345,13 +345,18 @@ services:
 
   # CrowdSec - Open-source & collaborative security IPS
   # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  # - check collections: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli collections list
+  # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
+  # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
+  # - accept enrollment: https://app.crowdsec.net/instances
+  # - updated acquis.yml: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
   crowdsec:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: crowdsecurity/crowdsec
     container_name: crowdsec
     ports:
       - "$CROWDSEC_API_PORT:8080"
-    # - "$ZEROTIER_IP_CLOUDSERVER:$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
+      - "$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
     environment:
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd fulljackz/proxmox"
       GID: "${GID-1000}"
