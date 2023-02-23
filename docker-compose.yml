@@ -132,7 +132,7 @@ services:
       - --entrypoints.https.address=:443
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
-      - --entrypoints.traefik.address=:8080
+      #- --entrypoints.traefik.address=:8080
       # - --entryPoints.ping.address=:8081
       - --api=true
       - --api.dashboard=true
