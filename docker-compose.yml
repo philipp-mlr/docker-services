@@ -349,7 +349,8 @@ services:
   # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
   # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
   # - accept enrollment: https://app.crowdsec.net/instances
-  # - updated acquis.yml: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
+  # - updated acquis.yml
+  # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
   crowdsec:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: crowdsecurity/crowdsec
