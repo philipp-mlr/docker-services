@@ -502,7 +502,7 @@ services:
     environment:
       - UID=$PUID
       - AUTHKEY=/run/secrets/steam_api_key
-      - GLST=/run/secrets/steam_garrysmod_token # Dedicated game server account
+      #- GLST=/run/secrets/steam_garrysmod_token # Dedicated game server account
       - WORKSHOPCOLLECTIONID=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOP=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOPDL=$GARRYSMOD_WORKSHOPCOLLECTIONID
@@ -520,6 +520,9 @@ services:
       ## TCP Services
       - "traefik.tcp.routers.garrysmod-rtr.service=garrysmod-svc"
       - "traefik.tcp.services.garrysmod-svc.loadbalancer.server.port=27015"
+      ## UDP Routers & Services
+      - "traefik.udp.routers.garrysmod-rtr.service=garrysmod-svc"
+      - "traefik.udp.services.garrysmod-svc.loadbalancer.server.port=27015"
 
   ############################# MAINTENANCE
 
