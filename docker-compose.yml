@@ -500,14 +500,14 @@ services:
       - $DOCKERDIR/appdata/garrysmod/config/server.cfg:/opt/steam/garrysmod/cfg/server.cfg
       - $DOCKERDIR/appdata/garrysmod/data/:/opt/steam/
     environment:
-      - UID=$UID
+      - UID=$PUID
       - AUTHKEY=/run/secrets/steam_api_key
       - GLST=/run/secrets/steam_garrysmod_token # Dedicated game server account
       - WORKSHOPCOLLECTIONID=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOP=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOPDL=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - GAMEMODE=terrortown
-      #- MAP=
+      - MAP=$GARRYSMOD_DEFAULT_MAP
       - MAXPLAYERS=32
     secrets:
       - steam_api_key
@@ -515,6 +515,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## TCP Routers
+      - "traefik.tcp.routers.garrysmod-rtr.tls=true
       - "traefik.tcp.routers.garrysmod-rtr.rule=HostSNI(`gmod.philipp.software`)"
       ## TCP Services
       - "traefik.tcp.routers.garrysmod-rtr.service=garrysmod-svc"
