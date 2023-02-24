@@ -170,8 +170,8 @@ services:
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=90 # To delay DNS check and reduce LE hitrate
-      # - --metrics.prometheus=true
-      # - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
+      - --metrics.prometheus=true
+      - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
     networks:
       t2_proxy:
         ipv4_address: 192.168.90.254 # You can specify a static IP
@@ -398,6 +398,7 @@ services:
       CROWDSEC_AGENT_HOST: crowdsec:8080 #$CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port
 
   # CrowdSec Bouncer - Cloudflare
+  # https://www.smarthomebeginner.com/crowdsec-cloudflare-bouncer/
   # sudo docker exec crowdsec cscli bouncer add cloudflare-bouncer
   # Set max ip number right the first time (max 10000). Recreating container deletes all ips and readds them causing cloudflare 429 rate limiting.
   cloudflare-bouncer:
@@ -407,6 +408,64 @@ services:
     volumes:
       - $DOCKERDIR/appdata/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
   ############################# DATABASE
+
+  # Prometheus - Database for sensor data
+  prometheus:
+    <<: *common-keys-monitoring # See EXTENSION FIELDS at the top
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "$PROMETHEUS_PORT:9090"
+    volumes:
+      - $DOCKERDIR/appdata/prometheus/config:/etc/prometheus
+      - $DOCKERDIR/appdata/prometheus/data:/prometheus
+    user: $PUID:$PGID
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.prometheus-rtr.entrypoints=https"
+      - "traefik.http.routers.prometheus-rtr.rule=Host(`prom.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.prometheus-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.prometheus-rtr.service=prometheus-svc"
+      - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
+
+  ############################# UTILITIES
+
+  # Grafana - Graphical data visualization for InfluxDB data
+  grafana:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - t2_proxy
+      - default
+    ports:
+      - "$GRAFANA_PORT:3000"
+    user: $PUID
+    volumes:
+      - $DOCKERDIR/appdata/grafana:/var/lib/grafana
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.grafana-rtr.entrypoints=https"
+      - "traefik.http.routers.grafana-rtr.rule=Host(`grafana.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.grafana-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.grafana-rtr.service=grafana-svc"
+      - "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"
+
   ############################# MAINTENANCE
 
   # Docker-GC - Automatic Docker Garbage Collection
