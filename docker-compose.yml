@@ -31,6 +31,10 @@ secrets:
     file: $DOCKERDIR/secrets/cf_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
+  steam_api_key:
+    file: $DOCKERDIR/secrets/steam_api_key
+  steam_garrysmod_token:
+    file: $DOCKERDIR/secrets/steam_garrysmod_token
   mysql_root_password:
     file: $DOCKERDIR/secrets/mysql_root_password
   guac_db_name:
@@ -505,6 +509,9 @@ services:
       - GAMEMODE=terrortown
       #- MAP=
       - MAXPLAYERS=32
+    secrets:
+      - steam_api_key
+      - steam_garrysmod_token
     labels:
       - "traefik.enable=true"
       ## TCP Routers
