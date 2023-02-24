@@ -31,8 +31,6 @@ secrets:
     file: $DOCKERDIR/secrets/cf_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
-  steam_api_key:
-    file: $DOCKERDIR/secrets/steam_api_key
   mysql_root_password:
     file: $DOCKERDIR/secrets/mysql_root_password
   guac_db_name:
@@ -122,7 +120,6 @@ services:
       - --entrypoints.https.address=:443
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
-      #- --entrypoints.steam.address=:27000
       # - --entryPoints.ping.address=:8081
       - --api=true
       - --api.dashboard=true
@@ -179,10 +176,6 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      #- target: 8080 # insecure api wont work
-      #   published: 8080
-      #   protocol: tcp
-      #   mode: host
     volumes:
       - $DOCKERDIR/appdata/traefik/rules/:/rules # file provider directory
       # - /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
@@ -313,7 +306,7 @@ services:
       - $DOCKERDIR/appdata/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
-      DOCKER_HOST: tcp://socket-proxy:2375
+      LOG_LEVEL: debug
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -533,20 +526,6 @@ services:
       - "$GARRYSMOD_PORT:27015"
     volumes:
       - $DOCKERDIR/appdata/steamcmd/:/home/steam/
-    secrets:
-      - steam_api_key
-    labels:
-      - "traefik.enable=true"
-      ## TCP Routers
-      - "traefik.tcp.routers.steamcmd-rtr.tls=true"
-      - "traefik.tcp.routers.steamcmd-rtr.rule=HostSNI(`*`)"
-      ## TCP Services
-      #- "traefik.tcp.routers.steamcmd-rtr.entrypoints=steam"
-      - "traefik.tcp.routers.steamcmd-rtr.service=steamcmd-svc"
-      - "traefik.tcp.services.steamcmd-svc.loadbalancer.server.port=27015"
-      ## UDP Routers & Services
-      - "traefik.udp.routers.steamcmd-rtr.service=steamcmd-svc"
-      - "traefik.udp.services.steamcmd-svc.loadbalancer.server.port=27015"
 
   ############################# MAINTENANCE
 
