@@ -499,6 +499,7 @@ services:
       - "$GARRYSMOD_PORT:27015"
     volumes:
       - $DOCKERDIR/appdata/garrysmod/config/server.cfg:/opt/steam/garrysmod/cfg/server.cfg
+      - $DOCKERDIR/appdata/garrysmod/overlay:/opt/overlay
     environment:
       - UID=$PUID
       - AUTHKEY=/run/secrets/steam_api_key
