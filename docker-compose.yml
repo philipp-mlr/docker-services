@@ -122,7 +122,7 @@ services:
       - --entrypoints.https.address=:443
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
-      - --entrypoints.steam.address=:27000
+      #- --entrypoints.steam.address=:27000
       # - --entryPoints.ping.address=:8081
       - --api=true
       - --api.dashboard=true
@@ -179,7 +179,7 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      # - target: 8080 # insecure api wont work
+      #- target: 8080 # insecure api wont work
       #   published: 8080
       #   protocol: tcp
       #   mode: host
@@ -298,6 +298,31 @@ services:
       ## HTTP Services
       - "traefik.http.routers.portainer-rtr.service=portainer-svc"
       - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
+
+  # Homepage - Application Dashboard
+  homepage:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    networks:
+      - t2_proxy
+      - socket_proxy
+    # ports:
+    #  - "$HOMEPAGE_PORT:3000" 
+    volumes:
+      - $DOCKERDIR/appdata/homepage:/app/config
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`,`www.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
 
   # Google OAuth - Single Sign On using OAuth 2.0
   # https://www.smarthomebeginner.com/google-oauth-with-traefik-docker/
@@ -499,13 +524,9 @@ services:
     image: steamcmd/steamcmd:latest
     container_name: steamcmd
     command:
-      - /home/steam/steamcmd/steamcmd.sh
-      - force_install_dir /home/steam/garrysmod
-      - login anonymous
-      - app_update 4020 -validate # install Garrysmod
-      #- force_install_dir /home/steam/css/
-      #- app_update 232330 -validate # install CSS
-      - quit
+      - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 -validate +quit
+        #- force_install_dir /home/steam/css/
+        #- app_update 232330 -validate # install CSS
       - /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
     ports:
       - "$GARRYSMOD_PORT:27015"
@@ -516,10 +537,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## TCP Routers
-      #- "traefik.tcp.routers.steamcmd-rtr.tls=true"
+      - "traefik.tcp.routers.steamcmd-rtr.tls=true"
       - "traefik.tcp.routers.steamcmd-rtr.rule=HostSNI(`*`)"
       ## TCP Services
-      - "traefik.tcp.routers.steamcmd-rtr.entrypoints=steam"
+      #- "traefik.tcp.routers.steamcmd-rtr.entrypoints=steam"
       - "traefik.tcp.routers.steamcmd-rtr.service=steamcmd-svc"
       - "traefik.tcp.services.steamcmd-svc.loadbalancer.server.port=27015"
       ## UDP Routers & Services
