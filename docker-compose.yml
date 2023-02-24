@@ -489,37 +489,39 @@ services:
 
   ############################# GAME SERVER
 
+
+  ## SteamCMD - For downloading and running Steam games and game server software
+  ## Ref: https://docs.ttt2.neoxult.de/server-owners/manual-install/
   steamcmd:
     <<: *common-keys-apps
     image: steamcmd/steamcmd:latest
     container_name: steamcmd
-    #command:
-    #  - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 validate -maxplayers 32 -game garrysmod +gamemode terrortown +host_workshop_collection 2420575611 -authkey 234BB03E9FE770C30152CE3CC59CD76B +quit
+    command:
+      - /home/steam/steamcmd/steamcmd.sh
+      - force_install_dir /home/steam/garrysmod
+      - login anonymous
+      - app_update 4020 -validate # install Garrysmod
+      #- force_install_dir /home/steam/css/
+      #- app_update 232330 -validate # install CSS
+      - quit
+      - /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
     ports:
       - "$GARRYSMOD_PORT:27015"
     volumes:
       - $DOCKERDIR/appdata/steamcmd/:/home/steam/
-    environment:
-      - AUTHKEY=/run/secrets/steam_api_key
-      - WORKSHOPCOLLECTIONID=$GARRYSMOD_WORKSHOPCOLLECTIONID
-      - WORKSHOP=$GARRYSMOD_WORKSHOPCOLLECTIONID
-      - WORKSHOPDL=$GARRYSMOD_WORKSHOPCOLLECTIONID
-      - GAMEMODE=terrortown
-      #- MAP=$GARRYSMOD_DEFAULT_MAP
-      - MAXPLAYERS=32
     secrets:
       - steam_api_key
     labels:
       - "traefik.enable=true"
       ## TCP Routers
-      - "traefik.tcp.routers.garrysmod-rtr.tls=true"
-      - "traefik.tcp.routers.garrysmod-rtr.rule=HostSNI(`gmod.philipp.software`)"
+      - "traefik.tcp.routers.steamcmd-rtr.tls=true"
+      - "traefik.tcp.routers.steamcmd-rtr.rule=HostSNI(`gmod.philipp.software`)"
       ## TCP Services
-      - "traefik.tcp.routers.garrysmod-rtr.service=garrysmod-svc"
-      - "traefik.tcp.services.garrysmod-svc.loadbalancer.server.port=27015"
+      - "traefik.tcp.routers.steamcmd-rtr.service=steamcmd-svc"
+      - "traefik.tcp.services.steamcmd-svc.loadbalancer.server.port=27015"
       ## UDP Routers & Services
-      - "traefik.udp.routers.garrysmod-rtr.service=garrysmod-svc"
-      - "traefik.udp.services.garrysmod-svc.loadbalancer.server.port=27015"
+      - "traefik.udp.routers.steamcmd-rtr.service=steamcmd-svc"
+      - "traefik.udp.services.steamcmd-svc.loadbalancer.server.port=27015"
 
   ############################# MAINTENANCE
 
