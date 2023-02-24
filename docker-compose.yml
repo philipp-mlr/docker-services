@@ -515,7 +515,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## TCP Routers
-      - "traefik.tcp.routers.garrysmod-rtr.tls=true
+      - "traefik.tcp.routers.garrysmod-rtr.tls=true"
       - "traefik.tcp.routers.garrysmod-rtr.rule=HostSNI(`gmod.philipp.software`)"
       ## TCP Services
       - "traefik.tcp.routers.garrysmod-rtr.service=garrysmod-svc"
