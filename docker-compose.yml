@@ -128,6 +128,7 @@ services:
       - --api.dashboard=true
       - --ping=true
       # - --serversTransport.insecureSkipVerify=true
+      ### Logging
       - --log=true
       - --log.filePath=/logs/traefik.log
       - --log.level=INFO # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
@@ -135,27 +136,26 @@ services:
       - --accessLog.filePath=/logs/access.log
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
       - --accessLog.filters.statusCodes=204-299,400-499,500-599
-      - --providers.docker=true
-      # Use Docker Socket Proxy instead for improved security
-      - --providers.docker.endpoint=tcp://socket-proxy:2375
-      # Automatically set Host rule for services
-      # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
-      - --providers.docker.exposedByDefault=false
+
       # - --entrypoints.https.http.middlewares=chain-oauth@file
       - --entrypoints.https.http.tls.options=tls-opts@file
       # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
       - --entrypoints.https.http.tls.certresolver=dns-cloudflare
       - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME
       - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME
-      # - --entrypoints.https.http.tls.domains[1].main=$DOMAINNAME2 # Pulls main cert for second domain
-      # - --entrypoints.https.http.tls.domains[1].sans=*.$DOMAINNAME2 # Pulls wildcard cert for second domain
+      - --providers.docker=true
+      # Automatically set Host rule for services
+      # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
+      - --providers.docker.exposedByDefault=false
+      ### Use Docker Socket Proxy instead for improved security
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
       - --providers.docker.network=t2_proxy
       - --providers.docker.swarmMode=false
       - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory
       # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
       - --providers.file.watch=true # Only works on top level files in the rules folder
       # - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
-      - --certificatesResolvers.dns-cloudflare.acme.email=$CLOUDFLARE_EMAIL
+      - --certificatesResolvers.dns-cloudflare.acme.email=/run/secrets/cf_token
       - --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
       - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
@@ -196,7 +196,7 @@ services:
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
       - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules. 
     secrets:
-      #- cf_email
+      - cf_email
       #- cf_api_key
       - cf_token
       - htpasswd
@@ -222,12 +222,9 @@ services:
       - "traefik.http.routers.ping.tls=true"
       - "traefik.http.routers.ping.service=ping@internal"
       ## Middlewares
-      #- "traefik.http.routers.traefik-rtr.middlewares=chain-no-auth@file" # For No Authentication
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Basic HTTP Authentication
-      #- "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Google OAuth
-      #- "traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file" # For Authelia Authentication
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Google OAuth
 
-      # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
   socket-proxy:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: socket-proxy
@@ -235,11 +232,10 @@ services:
     networks:
       socket_proxy:
         ipv4_address: 192.168.91.254 # You can specify a static IP
-    # privileged: true # true for VM. False for unprivileged LXC container.
     ports:
-      # - "127.0.0.1:2375:2375" # Port 2375 should only ever get exposed to the internal network. When possible use this line.
+      - "127.0.0.1:2375:2375" # Port 2375 should only ever get exposed to the internal network. When possible use this line.
       # I use the next line instead, as I want portainer to manage multiple docker endpoints within my home network.
-      - "2375:2375"
+      #- "2375:2375"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
