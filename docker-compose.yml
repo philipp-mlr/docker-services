@@ -313,6 +313,7 @@ services:
       - $DOCKERDIR/appdata/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
+      DOCKER_HOST: tcp://socket-proxy:2375
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
