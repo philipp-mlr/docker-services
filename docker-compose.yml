@@ -33,8 +33,6 @@ secrets:
     file: $DOCKERDIR/secrets/traefik_forward_auth
   steam_api_key:
     file: $DOCKERDIR/secrets/steam_api_key
-  steam_garrysmod_token:
-    file: $DOCKERDIR/secrets/steam_garrysmod_token
   mysql_root_password:
     file: $DOCKERDIR/secrets/mysql_root_password
   guac_db_name:
@@ -491,19 +489,18 @@ services:
 
   ############################# GAME SERVER
 
-  garrysmod:
+  steamcmd:
     <<: *common-keys-apps
-    image: hackebein/garrysmod:latest
-    container_name: garrysmod
+    image: steamcmd/steamcmd:latest
+    container_name: steamcmd
+    #command:
+    #  - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 validate -maxplayers 32 -game garrysmod +gamemode terrortown +host_workshop_collection 2420575611 -authkey 234BB03E9FE770C30152CE3CC59CD76B +quit
     ports:
       - "$GARRYSMOD_PORT:27015"
     volumes:
-      - $DOCKERDIR/appdata/garrysmod/config/server.cfg:/opt/steam/garrysmod/cfg/server.cfg
-      - $DOCKERDIR/appdata/garrysmod/overlay:/opt/overlay
+      - $DOCKERDIR/appdata/steamcmd/:/home/steam/
     environment:
-      - UID=$PUID
       - AUTHKEY=/run/secrets/steam_api_key
-      #- GLST=/run/secrets/steam_garrysmod_token # Dedicated game server account
       - WORKSHOPCOLLECTIONID=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOP=$GARRYSMOD_WORKSHOPCOLLECTIONID
       - WORKSHOPDL=$GARRYSMOD_WORKSHOPCOLLECTIONID
@@ -512,7 +509,6 @@ services:
       - MAXPLAYERS=32
     secrets:
       - steam_api_key
-      - steam_garrysmod_token
     labels:
       - "traefik.enable=true"
       ## TCP Routers
