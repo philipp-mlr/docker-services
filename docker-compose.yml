@@ -526,6 +526,8 @@ services:
       - "$GARRYSMOD_PORT:27015"
     volumes:
       - $DOCKERDIR/appdata/steamcmd/:/home/steam/
+    environment:
+      <<: *default-tz-puid-pgid
 
   ############################# MAINTENANCE
 
