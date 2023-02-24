@@ -300,8 +300,8 @@ services:
     networks:
       - t2_proxy
       - socket_proxy
-    ports:
-      - "$HOMEPAGE_PORT:3000"
+    #ports:
+    #  - "$HOMEPAGE_PORT:3000"
     volumes:
       - $DOCKERDIR/appdata/homepage:/app/config
     environment:
