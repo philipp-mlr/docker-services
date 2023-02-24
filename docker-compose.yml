@@ -105,8 +105,8 @@ services:
   # Traefik 2 - Reverse Proxy
   # Cloudflare refs: https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
-  # touch $DOCKERDIR/appdata/traefik2/acme/acme.json
-  # chmod 600 $DOCKERDIR/appdata/traefik2/acme/acme.json
+  # touch $DOCKERDIR/appdata/traefik/acme/acme.json
+  # chmod 600 $DOCKERDIR/appdata/traefik/acme/acme.json
   # touch $DOCKERDIR/logs/traefik.log
   # touch $DOCKERDIR/logs/access.log
 
@@ -359,7 +359,7 @@ services:
       - "$CROWDSEC_API_PORT:8080"
       - "$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
     environment:
-      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd fulljackz/proxmox"
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd crowdsecurity/nextcloud lepresidente/adguardhome"
       GID: "${GID-1000}"
       CUSTOM_HOSTNAME: vps
       #DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
