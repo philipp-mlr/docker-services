@@ -435,6 +435,8 @@ services:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: containrrr/watchtower
     container_name: watchtower
+    networks:
+      - socket_proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
