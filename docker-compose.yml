@@ -505,6 +505,13 @@ services:
       - GAMEMODE=terrortown
       #- MAP=
       - MAXPLAYERS=32
+    labels:
+      - "traefik.enable=true"
+      ## TCP Routers
+      - "traefik.tcp.routers.garrysmod-rtr.rule=HostSNI(`gmod.philipp.software`)"
+      ## TCP Services
+      - "traefik.tcp.routers.garrysmod-rtr.service=garrysmod-svc"
+      - "traefik.tcp.services.garrysmod-svc.loadbalancer.server.port=27015"
 
   ############################# MAINTENANCE
 
