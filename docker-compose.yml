@@ -307,8 +307,8 @@ services:
     networks:
       - t2_proxy
       - socket_proxy
-    # ports:
-    #  - "$HOMEPAGE_PORT:3000" 
+    ports:
+      - "$HOMEPAGE_PORT:3030"
     volumes:
       - $DOCKERDIR/appdata/homepage:/app/config
     environment:
@@ -322,7 +322,7 @@ services:
       - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.homepage-rtr.service=homepage-svc"
-      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3030"
 
   # Google OAuth - Single Sign On using OAuth 2.0
   # https://www.smarthomebeginner.com/google-oauth-with-traefik-docker/
