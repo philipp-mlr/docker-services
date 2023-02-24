@@ -473,7 +473,6 @@ services:
       # HASHED_PASSWORD: #optional
       # SUDO_PASSWORD: password #optional
       # SUDO_PASSWORD_HASH: #optional
-      # PROXY_DOMAIN: code-server.my.domain #optional
       # DEFAULT_WORKSPACE: /config/data/User/Workspaces/AZ.code-workspace #optional
     labels:
       - "traefik.enable=true"
@@ -485,6 +484,27 @@ services:
       ## HTTP Services
       - "traefik.http.routers.vscode-rtr.service=vscode-svc"
       - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
+
+  ############################# GAME SERVER
+  garrysmod:
+    <<: *common-keys-apps
+    image: hackebein/garrysmod:latest
+    container_name: garrysmod
+    ports:
+      - "$GARRYSMOD_PORT:27015"
+    volumes:
+      - $DOCKERDIR/appdata/garrysmod/config/server.cfg:/opt/steam/garrysmod/cfg/server.cfg
+      - $DOCKERDIR/appdata/garrysmod/data/:/opt/steam/
+    environment:
+      - UID=$UID
+      - AUTHKEY=/run/secrets/steam_api_key
+      - GLST=/run/secrets/steam_garrysmod_token # Dedicated game server account
+      - WORKSHOPCOLLECTIONID=$GARRYSMOD_WORKSHOPCOLLECTIONID
+      - WORKSHOP=$GARRYSMOD_WORKSHOPCOLLECTIONID
+      - WORKSHOPDL=$GARRYSMOD_WORKSHOPCOLLECTIONID
+      - GAMEMODE=terrortown
+      #- MAP=
+      - MAXPLAYERS=32
 
   ############################# MAINTENANCE
 
