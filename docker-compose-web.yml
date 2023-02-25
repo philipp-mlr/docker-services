@@ -174,8 +174,8 @@ services:
         published: 443
         protocol: tcp
         mode: host
-      - target: 8080 # insecure api wont work
-        published: 8080
+      - target: 8081 # insecure api wont work
+        published: 8081
         protocol: tcp
         mode: host
     volumes:
