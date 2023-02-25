@@ -1,0 +1,574 @@
+version: "3.9"
+
+########################### NETWORKS
+
+networks:
+  t2_proxy:
+    name: t2_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.90.0/24
+  default:
+    driver: bridge
+  socket_proxy:
+    name: socket_proxy
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.91.0/24
+
+########################### SECRETS
+
+secrets:
+  htpasswd:
+    file: $DOCKERDIR/secrets/htpasswd
+  cf_email:
+    file: $DOCKERDIR/secrets/cf_email
+  cf_token:
+    file: $DOCKERDIR/secrets/cf_token
+  traefik_forward_auth:
+    file: $DOCKERDIR/secrets/traefik_forward_auth
+  mysql_root_password:
+    file: $DOCKERDIR/secrets/mysql_root_password
+  guac_db_name:
+    file: $DOCKERDIR/secrets/guac_db_name
+  guac_mysql_user:
+    file: $DOCKERDIR/secrets/guac_mysql_user
+  guac_mysql_password:
+    file: $DOCKERDIR/secrets/guac_mysql_password
+  plex_claim:
+    file: $DOCKERDIR/secrets/plex_claim
+
+########################### EXTENSION FIELDS
+# Helps eliminate repetition of sections
+
+# Common environment values
+x-environment:
+  &default-tz-puid-pgid
+  TZ: $TZ
+  PUID: $PUID
+  PGID: $PGID
+
+# Keys common to some of the services in basic-services.txt
+x-common-keys-core:
+  &common-keys-core
+  networks:
+    - t2_proxy
+  security_opt:
+    - no-new-privileges:true
+  restart: always
+  # profiles:
+  # - core
+
+  # Keys common to some of the services in basic-services.txt
+x-common-keys-monitoring:
+  &common-keys-monitoring
+  networks:
+    - t2_proxy
+  security_opt:
+    - no-new-privileges:true
+  restart: always
+  # profiles:
+  # - monitoring
+
+  # Keys common to some of the dependent services/apps
+x-common-keys-apps:
+  &common-keys-apps
+  networks:
+    - t2_proxy
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+  # profiles:
+  # - apps
+
+  # Keys common to some of the services in media-services.txt
+x-common-keys-media:
+  &common-keys-media
+  networks:
+    - t2_proxy
+  security_opt:
+    - no-new-privileges:true
+  restart: "no"
+  # profiles:
+  # - media
+
+  ########################### SERVICES
+services:
+  ############################# FRONTENDS
+
+  # Traefik 2 - Reverse Proxy
+  # Cloudflare refs: https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/
+  # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
+  # touch $DOCKERDIR/appdata/traefik/acme/acme.json
+  # chmod 600 $DOCKERDIR/appdata/traefik/acme/acme.json
+  # touch $DOCKERDIR/logs/traefik.log
+  # touch $DOCKERDIR/logs/access.log
+
+  traefik:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: traefik
+    image: traefik:latest
+    command:
+      # CLI arguments
+      - --global.checkNewVersion=true
+      - --global.sendAnonymousUsage=true
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --entryPoints.ping.address=:8081
+      # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
+      - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
+      - --api=true
+      - --api.dashboard=true
+      - --ping=true
+      # - --serversTransport.insecureSkipVerify=true
+      ### Logging
+      - --log=true
+      - --log.filePath=/logs/traefik.log
+      - --log.level=INFO # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+      - --accessLog=true
+      - --accessLog.filePath=/logs/access.log
+      - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
+      - --accessLog.filters.statusCodes=204-299,400-499,500-599
+
+      # - --entrypoints.https.http.middlewares=chain-oauth@file
+      - --entrypoints.https.http.tls.options=tls-opts@file
+      # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
+      - --entrypoints.https.http.tls.certresolver=dns-cloudflare
+      - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME
+      - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME
+      - --providers.docker=true
+      # Automatically set Host rule for services
+      # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
+      - --providers.docker.exposedByDefault=false
+      ### Use Docker Socket Proxy instead for improved security
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
+      - --providers.docker.network=t2_proxy
+      - --providers.docker.swarmMode=false
+      - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory
+      # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
+      - --providers.file.watch=true # Only works on top level files in the rules folder
+      # - --certificatesResolvers.dns-cloudflare.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory # LetsEncrypt Staging Server - uncomment when testing
+      - --certificatesResolvers.dns-cloudflare.acme.email=/run/secrets/cf_email
+      - --certificatesResolvers.dns-cloudflare.acme.storage=/acme.json
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.provider=cloudflare
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      - --certificatesResolvers.dns-cloudflare.acme.dnsChallenge.delayBeforeCheck=90 # To delay DNS check and reduce LE hitrate
+      - --metrics.prometheus=true
+      - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.254 # You can specify a static IP
+      socket_proxy:
+      healthcheck:
+        test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+        interval: 5s
+        retries: 3
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: 443
+        published: 443
+        protocol: tcp
+        mode: host
+      - target: 8080 # insecure api wont work
+        published: 8080
+        protocol: tcp
+        mode: host
+    volumes:
+      - $DOCKERDIR/appdata/traefik/rules/:/rules # file provider directory
+      - $DOCKERDIR/appdata/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
+      - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
+    environment:
+      - TZ=$TZ
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
+      - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
+      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules. 
+    secrets:
+      - cf_email
+      - cf_token
+      - htpasswd
+    labels:
+      #- "autoheal=true"
+      - "traefik.enable=true"
+      # HTTP-to-HTTPS Redirect
+      - "traefik.http.routers.http-catchall.entrypoints=http"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      # HTTP Routers
+      - "traefik.http.routers.traefik-rtr.entrypoints=https"
+      - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
+      - "traefik.http.routers.traefik-rtr.tls=true" # Some people had 404s without this
+      - "traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
+      - "traefik.http.routers.traefik-rtr.tls.domains[0].main=$DOMAINNAME"
+      - "traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.$DOMAINNAME"
+      ## Services - API
+      - "traefik.http.routers.traefik-rtr.service=api@internal"
+      ## Healthcheck/ping
+      - "traefik.http.routers.ping.rule=Host(`traefik.$DOMAINNAME`) && Path(`/ping`)"
+      - "traefik.http.routers.ping.tls=true"
+      - "traefik.http.routers.ping.service=ping@internal"
+      ## Middlewares
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Google OAuth
+
+  # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
+  socket-proxy:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: socket-proxy
+    image: tecnativa/docker-socket-proxy
+    networks:
+      socket_proxy:
+        ipv4_address: 192.168.91.254 # You can specify a static IP
+    ports:
+      - "127.0.0.1:2375:2375" # Port 2375 should only ever get exposed to the internal network. When possible use this line.
+      # I use the next line instead, as I want portainer to manage multiple docker endpoints within my home network.
+      #- "2375:2375"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+      - LOG_LEVEL=info # debug,info,notice,warning,err,crit,alert,emerg
+      ## Variables match the URL prefix (i.e. AUTH blocks access to /auth/* parts of the API, etc.).
+      # 0 to revoke access.
+      # 1 to grant access.
+      ## Granted by Default
+      - EVENTS=1
+      - PING=1
+      - VERSION=1
+      ## Revoked by Default
+      # Security critical
+      - AUTH=0
+      - SECRETS=0
+      - POST=1 # Watchtower
+      # Not always needed
+      - BUILD=0
+      - COMMIT=0
+      - CONFIGS=0
+      - CONTAINERS=1 # Traefik, portainer, etc.
+      - DISTRIBUTION=0
+      - EXEC=0
+      - IMAGES=1 # Portainer
+      - INFO=1 # Portainer
+      - NETWORKS=1 # Portainer
+      - NODES=0
+      - PLUGINS=0
+      - SERVICES=1 # Portainer
+      - SESSION=0
+      - SWARM=0
+      - SYSTEM=0
+      - TASKS=1 # Portainer
+      - VOLUMES=1 # Portainer
+
+  # Portainer - WebUI for Containers
+  portainer:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    depends_on:
+      - socket-proxy
+    command: -H tcp://socket-proxy:2375
+    ports:
+      - "$PORTAINER_PORT:9000"
+    networks:
+      - t2_proxy
+      - socket_proxy
+    volumes:
+      - $DOCKERDIR/appdata/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+    environment:
+      - TZ=$TZ
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.portainer-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.portainer-rtr.service=portainer-svc"
+      - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
+
+  # Homepage - Application Dashboard
+  homepage:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: ghcr.io/benphelps/homepage:main
+    container_name: homepage
+    networks:
+      - t2_proxy
+      - socket_proxy
+    #ports:
+    #  - "$HOMEPAGE_PORT:3000"
+    volumes:
+      - $DOCKERDIR/appdata/homepage:/app/config
+    environment:
+      <<: *default-tz-puid-pgid
+      LOG_LEVEL: debug
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`,`www.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3030"
+
+  # Google OAuth - Single Sign On using OAuth 2.0
+  # https://www.smarthomebeginner.com/google-oauth-with-traefik-docker/
+  oauth:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: oauth
+    image: thomseddon/traefik-forward-auth:latest
+    environment:
+      - CONFIG=/config
+      - COOKIE_DOMAIN=$DOMAINNAME
+      - INSECURE_COOKIE=false
+      - AUTH_HOST=oauth.$DOMAINNAME
+      - URL_PATH=/_oauth
+      - LOG_LEVEL=warn # set to trace while testing bypass rules
+      - LOG_FORMAT=text
+      - LIFETIME=86400 # 1 day
+      - DEFAULT_ACTION=auth
+      - DEFAULT_PROVIDER=google
+    secrets:
+      - source: traefik_forward_auth
+        target: /config
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.oauth-rtr.tls=true"
+      - "traefik.http.routers.oauth-rtr.entrypoints=https"
+      - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.oauth-rtr.service=oauth-svc"
+      - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
+
+  ############################# SECURITY
+
+  # CrowdSec - Open-source & collaborative security IPS
+  # https://www.smarthomebeginner.com/crowdsec-docker-compose-1-fw-bouncer/
+  # - check collections: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli collections list
+  # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
+  # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
+  # - accept enrollment: https://app.crowdsec.net/instances
+  # - update acquis.yml in /home/USER/docker-services/appdata/crowdsec/config/acquis.yaml
+  # - move custom_whitelists.yaml to /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/ 
+  # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
+  ### install firewall bouncer
+  # https://doc.crowdsec.net/docs/getting_started/install_crowdsec/##install-our-repositories
+  # - curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+  # - sudo apt update
+  # - sudo apt install crowdsec-firewall-bouncer-iptables
+  # - add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add host-firewall-bouncer-HOSTNAME
+  # - edit config: /etc/crowdsec/bouncers/crowdsec-firewall-bouncer.yaml
+  crowdsec:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    ports:
+      - "$CROWDSEC_API_PORT:8080"
+      - "$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
+    environment:
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd crowdsecurity/nextcloud LePresidente/adguardhome"
+      GID: "${GID-1000}"
+      CUSTOM_HOSTNAME: vps
+      #DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
+      # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
+      AGENT_USERNAME: $CROWDSEC_AGENT_USERNAME
+      AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
+      LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
+    volumes:
+      - $DOCKERDIR/logs/:/logs/:ro
+      - /var/log:/var/log:ro
+      - $DOCKERDIR/appdata/crowdsec/data:/var/lib/crowdsec/data
+      - $DOCKERDIR/appdata/crowdsec/config:/etc/crowdsec
+
+  # CrowdSec Bouncer - Traefik
+  # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  # - add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add traefik-bouncer-HOSTNAME
+  # - update the api key for compose file
+  # - check bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers list
+  traefik-bouncer:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: fbonalair/traefik-crowdsec-bouncer
+    container_name: traefik-bouncer
+    depends_on:
+      - crowdsec
+    environment:
+      GIN_MODE: release # default is debug (more logs)
+      CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_BOUNCER_TRAEFIK_API_KEY
+      CROWDSEC_AGENT_HOST: crowdsec:8080 #$CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port
+
+  # CrowdSec Bouncer - Cloudflare
+  # https://www.smarthomebeginner.com/crowdsec-cloudflare-bouncer/
+  # sudo docker exec crowdsec cscli bouncer add cloudflare-bouncer
+  # Set max ip number right the first time (max 10000). Recreating container deletes all ips and readds them causing cloudflare 429 rate limiting.
+  cloudflare-bouncer:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: crowdsecurity/cloudflare-bouncer
+    container_name: cloudflare-bouncer
+    depends_on:
+      - crowdsec
+    volumes:
+      - $DOCKERDIR/appdata/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+  ############################# DATABASE
+
+  # Prometheus - Database for sensor data
+  prometheus:
+    <<: *common-keys-monitoring # See EXTENSION FIELDS at the top
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "$PROMETHEUS_PORT:9090"
+    volumes:
+      - $DOCKERDIR/appdata/prometheus/config:/etc/prometheus
+      - $DOCKERDIR/appdata/prometheus/data:/prometheus
+    user: $PUID:$PGID
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.prometheus-rtr.entrypoints=https"
+      - "traefik.http.routers.prometheus-rtr.rule=Host(`prom.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.prometheus-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.prometheus-rtr.service=prometheus-svc"
+      - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
+
+  ############################# UTILITIES
+
+  # Grafana - Graphical data visualization for InfluxDB data
+  grafana:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - t2_proxy
+      - default
+    ports:
+      - "$GRAFANA_PORT:3000"
+    user: $PUID
+    volumes:
+      - $DOCKERDIR/appdata/grafana:/var/lib/grafana
+    environment:
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.grafana-rtr.entrypoints=https"
+      - "traefik.http.routers.grafana-rtr.rule=Host(`grafana.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.grafana-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.grafana-rtr.service=grafana-svc"
+      - "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"
+
+  # VSCode - VSCode Editing
+  vscode:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: vscode
+    ports:
+      - "$VSCODE_PORT:8443"
+    volumes:
+      - $DOCKERDIR:/data/docker
+      #- $USERDIR/server:/data/server
+      #- $DATADIR:/data/data
+      - $DOCKERDIR/appdata/vscode:/config
+    environment:
+      <<: *default-tz-puid-pgid
+      DOCKER_HOST: tcp://socket-proxy:2375
+      # PASSWORD: $VSCODE_PASSWORD
+      # HASHED_PASSWORD: #optional
+      # SUDO_PASSWORD: password #optional
+      # SUDO_PASSWORD_HASH: #optional
+      # DEFAULT_WORKSPACE: /config/data/User/Workspaces/AZ.code-workspace #optional
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.vscode-rtr.entrypoints=https"
+      - "traefik.http.routers.vscode-rtr.rule=Host(`code.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.vscode-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.vscode-rtr.service=vscode-svc"
+      - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
+
+  ############################# GAME SERVER
+
+
+  ## SteamCMD - For downloading and running Steam games and game server software
+  ## Ref: https://docs.ttt2.neoxult.de/server-owners/manual-install/
+  steamcmd:
+    <<: *common-keys-apps
+    image: steamcmd/steamcmd:latest
+    container_name: steamcmd
+    command:
+      - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 -validate +quit
+        #- force_install_dir /home/steam/css/
+        #- app_update 232330 -validate # install CSS
+      - /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
+    ports:
+      - "$GARRYSMOD_PORT:27015"
+    volumes:
+      - $DOCKERDIR/appdata/steamcmd/:/home/steam/
+    environment:
+      <<: *default-tz-puid-pgid
+
+  ############################# MAINTENANCE
+
+  # Docker-GC - Automatic Docker Garbage Collection
+  # Create docker-gc-exclude file
+  dockergc:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: clockworksoul/docker-gc-cron:latest
+    container_name: docker-gc
+    depends_on:
+      - socket-proxy
+    networks:
+      - socket_proxy
+    volumes:
+      # - /var/run/docker.sock:/var/run/docker.sock # Use Docker Socket Proxy instead for improved security
+      - $DOCKERDIR/appdata/docker-gc/docker-gc-exclude:/etc/docker-gc-exclude
+    environment:
+      CRON: 12 0 0 * * ? # Everyday at midnight.
+      FORCE_IMAGE_REMOVAL: 1
+      FORCE_CONTAINER_REMOVAL: 0
+      GRACE_PERIOD_SECONDS: 604800 # 7 days
+      DRY_RUN: 0
+      CLEAN_UP_VOLUMES: 1
+      TZ: $TZ
+      DOCKER_HOST: tcp://socket-proxy:2375
+
+  # WatchTower - Automatic Docker Container Updates
+  watchtower:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: containrrr/watchtower
+    container_name: watchtower
+    depends_on:
+      - socket-proxy
+    networks:
+      - socket_proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      TZ: $TZ
+      WATCHTOWER_CLEANUP: "true"
+      WATCHTOWER_REMOVE_VOLUMES: "true"
+      WATCHTOWER_INCLUDE_STOPPED: "true"
+      WATCHTOWER_REVIVE_STOPPED: "true"
+      WATCHTOWER_NO_STARTUP_MESSAGE: "false"
+      WATCHTOWER_SCHEDULE: "0 30 12 * * *" # Everyday at 12:30
+      DOCKER_HOST: tcp://socket-proxy:2375 # Use this if you have Socket Proxy enabled.
