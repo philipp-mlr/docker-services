@@ -161,10 +161,10 @@ services:
       t2_proxy:
         ipv4_address: 192.168.90.254 # You can specify a static IP
       socket_proxy:
-      healthcheck:
-        test: [ "CMD", "traefik", "healthcheck", "--ping" ]
-        interval: 5s
-        retries: 3
+    healthcheck:
+      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      interval: 5s
+      retries: 3
     ports:
       - target: 80
         published: 80
