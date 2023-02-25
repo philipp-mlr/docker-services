@@ -116,9 +116,9 @@ services:
       - --global.sendAnonymousUsage=true
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
+      - --entryPoints.ping.address=:8081
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
       - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
-      # - --entryPoints.ping.address=:8081
       - --api=true
       - --api.dashboard=true
       - --ping=true
@@ -161,10 +161,10 @@ services:
       t2_proxy:
         ipv4_address: 192.168.90.254 # You can specify a static IP
       socket_proxy:
-        #healthcheck:
-        #  test: ["CMD", "traefik", "healthcheck", "--ping"]
-        #  interval: 5s
-        #  retries: 3
+    healthcheck:
+      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      interval: 5s
+      retries: 3
     ports:
       - target: 80
         published: 80
@@ -172,6 +172,10 @@ services:
         mode: host
       - target: 443
         published: 443
+        protocol: tcp
+        mode: host
+      - target: 8081 # insecure api wont work
+        published: 8081
         protocol: tcp
         mode: host
     volumes:

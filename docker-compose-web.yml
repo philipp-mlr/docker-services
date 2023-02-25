@@ -516,10 +516,9 @@ services:
     image: steamcmd/steamcmd:latest
     container_name: steamcmd
     command:
-      - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 -validate +quit
+      - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 -validate +quit && /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
         #- force_install_dir /home/steam/css/
         #- app_update 232330 -validate # install CSS
-      - /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
     ports:
       - "$GARRYSMOD_PORT:27015"
     volumes:
