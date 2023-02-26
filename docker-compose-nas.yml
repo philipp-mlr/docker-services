@@ -495,8 +495,16 @@ services:
       DELETE_ON_STOP: false
       DNS_SERVER: "1.1.1.1"
 
-  # Docker-GC - Automatic Docker Garbage Collection
-  # Create docker-gc-exclude file
+  cf-tunnel:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: cf-tunnel
+    image: cloudflare/cloudflared
+    command: tunnel run
+    #environment:
+    #  - TUNNEL_TOKEN=mytokengoeshere
+
+    # Docker-GC - Automatic Docker Garbage Collection
+    # Create docker-gc-exclude file
   dockergc:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     image: clockworksoul/docker-gc-cron:latest

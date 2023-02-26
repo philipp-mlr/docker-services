@@ -1,4 +1,5 @@
-appdata/traefik/acme
+appdata/
+!appdata/traefik/*
 secrets/*
 logs/*
 .env
