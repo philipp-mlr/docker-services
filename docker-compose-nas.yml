@@ -25,6 +25,8 @@ secrets:
     file: $DOCKERDIR/secrets/htpasswd
   cf_token:
     file: $DOCKERDIR/secrets/cf_token
+  cf_ddns_token:
+    file: $DOCKERDIR/secrets/cf_ddns_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
   mysql_root_password:
@@ -484,9 +486,9 @@ cf-ddns:
   container_name: cf-ddns
   image: oznu/cloudflare-ddns:latest
   secrets:
-    - cf_token
+    - cf_ddns_token
   environment:
-    - API_KEY=/run/secrets/cf_token
+    - API_KEY=/run/secrets/cf_ddns_token
     - ZONE=$DOMAINNAME
     - PROXIED=true
     - RRTYPE=A
