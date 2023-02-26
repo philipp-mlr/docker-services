@@ -535,8 +535,6 @@ services:
       - socket-proxy
     networks:
       - socket_proxy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       TZ: $TZ
       WATCHTOWER_CLEANUP: "true"
