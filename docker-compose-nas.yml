@@ -489,7 +489,7 @@ services:
     ports:
       - 8000:8000/tcp
     volumes:
-      - $DOCKERDIR/appdata/ddns-updater/config.json:/updater/data/config.json # Owned by UID 1000
+      - $DOCKERDIR/appdata/ddns-updater/:/updater/data/ # Owned by UID 1000
     secrets:
       - cf_token
     environment:
@@ -501,8 +501,8 @@ services:
       # Web UI
       LISTENING_PORT: 8000
       # Backup
-      #BACKUP_PERIOD: 96h # 0 to disable
-      #BACKUP_DIRECTORY: /updater/data/backups
+      BACKUP_PERIOD: 96h # 0 to disable
+      BACKUP_DIRECTORY: /updater/data/backups
       # Other
       LOG_LEVEL: debug
       LOG_CALLER: short
