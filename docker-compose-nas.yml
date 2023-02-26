@@ -476,36 +476,22 @@ services:
       ## HTTP Services
       - "traefik.http.routers.vscode-rtr.service=vscode-svc"
       - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
-
   ############################# MAINTENANCE
 
   # Cloudflare DDNS - Dynamic DNS Updater
-  ddns-updater:
-    <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: qmcgaw/ddns-updater
-    container_name: ddns-updater
-    restart: always
-    network_mode: bridge
-    ports:
-      - 8000:8000/tcp
-    volumes:
-      - $DOCKERDIR/appdata/ddns-updater/:/updater/data/ # Owned by UID 1000
-    secrets:
-      - cf_token
-    environment:
-      <<: *default-tz-puid-pgid
-      PERIOD: 12h
-      UPDATE_COOLDOWN_PERIOD: 5m
-      PUBLICIP_DNS_TIMEOUT: 3s
-      HTTP_TIMEOUT: 10s
-      # Web UI
-      LISTENING_PORT: 8000
-      # Backup
-      BACKUP_PERIOD: 96h # 0 to disable
-      BACKUP_DIRECTORY: /updater/data/backups
-      # Other
-      LOG_LEVEL: debug
-      LOG_CALLER: short
+cf-ddns:
+  <<: *common-keys-core # See EXTENSION FIELDS at the top
+  container_name: cf-ddns
+  image: oznu/cloudflare-ddns:latest
+  secrets:
+    - cf_token
+  environment:
+    - API_KEY=/run/secrets/cf_token
+    - ZONE=$DOMAINNAME
+    - PROXIED=true
+    - RRTYPE=A
+    - DELETE_ON_STOP=false
+    - DNS_SERVER=1.1.1.1
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
