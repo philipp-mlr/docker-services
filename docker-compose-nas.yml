@@ -490,8 +490,26 @@ services:
       - 8000:8000/tcp
     volumes:
       - $DOCKERDIR/appdata/ddns-updater:/updater/data # Owned by UID 1000
+    secrets:
+      - cf_token
     environment:
       <<: *default-tz-puid-pgid
+      CONFIG:
+        # Does not work in config file for some reason
+        {
+          "settings":
+            [
+              {
+                  "provider": "cloudflare",
+                  "zone_identifier": "$CLOUDFLARE_ZONE_ID",
+                  "domain": "$DOMAINNAME",
+                  "host": "@",
+                  "ttl": 600,
+                  "token": "/run/secrets/cf_token",
+                  "ip_version": "ipv4"
+                }
+            ]
+        }
       PERIOD: 12h
       UPDATE_COOLDOWN_PERIOD: 5m
       PUBLICIP_DNS_TIMEOUT: 3s
