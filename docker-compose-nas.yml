@@ -488,12 +488,12 @@ services:
     secrets:
       - cf_ddns_token
     environment:
-      - API_KEY=/run/secrets/cf_ddns_token
-      - ZONE=$DOMAINNAME
-      - PROXIED=true
-      - RRTYPE=A
-      - DELETE_ON_STOP=false
-      - DNS_SERVER=1.1.1.1
+      API_KEY: /run/secrets/cf_ddns_token
+      ZONE: $DOMAINNAME
+      PROXIED: false
+      RRTYPE: A
+      DELETE_ON_STOP: false
+      DNS_SERVER: "1.1.1.1"
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
