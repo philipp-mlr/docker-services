@@ -186,7 +186,6 @@ services:
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
       - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules. 
     secrets:
-      - cf_email
       - cf_token
       - htpasswd
     labels:
