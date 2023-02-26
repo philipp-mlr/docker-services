@@ -481,19 +481,19 @@ services:
   ############################# MAINTENANCE
 
   # Cloudflare DDNS - Dynamic DNS Updater
-cf-ddns:
-  <<: *common-keys-core # See EXTENSION FIELDS at the top
-  container_name: cf-ddns
-  image: oznu/cloudflare-ddns:latest
-  secrets:
-    - cf_ddns_token
-  environment:
-    - API_KEY=/run/secrets/cf_ddns_token
-    - ZONE=$DOMAINNAME
-    - PROXIED=true
-    - RRTYPE=A
-    - DELETE_ON_STOP=false
-    - DNS_SERVER=1.1.1.1
+  cf-ddns:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: oznu/cloudflare-ddns:latest
+    container_name: cf-ddns
+    secrets:
+      - cf_ddns_token
+    environment:
+      - API_KEY=/run/secrets/cf_ddns_token
+      - ZONE=$DOMAINNAME
+      - PROXIED=true
+      - RRTYPE=A
+      - DELETE_ON_STOP=false
+      - DNS_SERVER=1.1.1.1
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
