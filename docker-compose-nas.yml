@@ -488,9 +488,9 @@ services:
     secrets:
       - cf_ddns_token
     environment:
-      API_KEY: /run/secrets/cf_ddns_token
+      API_KEY_FILE: /run/secrets/cf_ddns_token
       ZONE: $DOMAINNAME
-      PROXIED: false
+      PROXIED: true
       RRTYPE: A
       DELETE_ON_STOP: false
       DNS_SERVER: "1.1.1.1"
