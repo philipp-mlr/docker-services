@@ -500,7 +500,7 @@ services:
     image: redis:latest
     container_name: redis
     volumes:
-      -$DOCKERDIR/appdata/redis/:/data
+      - $DOCKERDIR/appdata/redis/:/data
 
   # Postgres - Open source object-relational database (Paperless-ngx)
   postgres:
