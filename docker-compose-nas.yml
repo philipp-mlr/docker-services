@@ -347,7 +347,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    secrest:
+    secrets:
       - postgres_password
       - paperless_key
     volumes:
