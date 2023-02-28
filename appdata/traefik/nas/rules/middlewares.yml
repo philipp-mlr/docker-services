@@ -60,14 +60,6 @@ http:
         authResponseHeaders:
           - "X-Forwarded-User"
 
-    middlewares-authelia:
-      forwardAuth:
-        address: "http://authelia:9091/api/verify?rd=https://authelia.{{env "DOMAINNAME"}}"
-        trustForwardHeader: true
-        authResponseHeaders:
-          - "Remote-User"
-          - "Remote-Groups"
-
     middlewares-compress:
       compress: {}
     

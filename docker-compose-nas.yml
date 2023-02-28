@@ -179,7 +179,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - $DOCKERDIR/appdata/traefik/rules/:/rules # file provider directory
+      - $DOCKERDIR/appdata/traefik/nas/rules/:/rules # file provider directory
       - $DOCKERDIR/appdata/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
       - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
     environment:
