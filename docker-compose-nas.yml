@@ -357,32 +357,32 @@ services:
       - $DOCKERDIR/appdata/paperless/consume:/usr/src/paperless/consume
     environment:
       # General
-      - PAPERLESS_URL: https://dms.$DOMAINNAME
-      - USERMAP_UID: $PUID
-      - USERMAP_GID: $PGID
-      - PAPERLESS_TIME_ZONE: $TZ
-      - PAPERLESS_OCR_LANGUAGE: ger+eng
-      - PAPERLESS_CONSUMER_ENABLE_BARCODES: true
-      - PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: true
-      - PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX: ASN
-      - PAPERLESS_WEBSERVER_WORKERS: 2 # Default 1
-      - PAPERLESS_TASK_WORKERS: 2 # Default 1
+      PAPERLESS_URL: https://dms.$DOMAINNAME
+      USERMAP_UID: $PUID
+      USERMAP_GID: $PGID
+      PAPERLESS_TIME_ZONE: $TZ
+      PAPERLESS_OCR_LANGUAGE: ger+eng
+      PAPERLESS_CONSUMER_ENABLE_BARCODES: true
+      PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: true
+      PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX: ASN
+      PAPERLESS_WEBSERVER_WORKERS: 2 # Default 1
+      PAPERLESS_TASK_WORKERS: 2 # Default 1
       # User
-      - PAPERLESS_SECRET_KEY: /secrets/run/paperless_key
-      - PAPERLESS_ADMIN_USER: admin
-      - PAPERLESS_ADMIN_MAIL: /secrets/run/paperless_email
-      - PAPERLESS_ADMIN_PASSWORD: /secrets/run/paperless_password
+      PAPERLESS_SECRET_KEY: /secrets/run/paperless_key
+      PAPERLESS_ADMIN_USER: admin
+      PAPERLESS_ADMIN_MAIL: /secrets/run/paperless_email
+      PAPERLESS_ADMIN_PASSWORD: /secrets/run/paperless_password
       # Database
-      - PAPERLESS_DBENGINE: postgresql
-      - PAPERLESS_DBHOST: postgres
-      - PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
-      - PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
-      - PAPERLESS_DBPASS: /secrets/run/postgres_password
-      - PAPERLESS_REDIS: redis://redis:6379
+      PAPERLESS_DBENGINE: postgresql
+      PAPERLESS_DBHOST: postgres
+      PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
+      PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
+      PAPERLESS_DBPASS: /secrets/run/postgres_password
+      PAPERLESS_REDIS: redis://redis:6379
       # Tika & Gotenberg
-      - PAPERLESS_TIKA_ENABLED: 1
-      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
-      - PAPERLESS_TIKA_ENDPOINT: http://tika:$TIKA_PORT
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
+      PAPERLESS_TIKA_ENDPOINT: http://tika:$TIKA_PORT
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
