@@ -29,14 +29,14 @@ secrets:
     file: $DOCKERDIR/secrets/cf_ddns_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
-  mysql_root_password:
-    file: $DOCKERDIR/secrets/mysql_root_password
-  guac_db_name:
-    file: $DOCKERDIR/secrets/guac_db_name
-  guac_mysql_user:
-    file: $DOCKERDIR/secrets/guac_mysql_user
-  guac_mysql_password:
-    file: $DOCKERDIR/secrets/guac_mysql_password
+  postgres_password:
+    file: $DOCKERDIR/secrets/postgres_password
+  paperless_key:
+    file: $DOCKERDIR/secrets/paperless_key
+  paperless_email:
+    file: $DOCKERDIR/secrets/paperless_email
+  paperless_password:
+    file: $DOCKERDIR/secrets/paperless_password
   plex_claim:
     file: $DOCKERDIR/secrets/plex_claim
 
@@ -321,6 +321,80 @@ services:
       - "traefik.http.routers.oauth-rtr.service=oauth-svc"
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
 
+  # Paperless-ngx - a document management system that transforms your physical documents into a searchable online archive
+  paperless:
+    <<: *common-keys-apps
+    image: paperlessngx/paperless-ngx:latest
+    container_name: paperless
+    ports:
+      - "$PAPERLESS_PORT:8000"
+    depends_on:
+      - postgres
+      - redis
+      - gotenberg
+      - tika
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-fs",
+          "-S",
+          "--max-time",
+          "2",
+          "http://localhost:8000"
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    secrest:
+      - postgres_password
+      - paperless_key
+    volumes:
+      - $DOCKERDIR/appdata/paperless/data:/usr/src/paperless/data
+      - $DOCKERDIR/appdata/paperless/media:/usr/src/paperless/media
+      - $DOCKERDIR/appdata/paperless/export:/usr/src/paperless/export
+      - $DOCKERDIR/appdata/paperless/consume:/usr/src/paperless/consume
+    environment:
+      # General
+      - PAPERLESS_URL: https://dms.$DOMAINNAME
+      - USERMAP_UID: $PUID
+      - USERMAP_GID: $PGID
+      - PAPERLESS_TIME_ZONE: $TZ
+      - PAPERLESS_OCR_LANGUAGE: ger+eng
+      - PAPERLESS_CONSUMER_ENABLE_BARCODES: true
+      - PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: true
+      - PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX: ASN
+      - PAPERLESS_WEBSERVER_WORKERS: 2 # Default 1
+      - PAPERLESS_TASK_WORKERS: 2 # Default 1
+      # User
+      - PAPERLESS_SECRET_KEY: /secrets/run/paperless_key
+      - PAPERLESS_ADMIN_USER: admin
+      - PAPERLESS_ADMIN_MAIL: /secrets/run/paperless_email
+      - PAPERLESS_ADMIN_PASSWORD: /secrets/run/paperless_password
+      # Database
+      - PAPERLESS_DBENGINE: postgresql
+      - PAPERLESS_DBHOST: postgres
+      - PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
+      - PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
+      - PAPERLESS_DBPASS: /secrets/run/postgres_password
+      - PAPERLESS_REDIS: redis://redis:6379
+      # Tika & Gotenberg
+      - PAPERLESS_TIKA_ENABLED: 1
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
+      - PAPERLESS_TIKA_ENDPOINT: http://tika:$TIKA_PORT
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.paperless-rtr.tls=true"
+      - "traefik.http.routers.paperless-rtr.entrypoints=https"
+      - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.paperless-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.paperless-rtr.service=paperless-svc"
+      - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
+
   ############################# SECURITY
 
   # CrowdSec - Open-source & collaborative security IPS
@@ -420,6 +494,28 @@ services:
       - "traefik.http.routers.prometheus-rtr.service=prometheus-svc"
       - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
 
+  # redis - In memory key-value store - (Paperless-ngx: Task scheduler and advanced features )
+  redis:
+    <<: *common-keys-core
+    image: redis:latest
+    container_name: redis
+    volumes:
+      -$DOCKERDIR/appdata/redis/:/data
+
+  # Postgres - Open source object-relational database (Paperless-ngx)
+  postgres:
+    <<: *common-keys-core
+    image: postgres:latest
+    container_name: postgres
+    volumes:
+      - $DOCKERDIR/appdata/postgres/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $PAPERLESS_DATABASE_NAME
+      POSTGRES_USER: $PAPERLESS_DATABASE_USER
+      POSTGRES_PASSWORD: /secrets/run/postgres_password
+    secrets:
+      - postgres_password
+
   ############################# UTILITIES
 
   # Grafana - Graphical data visualization for InfluxDB data
@@ -478,6 +574,29 @@ services:
       ## HTTP Services
       - "traefik.http.routers.vscode-rtr.service=vscode-svc"
       - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
+
+  # gotenberg - an API server for convering document formats (Paperless-ngx)
+  gotenberg:
+    <<: *common-keys-core
+    image: docker.io/gotenberg/gotenberg:latest
+    container_name: gotenberg
+    ports:
+      - $GOTENBERG_PORT:3000
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
+
+  # tika - detects and extracts metadata and text from different file types (Paperless-ngx)
+  tika:
+    <<: *common-keys-core
+    image: ghcr.io/paperless-ngx/tika:latest
+    container_name: tika
+    ports:
+      - $TIKA_PORT:9998
+
   ############################# MAINTENANCE
 
   # Cloudflare DDNS - Dynamic DNS Updater

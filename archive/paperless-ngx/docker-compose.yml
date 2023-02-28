@@ -62,7 +62,7 @@ services:
       - traefik.http.routers.paperless.tls=true
       - traefik.http.routers.paperless.rule=Host(`dms.philipp.software`)
       - traefik.http.routers.paperless.service=paperless
-      #- traefik.http.services.paperless.loadbalancer.server.port=8000
+      - traefik.http.services.paperless.loadbalancer.server.port=8000
 
 networks:
   paperless:
