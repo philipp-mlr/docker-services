@@ -370,16 +370,16 @@ services:
       PAPERLESS_WEBSERVER_WORKERS: 2 # Default 1
       PAPERLESS_TASK_WORKERS: 2 # Default 1
       # User
-      PAPERLESS_SECRET_KEY: /run/secrets/paperless_key
+      PAPERLESS_SECRET_KEY_FILE: /run/secrets/paperless_key
       PAPERLESS_ADMIN_USER: admin
-      PAPERLESS_ADMIN_MAIL: /run/secrets/paperless_email
-      PAPERLESS_ADMIN_PASSWORD: /run/secrets/paperless_password
+      PAPERLESS_ADMIN_MAIL_FILE: /run/secrets/paperless_email
+      PAPERLESS_ADMIN_PASSWORD_FILE: /run/secrets/paperless_password
       # Database
       PAPERLESS_DBENGINE: postgresql
       PAPERLESS_DBHOST: postgres
       PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
       PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
-      PAPERLESS_DBPASS: /run/secrets/postgres_password
+      PAPERLESS_DBPASS_FILE: /run/secrets/postgres_password
       PAPERLESS_REDIS: redis://redis:6379
       # Tika & Gotenberg
       PAPERLESS_TIKA_ENABLED: 1
@@ -514,7 +514,7 @@ services:
     environment:
       POSTGRES_DB: $PAPERLESS_DATABASE_NAME
       POSTGRES_USER: $PAPERLESS_DATABASE_USER
-      POSTGRES_PASSWORD: /run/secrets/postgres_password
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
     secrets:
       - postgres_password
 
