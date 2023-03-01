@@ -350,6 +350,7 @@ services:
     secrets:
       - postgres_password
       - paperless_key
+      - paperless_password
     volumes:
       - $DOCKERDIR/appdata/paperless/data:/usr/src/paperless/data
       - $DOCKERDIR/appdata/paperless/media:/usr/src/paperless/media
