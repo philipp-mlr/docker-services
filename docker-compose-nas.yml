@@ -358,7 +358,7 @@ services:
     environment:
       # General
       #PAPERLESS_URL: https://dms.$DOMAINNAME #Disabled for now due to lack of domain name
-      PAPERLESS_ALLOWED_HOSTS: synology,nas,$DOMAINNAME
+      PAPERLESS_ALLOWED_HOSTS: localhost,synology,nas,$DOMAINNAME
       USERMAP_UID: $PUID
       USERMAP_GID: $PGID
       PAPERLESS_TIME_ZONE: $TZ
