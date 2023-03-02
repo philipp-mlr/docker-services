@@ -390,7 +390,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.paperless-rtr.tls=true"
       - "traefik.http.routers.paperless-rtr.entrypoints=https"
-      - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
+      - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`) || HOST(localhost) && Path(`/dms`)"
       ## Middlewares
       - "traefik.http.routers.paperless-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
