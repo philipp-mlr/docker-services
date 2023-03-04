@@ -27,10 +27,10 @@ secrets:
     file: $DOCKERDIR/secrets/cf_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
-  mysql_root_password:
-    file: $DOCKERDIR/secrets/mysql_root_password
-  guac_db_name:
-    file: $DOCKERDIR/secrets/guac_db_name
+  rsync_username:
+    file: $DOCKERDIR/secrets/rsync_username
+  rsync_password:
+    file: $DOCKERDIR/secrets/rsync_password
   guac_mysql_user:
     file: $DOCKERDIR/secrets/guac_mysql_user
   guac_mysql_password:
