@@ -475,8 +475,8 @@ services:
     image: axiom/rsync-server:latest
     container_name: rsync-server
     ports:
-      - "$RSYNC_PORT:873"
-      #- "$RSYNC_SSH_PORT:22"
+      #- "$RSYNC_PORT:873"
+      - "$RSYNC_SSH_PORT:22"
     volumes:
       - $DOCKERDIR/appdata/rsync:/data
     # - $USERDIR/.ssh/authorized_keys:/root/.ssh/authorized_keys
