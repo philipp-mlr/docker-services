@@ -476,6 +476,7 @@ services:
     container_name: rsync-server
     ports:
       - "$RSYNC_PORT:873"
+      - "$RSYNC_SSH_PORT:22"
     volumes:
       - $DOCKERDIR/appdata/rsync:/data
     # - $USERDIR/.ssh/authorized_keys:/root/.ssh/authorized_keys
@@ -494,7 +495,7 @@ services:
       - "traefik.http.routers.rsync-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.rsync-rtr.service=rsync-svc"
-      - "traefik.http.services.rsync-svc.loadbalancer.server.port=873"
+      - "traefik.http.services.rsync-svc.loadbalancer.server.port=22"
 
   # VSCode - VSCode Editing
   vscode:
