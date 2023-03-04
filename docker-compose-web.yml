@@ -483,8 +483,8 @@ services:
       - rsync_username
       - rsync_password
     environment:
-      USERNAME: /run/secrets/rsync_username
-      PASSWORD: /run/secrets/rsync_password
+      USERNAME: admin
+      PASSWORD: 123
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
