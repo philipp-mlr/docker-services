@@ -451,9 +451,6 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: grafana/grafana:latest
     container_name: grafana
-    networks:
-      - t2_proxy
-      - default
     ports:
       - "$GRAFANA_PORT:3000"
     user: $PUID
@@ -471,6 +468,32 @@ services:
       ## HTTP Services
       - "traefik.http.routers.grafana-rtr.service=grafana-svc"
       - "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"
+
+  # rsync - A rsyncd/sshd server in Docker. You know, for moving files.
+  rsync-server:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: axiom/rsync-server:latest
+    container_name: grafana
+    ports:
+      - "$RSYNC_PORT:873"
+    volumes:
+      - $DOCKERDIR/appdata/rsync:/data
+    secrets:
+      - rsync_username
+      - rsync_password
+    environment:
+      USERNAME: /run/secrets/rsync_username
+      PASSWORD: /run/secrets/rsync_password
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.rsync-rtr.entrypoints=https"
+      - "traefik.http.routers.rsync-rtr.rule=Host(`rsync.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.rsync-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.rsync-rtr.service=rsync-svc"
+      - "traefik.http.services.rsync-svc.loadbalancer.server.port=873"
 
   # VSCode - VSCode Editing
   vscode:
