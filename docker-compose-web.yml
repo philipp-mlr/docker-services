@@ -477,7 +477,7 @@ services:
     secrets:
       - webdav_password
     environment:
-      SERVER_NAMES: $DOMAINANME,webdav.$DOMAINNAME
+      SERVER_NAMES: webdav.$DOMAINNAME
       #AUTH_TYPE: digest
       #USERNAME: backup
       #PASSWORD: /run/secrets/webdav_password
