@@ -27,12 +27,8 @@ secrets:
     file: $DOCKERDIR/secrets/cf_token
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
-  rsync_username:
-    file: $DOCKERDIR/secrets/rsync_username
-  rsync_password:
-    file: $DOCKERDIR/secrets/rsync_password
-  guac_mysql_user:
-    file: $DOCKERDIR/secrets/guac_mysql_user
+  webdav_password:
+    file: $DOCKERDIR/secrets/webdav_password
   guac_mysql_password:
     file: $DOCKERDIR/secrets/guac_mysql_password
   plex_claim:
@@ -469,21 +465,32 @@ services:
       - "traefik.http.routers.grafana-rtr.service=grafana-svc"
       - "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"
 
-  # rsync - A rsyncd/sshd server in Docker. You know, for moving files.
-  rsync-server:
+  # webdav - For NAS backups
+  webdav:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: axiom/rsync-server:latest
-    container_name: rsync-server
+    image: bytemark/webdav:latest
+    container_name: webdav
     ports:
-      - "$RSYNC_PORT:873"
+      - "$WEBDAV_PORT:80"
     volumes:
-      - $DOCKERDIR/appdata/rsync:/data
+      - $DOCKERDIR/appdata/webdav/data:/var/lib/dav
     secrets:
-      - rsync_username
-      - rsync_password
+      - webdav_password
     environment:
-      USERNAME: admin
-      PASSWORD: 123
+      SERVER_NAMES: $DOMAINANME,webdav.$DOMAINNAME
+      #AUTH_TYPE: digest
+      #USERNAME: backup
+      #PASSWORD: /run/secrets/webdav_password
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.webdav-rtr.entrypoints=https"
+      - "traefik.http.routers.webdav-rtr.rule=Host(`webdav.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.webdav-rtr.middlewares=middlewares-basic-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.webdav-rtr.service=webdav-svc"
+      - "traefik.http.services.webdav-svc.loadbalancer.server.port=80"
 
   # VSCode - VSCode Editing
   vscode:
