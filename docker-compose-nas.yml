@@ -339,7 +339,7 @@ services:
       - redis-nextcloud
       - postgres-nextcloud
     ports:
-      - $NEXTCLOUD_PORT:80
+      - "$NEXTCLOUD_PORT:80"
     volumes:
       - $DOCKERDIR/appdata/nextcloud/:/var/www/html
       - $DOCKERDIR/appdata/paperless/consume:/usr/src/paperless/consume #has to belong to www-data:www-data
@@ -556,7 +556,7 @@ services:
     image: redis:latest
     container_name: redis-paperless
     ports:
-      - $REDIS_PAPERLESS_PORT:6379
+      - "$REDIS_PAPERLESS_PORT:6379"
     volumes:
       - $DOCKERDIR/appdata/redis_paperless/:/data
 
@@ -566,7 +566,7 @@ services:
     image: redis:latest
     container_name: redis-nextcloud
     ports:
-      - $REDIS_NEXTCLOUD_PORT:6379
+      - "$REDIS_NEXTCLOUD_PORT:6379"
     volumes:
       - $DOCKERDIR/appdata/redis_nextcloud/:/data
 
@@ -667,7 +667,7 @@ services:
     image: docker.io/gotenberg/gotenberg:latest
     container_name: gotenberg
     ports:
-      - $GOTENBERG_PORT:3000
+      - "$GOTENBERG_PORT:3000"
     # The gotenberg chromium route is used to convert .eml files. We do not
     # want to allow external content like tracking pixels or even javascript.
     command:
@@ -681,8 +681,7 @@ services:
     image: ghcr.io/paperless-ngx/tika:latest
     container_name: tika
     ports:
-      - $TIKA_PORT:9998
-
+      - "$TIKA_PORT:9998"
   ############################# MAINTENANCE
 
   # Cloudflare DDNS - Dynamic DNS Updater
