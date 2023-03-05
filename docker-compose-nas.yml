@@ -702,7 +702,7 @@ services:
     image: cloudflare/cloudflared
     command: tunnel run
     environment:
-      - TUNNEL_TOKEN: $CF_TUNNEL_TOKEN
+      TUNNEL_TOKEN: $CF_TUNNEL_TOKEN
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
