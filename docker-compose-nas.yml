@@ -433,7 +433,7 @@ services:
       PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
       PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
       PAPERLESS_DBPASS_FILE: /run/secrets/postgres_password
-      PAPERLESS_REDIS: redis://redis_paperless:$REDIS_PAPERLESS_PORT
+      PAPERLESS_REDIS: redis://redis-paperless:$REDIS_PAPERLESS_PORT
       # Tika & Gotenberg
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
