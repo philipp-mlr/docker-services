@@ -362,7 +362,7 @@ services:
       # Etc
       TRUSTED_PROXIES: ${TRAEFIK_IP}
       #OVERWRITEPROTOCOL: https
-      NEXTCLOUD_TRUSTED_DOMAINS: localhost,paperless,synology,nas,$DOMAINNAME,dms.$DOMAINNAME
+      NEXTCLOUD_TRUSTED_DOMAINS: localhost paperless synology nas $DOMAINNAME dms.$DOMAINNAME
     labels:
       - traefik.enable=true
       ## HTTP Routers
