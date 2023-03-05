@@ -360,9 +360,9 @@ services:
       NEXTCLOUD_ADMIN_USER_FILE: /run/secrets/nextcloud_admin_user
       NEXTCLOUD_ADMIN_PASSWORD_FILE: /run/secrets/nextcloud_admin_password
       # Etc
-      TRUSTED_PROXIES: 192.168.90.254 cloud.$DOMAINNAME
+      TRUSTED_PROXIES: 192.168.90.254 $DOMAINNAME
       #OVERWRITEPROTOCOL: https
-      NEXTCLOUD_TRUSTED_DOMAINS: nextcloud localhost synology nas $DOMAINNAME cloud.$DOMAINNAME
+      NEXTCLOUD_TRUSTED_DOMAINS: nextcloud localhost synology nas $DOMAINNAME
       PHP_MEMORY_LIMIT: 4G
       PHP_UPLOAD_LIMIT: 100G
     labels:
