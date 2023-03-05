@@ -383,7 +383,7 @@ services:
       - "$PAPERLESS_PORT:8000"
     depends_on:
       - postgres-paperless
-      - redis-paperless
+      - redis_paperless
       - gotenberg
       - tika
     healthcheck:
@@ -429,11 +429,11 @@ services:
       PAPERLESS_ADMIN_PASSWORD_FILE: /run/secrets/paperless_password
       # Database
       PAPERLESS_DBENGINE: postgresql
-      PAPERLESS_DBHOST: postgres_paperless
+      PAPERLESS_DBHOST: postgres-paperless
       PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
       PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
       PAPERLESS_DBPASS_FILE: /run/secrets/postgres_password
-      PAPERLESS_REDIS: redis://redis-paperless:$REDIS_PAPERLESS_PORT
+      PAPERLESS_REDIS: redis://redis_paperless:$REDIS_PAPERLESS_PORT
       # Tika & Gotenberg
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
@@ -550,10 +550,10 @@ services:
   #     - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
 
   # redis - In memory key-value store - (Paperless-ngx: Task scheduler and advanced features )
-  redis-paperless:
+  redis_paperless:
     <<: *common-keys-core
     image: redis:latest
-    container_name: redis-paperless
+    container_name: redis_paperless
     ports:
       - $REDIS_PAPERLESS_PORT:6379
     volumes:
@@ -591,7 +591,7 @@ services:
     image: postgres:latest
     container_name: postgres-nextcloud
     ports:
-      - "$POSTGRES_NEXTCLOUD_PORT:5432"
+      - "$POSTGRES_PAPERLESS_PORT:5432"
     volumes:
       - $DOCKERDIR/appdata/postgres_nextcloud/:/var/lib/postgresql/data
     environment:
