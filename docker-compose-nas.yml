@@ -383,7 +383,7 @@ services:
       - "$PAPERLESS_PORT:8000"
     depends_on:
       - postgres-paperless
-      - redis_paperless
+      - redis-paperless
       - gotenberg
       - tika
     healthcheck:
@@ -433,7 +433,7 @@ services:
       PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
       PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
       PAPERLESS_DBPASS_FILE: /run/secrets/postgres_password
-      PAPERLESS_REDIS: redis://redis_paperless:$REDIS_PAPERLESS_PORT
+      PAPERLESS_REDIS: redis://redis-paperless:$redis-paperless_PORT
       # Tika & Gotenberg
       PAPERLESS_TIKA_ENABLED: 1
       PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
@@ -550,10 +550,10 @@ services:
   #     - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
 
   # redis - In memory key-value store - (Paperless-ngx: Task scheduler and advanced features )
-  redis_paperless:
+  redis-paperless:
     <<: *common-keys-core
     image: redis:latest
-    container_name: redis_paperless
+    container_name: redis-paperless
     ports:
       - $REDIS_PAPERLESS_PORT:6379
     volumes:
