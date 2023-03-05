@@ -351,7 +351,7 @@ services:
       # Postgres
       POSTGRES_HOST: postgres-nextcloud
       POSTGRES_DB: $NEXTCLOUD_DATABASE_NAME
-      POSTGRES_USER: NEXTCLOUD_DATABASE_USER
+      POSTGRES_USER: $NEXTCLOUD_DATABASE_USER
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       # Redis
       REDIS_HOST: redis-nextcloud
