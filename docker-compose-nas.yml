@@ -574,6 +574,8 @@ services:
     <<: *common-keys-core
     image: postgres:latest
     container_name: postgres-paperless
+    ports:
+      - "$POSTGRES_PAPERLESS_PORT:5432"
     volumes:
       - $DOCKERDIR/appdata/postgres_paperless/:/var/lib/postgresql/data
     environment:
@@ -588,6 +590,8 @@ services:
     <<: *common-keys-core
     image: postgres:latest
     container_name: postgres-nextcloud
+    ports:
+      - "$POSTGRES_NEXTCLOUD_PORT:5432"
     volumes:
       - $DOCKERDIR/appdata/postgres_nextcloud/:/var/lib/postgresql/data
     environment:
