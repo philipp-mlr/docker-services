@@ -71,3 +71,15 @@ http:
         memRequestBodyBytes: 2097152  
         memResponseBodyBytes: 2097152
         retryExpression: "IsNetworkError() && Attempts() <= 2"
+
+    middlewares-nextcloud:
+      headers: 
+        contentSecurityPolicy: frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}
+        customresponseheaders:
+          X-Frame-Options: SAMEORIGIN
+    
+    middlewares-nextcloud-redirect:
+      redirectregex:
+        permanent: true
+        regex: https://(.*)/.well-known/(card|cal)dav
+        replacement: https://$${1}/remote.php/dav/

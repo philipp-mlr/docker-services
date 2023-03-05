@@ -24,11 +24,11 @@ services:
       - nextcloud
     volumes:
       - nextcloud-redis:/var/lib/redis
+
   nextcloud:
     depends_on:
       - redis
       - db
-
     image: nextcloud:latest
     container_name: nextcloud
     volumes:
@@ -61,7 +61,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       TRUSTED_PROXIES: ${TRAEFIK_IP}
       OVERWRITEPROTOCOL: https
-      
+
 networks:
   nextcloud:
   web:

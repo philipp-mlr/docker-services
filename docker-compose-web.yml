@@ -21,18 +21,17 @@ networks:
 ########################### SECRETS
 
 secrets:
+  # Traefik
   htpasswd:
     file: $DOCKERDIR/secrets/htpasswd
   cf_token:
     file: $DOCKERDIR/secrets/cf_token
+  # Oauth
   traefik_forward_auth:
     file: $DOCKERDIR/secrets/traefik_forward_auth
+  # Webdav
   webdav_password:
     file: $DOCKERDIR/secrets/webdav_password
-  guac_mysql_password:
-    file: $DOCKERDIR/secrets/guac_mysql_password
-  plex_claim:
-    file: $DOCKERDIR/secrets/plex_claim
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
@@ -522,26 +521,6 @@ services:
       ## HTTP Services
       - "traefik.http.routers.vscode-rtr.service=vscode-svc"
       - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
-
-  ############################# GAME SERVER
-
-
-  ## SteamCMD - For downloading and running Steam games and game server software
-  ## Ref: https://docs.ttt2.neoxult.de/server-owners/manual-install/
-  steamcmd:
-    <<: *common-keys-apps
-    image: steamcmd/steamcmd:latest
-    container_name: steamcmd
-    command:
-      - /home/steam/steamcmd/steamcmd.sh +force_install_dir /home/steam/garrysmod +login anonymous +app_update 4020 -validate +quit && /home/steam/garrysmod/srcds_run -game garrysmod +gamemode terrortown +maxplayers 32 +map $GARRYSMOD_MAP +host_workshop_collection $GARRYSMOD_WORKSHOPCOLLECTION +sv_setsteamaccount $GAME_SERVER_ACCOUNT_TOKEN
-        #- force_install_dir /home/steam/css/
-        #- app_update 232330 -validate # install CSS
-    ports:
-      - "$GARRYSMOD_PORT:27015"
-    volumes:
-      - $DOCKERDIR/appdata/steamcmd/:/home/steam/
-    environment:
-      <<: *default-tz-puid-pgid
 
   ############################# MAINTENANCE
 
