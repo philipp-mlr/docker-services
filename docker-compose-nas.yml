@@ -412,7 +412,7 @@ services:
     environment:
       # General
       PAPERLESS_URL: https://dms.$DOMAINNAME
-      PAPERLESS_ALLOWED_HOSTS: localhost,synology,nas,$DOMAINNAME,dms.$DOMAINNAME
+      PAPERLESS_ALLOWED_HOSTS: localhost,paperless,synology,nas,$DOMAINNAME,dms.$DOMAINNAME
       USERMAP_UID: $PUID
       USERMAP_GID: $PGID
       PAPERLESS_TIME_ZONE: $TZ
