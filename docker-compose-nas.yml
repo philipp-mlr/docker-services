@@ -363,6 +363,8 @@ services:
       TRUSTED_PROXIES: 192.168.90.254
       OVERWRITEPROTOCOL: https
       NEXTCLOUD_TRUSTED_DOMAINS: localhost paperless synology nas $DOMAINNAME dms.$DOMAINNAME
+      PHP_MEMORY_LIMIT: 4G
+      PHP_UPLOAD_LIMIT: 100G
     labels:
       - traefik.enable=true
       ## HTTP Routers
