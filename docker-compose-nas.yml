@@ -555,8 +555,9 @@ services:
     <<: *common-keys-core
     image: redis:latest
     container_name: redis-paperless
+    command: --port $REDIS_PAPERLESS_PORT
     ports:
-      - "$REDIS_PAPERLESS_PORT:6379"
+      - "$REDIS_PAPERLESS_PORT:$REDIS_PAPERLESS_PORT"
     volumes:
       - $DOCKERDIR/appdata/redis_paperless/:/data
 
@@ -565,8 +566,9 @@ services:
     <<: *common-keys-core
     image: redis:latest
     container_name: redis-nextcloud
+    command: --port $REDIS_NEXTCLOUD_PORT
     ports:
-      - "$REDIS_NEXTCLOUD_PORT:6379"
+      - "$REDIS_NEXTCLOUD_PORT:$REDIS_NEXTCLOUD_PORT"
     volumes:
       - $DOCKERDIR/appdata/redis_nextcloud/:/data
 
