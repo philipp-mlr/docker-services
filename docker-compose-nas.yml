@@ -361,7 +361,7 @@ services:
       NEXTCLOUD_ADMIN_PASSWORD_FILE: /run/secrets/nextcloud_admin_password
       # Etc
       TRUSTED_PROXIES: ${TRAEFIK_IP}
-      OVERWRITEPROTOCOL: https
+      #OVERWRITEPROTOCOL: https
     labels:
       - traefik.enable=true
       ## HTTP Routers
