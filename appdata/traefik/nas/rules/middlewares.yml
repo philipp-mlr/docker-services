@@ -75,8 +75,13 @@ http:
     middlewares-nextcloud:
       headers: 
         contentSecurityPolicy: frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}
+        customFrameOptionsValue: "allow-from https:{{env "DOMAINNAME"}}"
+        stsPreload: true
+        stsIncludeSubdomains: true 
+        X-Frame-Options: SAMEORIGIN
         customresponseheaders:
-          X-Frame-Options: SAMEORIGIN
+          X-Robots-Tag: none
+          stsSeconds: 155520011
 
     middlewares-nextcloud-redirect:
       redirectregex:

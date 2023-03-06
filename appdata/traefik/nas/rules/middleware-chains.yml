@@ -50,9 +50,9 @@ http:
     chain-nextcloud:
       chain:
         middlewares:
-          - middlewares-nextcloud
-          - middlewares-nextcloud-redirect
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
-          - middlewares-secure-headers
+          #- middlewares-secure-headers
           - middlewares-compress
+          - middlewares-nextcloud
+          - middlewares-nextcloud-redirect
