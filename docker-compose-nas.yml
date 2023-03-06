@@ -695,7 +695,7 @@ services:
     volumes:
       - $DOCKERDIR/appdata/adguard/conf:/opt/adguardhome/conf 
       - $DOCKERDIR/appdata/adguard/work:/opt/adguardhome/work 
-      - $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
+      #- $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
