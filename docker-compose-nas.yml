@@ -231,7 +231,7 @@ services:
       - "traefik.http.routers.ping.tls=true"
       - "traefik.http.routers.ping.service=ping@internal"
       ## Middlewares
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Google OAuth
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-no-auth@file" # For Google OAuth
 
   # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
   socket-proxy:
@@ -303,7 +303,7 @@ services:
       - "traefik.http.routers.portainer-rtr.entrypoints=https"
       - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.portainer-rtr.service=portainer-svc"
       - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
@@ -458,7 +458,7 @@ services:
       - "traefik.http.routers.paperless-rtr.entrypoints=https"
       - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.paperless-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.paperless-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.paperless-rtr.service=paperless-svc"
       - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
