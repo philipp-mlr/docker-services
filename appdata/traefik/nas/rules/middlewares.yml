@@ -78,10 +78,9 @@ http:
         customFrameOptionsValue: "allow-from https:{{env "DOMAINNAME"}}"
         stsPreload: true
         stsIncludeSubdomains: true 
-        X-Frame-Options: SAMEORIGIN
+        stsSeconds: 155520011
         customresponseheaders:
-          X-Robots-Tag: none
-          stsSeconds: 155520011
+          X-Frame-Options: SAMEORIGIN
 
     middlewares-nextcloud-redirect:
       redirectregex:
