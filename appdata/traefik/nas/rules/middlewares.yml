@@ -74,16 +74,16 @@ http:
 
     middlewares-nextcloud:
       headers: 
-        contentSecurityPolicy: frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}
+        contentSecurityPolicy: "frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}"
         customFrameOptionsValue: "allow-from https:{{env "DOMAINNAME"}}"
         stsPreload: true
         stsIncludeSubdomains: true 
         stsSeconds: 155520011
-        customresponseheaders:
+        customResponseHeaders:
           X-Frame-Options: SAMEORIGIN
 
     middlewares-nextcloud-redirect:
-      redirectregex:
+      redirectRegex:
         permanent: true
-        regex: https://(.*)/.well-known/(card|cal)dav
-        replacement: https://$${1}/remote.php/dav/
+        regex: "https://(.*)/.well-known/(card|cal)dav"
+        replacement: "https://$${1}/remote.php/dav/"
