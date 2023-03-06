@@ -145,7 +145,7 @@ services:
       ### Logging
       - --log=true
       - --log.filePath=/logs/traefik.log
-      - --log.level=INFO # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+      - --log.level=DEBUG # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
       - --accessLog=true
       - --accessLog.filePath=/logs/access.log
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
@@ -693,11 +693,11 @@ services:
       - 853/tcp # DNS over TLS
       - 3000/tcp # Web UI
     volumes:
-      - $DOCKERDIR/appdata/adguard/conf:/opt/adguardhome/conf 
-      - $DOCKERDIR/appdata/adguard/work:/opt/adguardhome/work 
+      - $DOCKERDIR/appdata/adguard/conf:/opt/adguardhome/conf
+      - $DOCKERDIR/appdata/adguard/work:/opt/adguardhome/work
       #- $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
 
-  # gotenberg - an API server for convering document formats (Paperless-ngx)
+      # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
     <<: *common-keys-core
     image: docker.io/gotenberg/gotenberg:latest
