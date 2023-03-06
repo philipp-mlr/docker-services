@@ -360,7 +360,7 @@ services:
       NEXTCLOUD_ADMIN_USER_FILE: /run/secrets/nextcloud_admin_user
       NEXTCLOUD_ADMIN_PASSWORD_FILE: /run/secrets/nextcloud_admin_password
       # Etc
-      TRUSTED_PROXIES: 192.168.90.254 $DOMAINNAME
+      TRUSTED_PROXIES: 192.168.90.0/24 $DOMAINNAME
       #OVERWRITEPROTOCOL: https
       NEXTCLOUD_TRUSTED_DOMAINS: nextcloud localhost synology nas $DOMAINNAME
       PHP_MEMORY_LIMIT: 4G
@@ -664,6 +664,28 @@ services:
   #     ## HTTP Services
   #     - "traefik.http.routers.vscode-rtr.service=vscode-svc"
   #     - "traefik.http.services.vscode-svc.loadbalancer.server.port=8443"
+
+  # AdGuard Home - DNS AdBlocking
+  adguardhome:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: adguardhome
+    image: adguard/adguardhome
+    networks:
+      dockervlan:
+        ipv4_address: 192.168.2.102 # IP address inside defined range
+    ports:
+      - 53/udp # DNS
+      - 67/udp # DHCP
+      - 68/tcp # DHCP
+      - 68/udp # DHCP
+      - 80/tcp # Web UI
+      - 443/tcp # Web UI
+      - 853/tcp # DNS over TLS
+      - 3000/tcp # Web UI
+    volumes:
+      - $DOCKERDIR/appdata/adguard/conf:/opt/adguardhome/conf 
+      - $DOCKERDIR/appdata/adguard/work:/opt/adguardhome/work 
+      - $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:

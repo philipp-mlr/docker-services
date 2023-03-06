@@ -77,7 +77,7 @@ http:
         contentSecurityPolicy: frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}
         customresponseheaders:
           X-Frame-Options: SAMEORIGIN
-    
+
     middlewares-nextcloud-redirect:
       redirectregex:
         permanent: true
