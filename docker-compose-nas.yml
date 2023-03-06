@@ -383,10 +383,20 @@ services:
       - traefik.http.routers.nextcloud-rtr.entrypoints=https
       - traefik.http.routers.nextcloud-rtr.rule=Host(`cloud.$DOMAINNAME`)
       ## Middlewares
-      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
+      - "traefik.http.routers.nextcloud-rtr.middlewares=nextcloud,nextcloud_redirect"
       ## HTTP Services
       - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
       - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=80"
+
+      - traefik.http.middlewares.nextcloud.headers.customFrameOptionsValue=ALLOW-FROM https://philipp.software
+      - traefik.http.middlewares.nextcloud.headers.contentSecurityPolicy=frame-ancestors 'self' philipp.software *.philipp.software
+      - traefik.http.middlewares.nextcloud.headers.stsSeconds=155520011
+      - traefik.http.middlewares.nextcloud.headers.stsIncludeSubdomains=true
+      - traefik.http.middlewares.nextcloud.headers.stsPreload=true
+      - traefik.http.middlewares.nextcloud.headers.customresponseheaders.X-Frame-Options=SAMEORIGIN
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.permanent=true
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.replacement=https://$${1}/remote.php/dav/
 
   # Paperless-ngx - a document management system that transforms your physical documents into a searchable online archive
   paperless:
