@@ -381,7 +381,7 @@ services:
       ## HTTP Routers
       - traefik.http.routers.nextcloud-rtr.tls=true
       - traefik.http.routers.nextcloud-rtr.entrypoints=https
-      - traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`)
+      - traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)
       ## Middlewares
       - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
       ## HTTP Services
