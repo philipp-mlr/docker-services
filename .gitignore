@@ -3,3 +3,4 @@ appdata/
 secrets/*
 logs/*
 .env
+shared/*

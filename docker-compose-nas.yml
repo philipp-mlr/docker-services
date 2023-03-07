@@ -764,6 +764,22 @@ services:
       #- "traefik.http.middlewares.onlyoffice-root.redirectregex.permanent=true"
       #- "traefik.http.middlewares.onlyoffice-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
 
+  # Traefik Certs Dumper - Extract LetsEncrypt Certificates - Traefik2 Compatible
+  certdumper:
+    <<: *common-keys-core
+    container_name: traefik_certdumper
+    image: humenius/traefik-certs-dumper:latest
+    command: --restart-containers onlyoffice
+    networks:
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $DOCKERDIR/appdata/traefik/acme:/traefik:ro
+      - $DOCKERDIR/shared/certs/:/output:rw
+    environment:
+      DOMAIN: $DOMAINNAME
+
   ############################# MAINTENANCE
 
   # Cloudflare DDNS - Dynamic DNS Updater
