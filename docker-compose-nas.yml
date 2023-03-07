@@ -315,7 +315,6 @@ services:
     depends_on:
       - redis-nextcloud
       - postgres-nextcloud
-      - collabora
     ports:
       - "$NEXTCLOUD_PORT:80"
     volumes:
