@@ -353,7 +353,8 @@ services:
       - "$NEXTCLOUD_PORT:80"
     volumes:
       - $DOCKERDIR/appdata/nextcloud/:/var/www/html
-      - $DOCKERDIR/appdata/paperless/consume:/usr/src/paperless/consume #has to belong to www-data:www-data
+      - $DOCKERDIR/appdata/paperless/consume:/external/consume #has to belong to www-data:www-data
+      - /volume1/scan:/external/scan #has to belong to www-data:www-data
     secrets:
       - nextcloud_admin_password
       - nextcloud_admin_user
@@ -741,35 +742,33 @@ services:
       ## HTTP Services
       - "traefik.http.routers.collabora-rtr.service=collabora-svc"
       - "traefik.http.services.collabora-svc.loadbalancer.server.port=9980"
-  
-  onlyoffice:
-    <<: *common-keys-apps
-    image: onlyoffice/documentserver:latest
-    container_name: onlyoffice
-    ports:
-      - "$ONLYOFFICE_PORT_HTTP:80"
-      - "$ONLYOFFICE_PORT_HTTPS:443"
-    volumes:
-      - $DOCKERDIR/appdata/onlyoffice/logs:/var/log/onlyoffice
-      - $DOCKERDIR/shared/certs:/var/www/onlyoffice/Data/certs
-    environment:
-      SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
-      SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.onlyoffice-rtr.tls=true"
-      - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
-      - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
-      ## HTTP Services
-      - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
-      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=443"
-      #- "traefik.http.middlewares.onlyoffice-root.redirectregex.regex=^(.*)"
-      #- "traefik.http.middlewares.onlyoffice-root.redirectregex.replacement=https://cloud.somedomain.com/"
-      #- "traefik.http.middlewares.onlyoffice-root.redirectregex.permanent=true"
-      #- "traefik.http.middlewares.onlyoffice-headers.headers.customrequestheaders.X-Forwarded-Proto=https"
+
+  # Onlyoffice - Feature-rich web-based office suite with a vast range of collaborative capabilities  
+  # Currently only seems to work without Cloudflare Tunnel
+  # onlyoffice:
+  #   <<: *common-keys-apps
+  #   image: onlyoffice/documentserver:latest
+  #   container_name: onlyoffice
+  #   ports:
+  #     - "$ONLYOFFICE_PORT_HTTP:80"
+  #     - "$ONLYOFFICE_PORT_HTTPS:443"
+  #   volumes:
+  #     - $DOCKERDIR/appdata/onlyoffice/logs:/var/log/onlyoffice
+  #     #- $DOCKERDIR/shared/certs:/var/www/onlyoffice/Data/certs
+  #     #environment:
+  #     #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
+  #     #SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
+  #   labels:
+  #     - "traefik.enable=true"
+  #     ## HTTP Routers
+  #     - "traefik.http.routers.onlyoffice-rtr.tls=true"
+  #     - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
+  #     - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
+  #     ## Middlewares
+  #     - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
+  #     ## HTTP Services
+  #     - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
+  #     - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=443"
 
   # Traefik Certs Dumper - Extract LetsEncrypt Certificates - Traefik2 Compatible
   certdumper:
