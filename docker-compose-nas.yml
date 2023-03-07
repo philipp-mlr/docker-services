@@ -748,6 +748,9 @@ services:
     container_name: onlyoffice
     ports:
       - "$ONLYOFFICE_PORT:443"
+    volumes:
+      - $DOCKERDIR/shared/certs/cert.pem:/app/onlyoffice/DocumentServer/data/certs/onlyoffice.crt
+      - $DOCKERDIR/shared/certs/key.pem:/app/onlyoffice/DocumentServer/data/certs/onlyoffice.key
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
