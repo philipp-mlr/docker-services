@@ -51,7 +51,7 @@ services:
       - traefik.http.middlewares.nextcloud.headers.stsPreload=true
       - traefik.http.middlewares.nextcloud.headers.customresponseheaders.X-Frame-Options=SAMEORIGIN
       - traefik.http.middlewares.nextcloud_redirect.redirectregex.permanent=true
-      - traefik.http.middlewares.nextcloud_redirect.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav
+      - traefik.http.middlewares.nextcloud_redirect.redirectregex.regex=https://(.*)/.well-known/(?:card|cal)dav
       - traefik.http.middlewares.nextcloud_redirect.redirectregex.replacement=https://$${1}/remote.php/dav/
     environment:
       REDIS_HOST: redis
