@@ -750,7 +750,7 @@ services:
       - "$ONLYOFFICE_PORT_HTTP:80"
       - "$ONLYOFFICE_PORT_HTTPS:443"
     volumes:
-      - $DOCKERDIR/onlyoffice/DocumentServer/logs:/var/log/onlyoffice
+      - $DOCKERDIR/appdata/onlyoffice/logs:/var/log/onlyoffice
       - $DOCKERDIR/shared/certs:/var/www/onlyoffice/Data/certs
     environment:
       SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
