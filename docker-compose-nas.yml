@@ -758,7 +758,7 @@ services:
       - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
-      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=9980"
+      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=443"
       #- "traefik.http.middlewares.onlyoffice-root.redirectregex.regex=^(.*)"
       #- "traefik.http.middlewares.onlyoffice-root.redirectregex.replacement=https://cloud.somedomain.com/"
       #- "traefik.http.middlewares.onlyoffice-root.redirectregex.permanent=true"
