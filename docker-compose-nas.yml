@@ -608,8 +608,8 @@ services:
   # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container 
   protonmail-bridge:
     <<: *common-keys-core
-    container_name: shenxn/protonmail-bridge:latest
-    image: humenius/traefik-certs-dumper:latest
+    container_name: protonmail-bridge
+    image: shenxn/protonmail-bridge:latest
     ports:
       - $PROTONMAIL_IMAP_PORT:25/tcp #SMTP
       - $PROTONMAIL_SMTP_PORT:143/tcp #IMAP
