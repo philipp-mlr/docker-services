@@ -611,8 +611,8 @@ services:
     container_name: protonmail-bridge
     image: shenxn/protonmail-bridge:2.3.0-1
     ports:
-      - $PROTONMAIL_IMAP_PORT:25/tcp #SMTP
-      - $PROTONMAIL_SMTP_PORT:143/tcp #IMAP
+      - 127.0.0.1:$PROTONMAIL_IMAP_PORT:25/tcp #SMTP
+      - 127.0.0.1:$PROTONMAIL_SMTP_PORT:143/tcp #IMAP
     volumes:
       - $DOCKERDIR/appdata/protonmail_bridge:/root
 
