@@ -1,7 +1,4 @@
-> # TLS
-> the crt files only work if:
-> - domain.crt is a chain/- or full-chain certificate in which domain, intermediate, and root-ca have been joined
+# General
+This repository is heavily inspired by the work in [this](https://github.com/htpcBeginner/docker-traefik) by htpcBeginner.
 
-`cat domain.crt intermediate.crt ca-root.crt > chain.crt`
-
-> - the private key must be unencrypted
+I am using this repository to set up containers on my synology nas and web server.
