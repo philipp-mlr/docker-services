@@ -605,8 +605,18 @@ services:
     environment:
       DOMAIN: $DOMAINNAME
 
-  ############################# MAINTENANCE
+  # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container 
+  protonmail-bridge:
+    <<: *common-keys-core
+    container_name: protonmail-bridge
+    image: shenxn/protonmail-bridge:2.3.0-1
+    ports:
+      - 127.0.0.1:$PROTONMAIL_IMAP_PORT:25/tcp #SMTP
+      - 127.0.0.1:$PROTONMAIL_SMTP_PORT:143/tcp #IMAP
+    volumes:
+      - $DOCKERDIR/appdata/protonmail_bridge:/root
 
+  ############################# MAINTENANCE
 
   # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge. 
   cf-tunnel:

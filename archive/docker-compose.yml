@@ -1,0 +1,20 @@
+  collabora:
+    <<: *common-keys-apps
+    image: collabora/code:latest
+    container_name: collabora
+    ports:
+      - "$COLLABORA_PORT:9980"
+    environment:
+      domain: $DOMAINNAME|cloud.$DOMAINNAME
+      extra_params: --o:ssl.enable=false --o:ssl.termination=true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.collabora-rtr.tls=true"
+      - "traefik.http.routers.collabora-rtr.entrypoints=https"
+      - "traefik.http.routers.collabora-rtr.rule=Host(`collabora.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.collabora-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.collabora-rtr.service=collabora-svc"
+      - "traefik.http.services.collabora-svc.loadbalancer.server.port=9980"
