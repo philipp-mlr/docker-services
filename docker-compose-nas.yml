@@ -63,15 +63,13 @@ secrets:
 # Helps eliminate repetition of sections
 
 # Common environment values
-x-environment:
-  &default-tz-puid-pgid
+x-environment: &default-tz-puid-pgid
   TZ: $TZ
   PUID: $PUID
   PGID: $PGID
 
 # Keys common to some of the services in basic-services.txt
-x-common-keys-core:
-  &common-keys-core
+x-common-keys-core: &common-keys-core
   networks:
     - t2_proxy
   security_opt:
@@ -81,8 +79,7 @@ x-common-keys-core:
   # - core
 
   # Keys common to some of the services in basic-services.txt
-x-common-keys-monitoring:
-  &common-keys-monitoring
+x-common-keys-monitoring: &common-keys-monitoring
   networks:
     - t2_proxy
   security_opt:
@@ -92,8 +89,7 @@ x-common-keys-monitoring:
   # - monitoring
 
   # Keys common to some of the dependent services/apps
-x-common-keys-apps:
-  &common-keys-apps
+x-common-keys-apps: &common-keys-apps
   networks:
     - t2_proxy
   security_opt:
@@ -103,8 +99,7 @@ x-common-keys-apps:
   # - apps
 
   # Keys common to some of the services in media-services.txt
-x-common-keys-media:
-  &common-keys-media
+x-common-keys-media: &common-keys-media
   networks:
     - t2_proxy
   security_opt:
@@ -180,7 +175,7 @@ services:
         ipv4_address: 192.168.90.254 # You can specify a static IP
       socket_proxy:
     healthcheck:
-      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
       interval: 5s
       retries: 3
     ports:
@@ -204,7 +199,7 @@ services:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
-      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules. 
+      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
     secrets:
       - cf_token
       - htpasswd
@@ -370,15 +365,7 @@ services:
       - tika
     healthcheck:
       test:
-        [
-          "CMD",
-          "curl",
-          "-fs",
-          "-S",
-          "--max-time",
-          "2",
-          "http://localhost:8000"
-        ]
+        ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -446,12 +433,12 @@ services:
       - $DOCKERDIR/appdata/prometheus/data:/prometheus
     user: $PUID:$PGID
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-      - '--web.enable-lifecycle'
-      - '--web.enable-admin-api'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -605,7 +592,7 @@ services:
     environment:
       DOMAIN: $DOMAINNAME
 
-  # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container 
+  # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container
   protonmail-bridge:
     <<: *common-keys-core
     container_name: protonmail-bridge
@@ -616,9 +603,151 @@ services:
     volumes:
       - $DOCKERDIR/appdata/protonmail_bridge:/root
 
+  ############################# INDEXERS
+
+  ############################# PVRS
+
+  # Radarr - Movie management
+  # Set url_base in radarr settings if using PathPrefix
+  radarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/radarr:nightly # latest was causing "Error parsing column 45"
+    container_name: radarr
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.164
+    ports:
+      - "$RADARR_PORT:7878"
+    volumes:
+      - $DOCKERDIR/appdata/radarr:/config
+      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
+      - $DATADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
+      - $DATADIR:/data
+      - $EXTDRIVE/downloads/torrents:/data/downloads/torrents
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
+      #- "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.radarr-rtr-bypass.priority=100"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.radarr-rtr.entrypoints=https"
+      - "traefik.http.routers.radarr-rtr.rule=Host(`radarr.$DOMAINNAME`)"
+      - "traefik.http.routers.radarr-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.radarr-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.radarr-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.radarr-rtr.service=radarr-svc"
+      - "traefik.http.routers.radarr-rtr-bypass.service=radarr-svc"
+      - "traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
+
+  # Sonarr - TV Shows management
+  # Set url_base in sonarr settings if using PathPrefix
+  sonarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.167
+    ports:
+      - "$SONARR_PORT:8989"
+    volumes:
+      - $DOCKERDIR/appdata/sonarr:/config
+      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
+      - $DATADIR/temp/appdata/sonarr/MediaCover:/config/MediaCover
+      - $DATADIR:/data
+      - $EXTDRIVE/downloads/torrents:/data/downloads/torrents
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.sonarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
+      #- "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.sonarr-rtr-bypass.priority=100"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.sonarr-rtr.entrypoints=https"
+      - "traefik.http.routers.sonarr-rtr.rule=Host(`sonarr.$DOMAINNAME`)"
+      - "traefik.http.routers.sonarr-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.sonarr-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.sonarr-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.sonarr-rtr.service=sonarr-svc"
+      - "traefik.http.routers.sonarr-rtr-bypass.service=sonarr-svc"
+      - "traefik.http.services.sonarr-svc.loadbalancer.server.port=8989"
+
+  # Readarr - Books management
+  # Set url_base in readarr settings if using PathPrefix
+  readarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: hotio/readarr:nightly
+    container_name: readarr
+    ports:
+      - "$READARR_PORT:8787"
+    volumes:
+      - $DOCKERDIR/appdata/readarr:/config
+      - $DATADIR:/data
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+      UMASK: 002
+      #ARGS: ""
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.readarr-rtr.entrypoints=https"
+      - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.readarr-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.readarr-rtr.service=readarr-svc"
+      - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
+
+  ############################# MEDIA
+
+  # Jellyfin - Media Server
+  jellyfin:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    devices:
+      - /dev/dri:/dev/dri # for harware transcoding
+    ports:
+      - "$JELLYFIN_PORT:8096"
+      - "8920:8920" # Emby also uses same port if running both
+    environment:
+      <<: *default-tz-puid-pgid
+      UMASK_SET: 022
+    volumes:
+      - $DOCKERDIR/appdata/jellyfin:/config
+      - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
+      - $DATADIR:/data/media
+      - $DATADIR/downloads:/data/downloads
+      - $DATADIR/downloads/torrents:/data/downloads/torrents
+      - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
+      - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
+      - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
+
   ############################# MAINTENANCE
 
-  # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge. 
+  # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge.
   cf-tunnel:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: cf-tunnel
