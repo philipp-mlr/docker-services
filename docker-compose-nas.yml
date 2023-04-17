@@ -586,17 +586,17 @@ services:
     labels:
       - "traefik.enable=true"
       ## Gluetun Built-in HTTP control server
-      - "traefik.http.routers.gluetun.rule=Host(`gluetun.your.domain.com`)"
-      - "traefik.http.routers.gluetun.service=gluetun"
-      - "traefik.http.services.gluetun.loadbalancer.server.port=8000"
+      - "traefik.http.routers.gluetun-rtr.rule=Host(`gluetun.$DOMAINNAME`)"
+      - "traefik.http.routers.gluetun-rtr.service=gluetun-svc"
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
       ## HTTP Routers
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
       ## Middlewares
       - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
       ## HTTP Services
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-svc" # qBittorrent
-      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
+      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
