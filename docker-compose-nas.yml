@@ -734,6 +734,32 @@ services:
 
   ############################# INDEXERS
 
+  # Prowlarr - Torrent proxy
+  prowlarr:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: ghcr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.162
+    # ports:
+    #  - "$PROWLARR_PORT:9696"
+    volumes:
+      - $DOCKERDIR/appdata/prowlarr:/config
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
+      - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
+      - "traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"
+
   ############################# PVRS
 
   # Radarr - Movie management
