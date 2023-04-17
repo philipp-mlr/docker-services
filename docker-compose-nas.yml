@@ -567,9 +567,9 @@ services:
       - /dev/net/tun
     ports:
       - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
-    # #   - 8888:8888/tcp # HTTP proxy
-    # #   - 8388:8388/tcp # Shadowsocks
-    # #   - 8388:8388/udp # Shadowsocks
+      - 8888:8888/tcp # HTTP proxy
+      - 8388:8388/tcp # Shadowsocks
+      - 8388:8388/udp # Shadowsocks
     volumes:
       - $DOCKERDIR/appdata/gluetun:/gluetun
     environment:
@@ -585,6 +585,10 @@ services:
       WIREGUARD_ADDRESSES: $WIREGUARD_ADDRESSES
     labels:
       - "traefik.enable=true"
+      ## Gluetun Built-in HTTP control server
+      - "traefik.http.routers.gluetun.rule=Host(`gluetun.your.domain.com`)"
+      - "traefik.http.routers.gluetun.service=gluetun"
+      - "traefik.http.services.gluetun.loadbalancer.server.port=8000"
       ## HTTP Routers
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
