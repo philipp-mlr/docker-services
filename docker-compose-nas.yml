@@ -592,7 +592,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-svc" # qBittorrent
-      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8087" # qBittorrent
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
