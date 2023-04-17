@@ -566,7 +566,7 @@ services:
     devices:
       - /dev/net/tun
     ports:
-      - "$QBITTORRENT_PORT:$QBITTORRENT_PORT" # Exposing qBittorrent through Docker Host LAN IP
+      - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
     # #   - 8888:8888/tcp # HTTP proxy
     # #   - 8388:8388/tcp # Shadowsocks
     # #   - 8388:8388/udp # Shadowsocks
@@ -592,7 +592,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-svc" # qBittorrent
-      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=$QBITTORRENT_PORT" # qBittorrent
+      - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8080" # qBittorrent
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
