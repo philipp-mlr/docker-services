@@ -691,7 +691,7 @@ services:
     #   - "$QBITTORRENT_PORT:8080" # Explosed via gluetun
     volumes:
       - $DOCKERDIR/appdata/qbittorrent:/config
-      - $DATADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
+      - $DATADIR/downloads/torrents:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
       PUID: 0
       GUID: 0
@@ -822,8 +822,8 @@ services:
       - $DOCKERDIR/appdata/sonarr:/config
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $DATADIR/temp/appdata/sonarr/MediaCover:/config/MediaCover
-      - $DATADIR:/data
-      #- $DATADIR/downloads:/data/downloads
+      #- $DATADIR:/data
+      - $DATADIR/downloads:/data/downloads
       - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
