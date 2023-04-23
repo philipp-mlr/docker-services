@@ -593,7 +593,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
       ## Middlewares
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-no-auth@file" # qBittorrent
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
@@ -702,16 +702,6 @@ services:
       retries: 1
     labels: # Traefik labels added via glueten
       - "deunhealth.restart.on.unhealthy=true"
-      ##### TESTING
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
-      ## Middlewares
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-no-auth@file" # qBittorrent
-      ## HTTP Services
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
-      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
 
   # nzbget - Binary newsgrabber (NZB downloader)
   nzbget:
