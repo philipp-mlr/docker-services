@@ -593,7 +593,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
       ## Middlewares
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-no-auth@file" # qBittorrent
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-no-auth@file" # qBittorrent # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
@@ -799,7 +799,7 @@ services:
       - "traefik.http.routers.radarr-rtr.priority=99"
       ## Middlewares
       - "traefik.http.routers.radarr-rtr-bypass.middlewares=chain-no-auth@file"
-      - "traefik.http.routers.radarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.radarr-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.radarr-rtr.service=radarr-svc"
       - "traefik.http.routers.radarr-rtr-bypass.service=radarr-svc"
@@ -838,7 +838,7 @@ services:
       - "traefik.http.routers.sonarr-rtr.priority=99"
       ## Middlewares
       - "traefik.http.routers.sonarr-rtr-bypass.middlewares=chain-no-auth@file"
-      - "traefik.http.routers.sonarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sonarr-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.sonarr-rtr.service=sonarr-svc"
       - "traefik.http.routers.sonarr-rtr-bypass.service=sonarr-svc"
@@ -863,10 +863,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth
-      #- "traefik.http.routers.readarr-rtr.entrypoints=https"
-      #- "traefik.http.routers.readarr-rtr.rule=Host(`readarr.$DOMAINNAME`)"
+      - "traefik.http.routers.readarr-rtr.entrypoints=https"
+      - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.readarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.readarr-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.readarr-rtr.service=readarr-svc"
       - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
