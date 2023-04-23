@@ -686,7 +686,9 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
-    network_mode: "service:gluetun"
+    #network_mode: "service:gluetun"
+    ports:
+      - "$QBITTORRENT_PORT:8080" # Explosed via gluetun
     volumes:
       - $DOCKERDIR/appdata/qbittorrent:/config
       - $DATADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
@@ -700,6 +702,16 @@ services:
       retries: 1
     labels: # Traefik labels added via glueten
       - "deunhealth.restart.on.unhealthy=true"
+      ##### TESTING
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
+      ## Middlewares
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
+      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
 
   # nzbget - Binary newsgrabber (NZB downloader)
   nzbget:
