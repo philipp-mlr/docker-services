@@ -789,10 +789,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
-      #- "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
-      #- "traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
-      #- "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
-      #- "traefik.http.routers.radarr-rtr-bypass.priority=100"
+      - "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
+      - "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.radarr-rtr-bypass.priority=100"
       ## HTTP Routers Auth
       - "traefik.http.routers.radarr-rtr.entrypoints=https"
       - "traefik.http.routers.radarr-rtr.rule=Host(`radarr.$DOMAINNAME`)"
@@ -828,10 +828,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
-      #- "traefik.http.routers.sonarr-rtr-bypass.entrypoints=https"
-      #- "traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
-      #- "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
-      #- "traefik.http.routers.sonarr-rtr-bypass.priority=100"
+      - "traefik.http.routers.sonarr-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
+      - "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.sonarr-rtr-bypass.priority=100"
       ## HTTP Routers Auth
       - "traefik.http.routers.sonarr-rtr.entrypoints=https"
       - "traefik.http.routers.sonarr-rtr.rule=Host(`sonarr.$DOMAINNAME`)"
