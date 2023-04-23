@@ -693,7 +693,8 @@ services:
       - $DOCKERDIR/appdata/qbittorrent:/config
       - $DATADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
-      <<: *default-tz-puid-pgid
+      PUID: 0
+      GUID: 0
       UMASK_SET: 002
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
       test: "curl -sf https://example.com  || exit 1"
