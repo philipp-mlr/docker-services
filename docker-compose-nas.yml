@@ -746,8 +746,8 @@ services:
     networks:
       t2_proxy:
         ipv4_address: 192.168.90.162
-    # ports:
-    #  - "$PROWLARR_PORT:9696"
+    ports:
+     - "$PROWLARR_PORT:9696"
     volumes:
       - $DOCKERDIR/appdata/prowlarr:/config
       - "/etc/localtime:/etc/localtime:ro"
