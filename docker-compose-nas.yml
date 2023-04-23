@@ -858,8 +858,8 @@ services:
     volumes:
       - $DOCKERDIR/appdata/readarr:/config
       - $DATADIR:/data
-      - $DATADIR/downloads:/data/downloads
-      - $DATADIR/downloads/torrents:/data/downloads/torrents
+      # - $DATADIR/downloads:/data/downloads
+      # - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
