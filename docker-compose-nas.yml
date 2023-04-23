@@ -783,7 +783,7 @@ services:
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $DATADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
       - $DATADIR:/data
-      #- $DATADIR/downloads:/data/downloads
+      - $DATADIR/downloads:/data/downloads
       - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
@@ -858,6 +858,8 @@ services:
     volumes:
       - $DOCKERDIR/appdata/readarr:/config
       - $DATADIR:/data
+      - $DATADIR/downloads:/data/downloads
+      - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
