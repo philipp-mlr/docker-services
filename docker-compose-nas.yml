@@ -783,8 +783,8 @@ services:
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $DATADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
       - $DATADIR:/data
-      - $DATADIR/downloads:/data/downloads
-      #- $DATADIR/downloads/torrents:/data/downloads/torrents
+      #- $DATADIR/downloads:/data/downloads
+      - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -823,8 +823,8 @@ services:
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $DATADIR/temp/appdata/sonarr/MediaCover:/config/MediaCover
       - $DATADIR:/data
-      - $DATADIR/downloads:/data/downloads
-      #- $DATADIR/downloads/torrents:/data/downloads/torrents
+      #- $DATADIR/downloads:/data/downloads
+      - $DATADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -894,7 +894,7 @@ services:
       - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
       - $DATADIR:/data/media
       - $DATADIR/downloads:/data/downloads
-      #- $DATADIR/downloads/torrents:/data/downloads/torrents
+      - $DATADIR/downloads/torrents:/data/downloads/torrents
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
     labels:
       - "traefik.enable=true"
