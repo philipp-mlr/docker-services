@@ -895,8 +895,6 @@ services:
       - $DOCKERDIR/appdata/jellyfin:/config
       - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
       - $DATADIR:/data/media
-      - $DATADIR/downloads:/data/downloads
-      - $DATADIR/downloads/torrents:/data/downloads/torrents
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
     labels:
       - "traefik.enable=true"
