@@ -961,3 +961,16 @@ services:
       WATCHTOWER_NO_STARTUP_MESSAGE: "false"
       WATCHTOWER_SCHEDULE: "0 30 12 * * *" # Everyday at 12:30
       DOCKER_HOST: tcp://socket-proxy:2375 # Use this if you have Socket Proxy enabled.
+
+  # DeUnhealth - Restart your unhealthy containers safely (e.g. containers depending on VPN and VPN reconnects)
+  deunhealth:
+    <<: *common-keys-core
+    image: qmcgaw/deunhealth
+    container_name: deunhealth
+    networks:
+      - socket_proxy
+    environment:
+      LOG_LEVEL: info
+      HEALTH_SERVER_ADDRESS: 127.0.0.1:9999
+      TZ: $TZ
+      DOCKER_HOST: tcp://socket-proxy:2375
