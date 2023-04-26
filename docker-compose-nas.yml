@@ -906,8 +906,8 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: jlesage/handbrake:latest
     container_name: handbrake
-    # ports:
-    #   - "$HANDBRAKE_PORT:5800"
+    ports:
+      - "$HANDBRAKE_PORT:5800"
     volumes:
       - $DATADIR/downloads:/data/downloads
       - $DOCKERDIR/appdata/handbrake/config:/config
@@ -919,6 +919,7 @@ services:
       TZ: $TZ
       KEEP_APP_RUNNING: 1
       CLEAN_TMP_DIR: 1
+      AUTOMATED_CONVERSION_KEEP_SOURCE: 1
       VNC_PASSWORD: $HANDBRAKE_VNC_PASSWD
     labels:
       - "traefik.enable=true"
