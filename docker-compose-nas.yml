@@ -912,7 +912,7 @@ services:
       PLEX_CLAIM_FILE: /run/secrets/plex_claim
       PLEX_UID: $PUID
       PLEX_GID: $PGID
-      ADVERTISE_IP: "http://$SERVER_IP:32400/,https://plex.$DOMAINNAME"
+      ADVERTISE_IP: "http://localhost:32400,http://$SERVER_IP:32400/,https://plex.$DOMAINNAME"
     secrets:
       - plex_claim
     labels:
