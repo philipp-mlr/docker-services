@@ -882,7 +882,7 @@ services:
   # Plex - Media Server
   plexms:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: plexinc/pms-docker:plexpass
+    image: plexinc/pms-docker:public
     container_name: plexms
     #devices:
     #  - /dev/dri:/dev/dri # for harware transcoding
