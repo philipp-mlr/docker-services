@@ -900,7 +900,7 @@ services:
     volumes:
       - $DOCKERDIR/appdata/plexms:/config
       - $DATADIR/downloads:/data/downloads
-      - $DATADIR/media:/data/media
+      - $DATADIR:/data/media
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
       # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $DATADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
