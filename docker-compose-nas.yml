@@ -684,6 +684,37 @@ services:
       - "traefik.http.routers.glances-rtr.service=glances-svc"
       - "traefik.http.services.glances-svc.loadbalancer.server.port=61208"
 
+  # qDirStat - Directory Statistics
+  qdirstat:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: jlesage/qdirstat:latest
+    container_name: qdirstat
+    ports:
+      - "$QDIRSTAT_PORT:5800"
+    volumes:
+      - $DOCKERDIR/appdata/qdirstat/config:/config:rw
+      - /media/data:/data/data:ro
+    environment:
+      USER_ID: $PUID
+      GROUP_ID: $PGID
+      UMASK: 002
+      TZ: $TZ
+      KEEP_APP_RUNNING: 1
+      CLEAN_TMP_DIR: 1
+      DISPLAY_WIDTH: 1600
+      DISPLAY_HEIGHT: 960
+      VNC_PASSWORD: $QDIRSTAT_VNC_PASSWD
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.qdirstat-rtr.entrypoints=https"
+      - "traefik.http.routers.qdirstat-rtr.rule=Host(`qdirstat.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.qdirstat-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
+      - "traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
