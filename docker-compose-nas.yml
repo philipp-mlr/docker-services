@@ -58,6 +58,9 @@ secrets:
     file: $DOCKERDIR/secrets/nextcloud_admin_user
   nextcloud_admin_password:
     file: $DOCKERDIR/secrets/nextcloud_admin_password
+  # Plex
+  plex_claim:
+    file: $DOCKERDIR/secrets/plex_claim
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
