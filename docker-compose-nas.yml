@@ -876,6 +876,31 @@ services:
       - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
       - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
 
+  ############################# MEDIA FILE MANAGEMENT
+
+  # Bazarr - Subtitle Management
+  bazarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/bazarr
+    container_name: bazarr
+    ports:
+      - "$BAZARR_PORT:6767"
+    volumes:
+      - $DOCKERDIR/appdata/bazarr:/config
+      - $DATADIR/media:/data/media
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.bazarr-rtr.entrypoints=https"
+      - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.bazarr-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
+      - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"
+
   ############################# MAINTENANCE
 
   # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge.
