@@ -261,7 +261,7 @@ services:
       - CONFIGS=0
       - CONTAINERS=1 # Traefik, portainer, etc.
       - DISTRIBUTION=0
-      - EXEC=0
+      - EXEC=1
       - IMAGES=1 # Portainer
       - INFO=1 # Portainer
       - NETWORKS=1 # Portainer
