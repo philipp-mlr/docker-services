@@ -693,7 +693,7 @@ services:
       - "$QDIRSTAT_PORT:5800"
     volumes:
       - $DOCKERDIR/appdata/qdirstat/config:/config:rw
-      - /media/data:/data/data:ro
+      - $DATADIR:/data/media:ro
     environment:
       USER_ID: $PUID
       GROUP_ID: $PGID
