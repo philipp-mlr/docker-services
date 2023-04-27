@@ -945,66 +945,66 @@ services:
       - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
 
   # Plex - Media Server
-  plexms:
-    <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: plexinc/pms-docker:plexpass
-    container_name: plexms
-    #devices:
-    #  - /dev/dri:/dev/dri # for harware transcoding
-    ports:
-      - "$PLEX_PORT:32400/tcp"
-      - "3005:3005/tcp"
-      - "8324:8324/tcp"
-      - "32469:32469/tcp"
-      #- "1900:1900/udp" # conflicts with xTeVe
-      - "32410:32410/udp"
-      - "32412:32412/udp"
-      - "32413:32413/udp"
-      - "32414:32414/udp"
-      - "$PLEX_WEB_TOOLS_PORT:33400"
-    volumes:
-      - $DOCKERDIR/appdata/plexms:/config
-      - $DATADIR/downloads:/data/downloads
-      - $DATADIR:/data/media
-      - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
-      # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $DATADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
-      - $DATADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
-      - $DATADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
-    environment:
-      TZ: $TZ
-      HOSTNAME: "plex"
-      PLEX_CLAIM_FILE: /run/secrets/plex_claim
-      PLEX_UID: $PUID
-      PLEX_GID: $PGID
-      ADVERTISE_IP: "http://localhost:32400,http://$SERVER_IP:32400/,https://plex.$DOMAINNAME"
-    secrets:
-      - plex_claim
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.plexms-rtr.entrypoints=https"
-      - "traefik.http.routers.plexms-rtr.rule=Host(`plex.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.plexms-rtr.middlewares=chain-no-auth@file"
-      ## HTTP Servicesnoauth
-      - "traefik.http.routers.plexms-rtr.service=plexms-svc"
-      - "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
+  # plexms:
+  #   <<: *common-keys-media # See EXTENSION FIELDS at the top
+  #   image: plexinc/pms-docker:plexpass
+  #   container_name: plexms
+  #   #devices:
+  #   #  - /dev/dri:/dev/dri # for harware transcoding
+  #   ports:
+  #     - "$PLEX_PORT:32400/tcp"
+  #     - "3005:3005/tcp"
+  #     - "8324:8324/tcp"
+  #     - "32469:32469/tcp"
+  #     #- "1900:1900/udp" # conflicts with xTeVe
+  #     - "32410:32410/udp"
+  #     - "32412:32412/udp"
+  #     - "32413:32413/udp"
+  #     - "32414:32414/udp"
+  #     - "$PLEX_WEB_TOOLS_PORT:33400"
+  #   volumes:
+  #     - $DOCKERDIR/appdata/plexms:/config
+  #     - $DATADIR/downloads:/data/downloads
+  #     - $DATADIR:/data/media
+  #     - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
+  #     # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
+  #     - $DATADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
+  #     - $DATADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+  #     - $DATADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
+  #   environment:
+  #     TZ: $TZ
+  #     HOSTNAME: "plex"
+  #     PLEX_CLAIM_FILE: /run/secrets/plex_claim
+  #     PLEX_UID: $PUID
+  #     PLEX_GID: $PGID
+  #     ADVERTISE_IP: "http://localhost:32400,http://$SERVER_IP:32400/,https://plex.$DOMAINNAME"
+  #   secrets:
+  #     - plex_claim
+  #   labels:
+  #     - "traefik.enable=true"
+  #     ## HTTP Routers
+  #     - "traefik.http.routers.plexms-rtr.entrypoints=https"
+  #     - "traefik.http.routers.plexms-rtr.rule=Host(`plex.$DOMAINNAME`)"
+  #     ## Middlewares
+  #     - "traefik.http.routers.plexms-rtr.middlewares=chain-no-auth@file"
+  #     ## HTTP Servicesnoauth
+  #     - "traefik.http.routers.plexms-rtr.service=plexms-svc"
+  #     - "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
 
   # Plex Meta Manager - Automatic Metadata Manager for Plex
-  plexmm:
-    <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: lscr.io/linuxserver/plex-meta-manager:latest
-    container_name: plexmm
-    environment:
-      <<: *default-tz-puid-pgid
-      PMM_CONFIG: /config/config.yml #optional
-      PMM_TIME: 03:00 #optional
-      PMM_RUN: "True" #optional
-      PMM_TEST: "False" #optional
-      PMM_NO_MISSING: "False" #optional
-    volumes:
-      - $DOCKERDIR/appdata/plex-meta-manager:/config
+  # plexmm:
+  #   <<: *common-keys-media # See EXTENSION FIELDS at the top
+  #   image: lscr.io/linuxserver/plex-meta-manager:latest
+  #   container_name: plexmm
+  #   environment:
+  #     <<: *default-tz-puid-pgid
+  #     PMM_CONFIG: /config/config.yml #optional
+  #     PMM_TIME: 03:00 #optional
+  #     PMM_RUN: "True" #optional
+  #     PMM_TEST: "False" #optional
+  #     PMM_NO_MISSING: "False" #optional
+  #   volumes:
+  #     - $DOCKERDIR/appdata/plex-meta-manager:/config
 
   ############################# MEDIA FILE MANAGEMENT
 
