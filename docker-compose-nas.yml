@@ -1055,7 +1055,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.handbrake-rtr.entrypoints=https"
-      - "traefik.http.routers.handbrake-rtr.rule=Host(`handbrake.$DOMAINNAME)"
+      - "traefik.http.routers.handbrake-rtr.rule=Host(`handbrake.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.handbrake-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
