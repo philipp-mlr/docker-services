@@ -848,7 +848,7 @@ services:
   # Set url_base in sonarr settings if using PathPrefix
   sonarr:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: lscr.io/linuxserver/sonarr
+    image: lscr.io/linuxserver/sonarr:develop
     container_name: sonarr
     networks:
       t2_proxy:
