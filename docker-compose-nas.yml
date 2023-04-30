@@ -447,7 +447,7 @@ services:
       - "traefik.http.routers.homepage-rtr.service=homepage-svc"
       - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
 
-  # qDirStat - Directory Statistics
+  # Overseerr - Request management and media discovery
   overseerr:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: lscr.io/linuxserver/overseerr:latest
@@ -468,6 +468,28 @@ services:
       ## HTTP Services
       - "traefik.http.routers.overseerr-rtr.service=overseerr-svc"
       - "traefik.http.services.overseerr-svc.loadbalancer.server.port=5055"
+
+  # Speedtest - Internet performance tracking
+  speedtest:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    container_name: speedtest
+    ports:
+      - "$SPEEDTEST_PORT:80"
+    volumes:
+      - $DOCKERDIR/appdata/speedtest-tracker/config:/config:rw
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.speedtest-rtr.entrypoints=https"
+      - "traefik.http.routers.speedtest-rtr.rule=Host(`speedtest.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.speedtest-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.speedtest-rtr.service=speedtest-svc"
+      - "traefik.http.services.speedtest-svc.loadbalancer.server.port=80"
 
   ############################# DATABASE
 
