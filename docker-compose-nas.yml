@@ -422,6 +422,31 @@ services:
       - "traefik.http.routers.paperless-rtr.service=paperless-svc"
       - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
 
+  # Homepage - Application Dashboard
+  homepage:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: ghcr.io/benphelps/homepage:latest
+    container_name: homepage
+    networks:
+      - t2_proxy
+      - socket_proxy
+    # ports:
+    #  - "$HOMEPAGE_PORT:3000"
+    volumes:
+      - $DOCKERDIR/appdata/homepage:/app/config
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`,`www.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.homepage-rtr.service=homepage-svc"
+      - "traefik.http.services.homepage-svc.loadbalancer.server.port=3000"
+
   ############################# DATABASE
 
   #Prometheus - Database for sensor data
