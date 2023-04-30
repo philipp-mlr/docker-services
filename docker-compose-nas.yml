@@ -491,6 +491,27 @@ services:
       - "traefik.http.routers.speedtest-rtr.service=speedtest-svc"
       - "traefik.http.services.speedtest-svc.loadbalancer.server.port=80"
 
+  # Uptime Kuma - Status Page & Monitoring Server
+  uptime-kuma:
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    networks:
+      - t2_proxy
+      - default
+    volumes:
+      - $DOCKERDIR/appdata/uptime-kuma:/app/data
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.uptime-kuma-rtr.entrypoints=https"
+      - "traefik.http.routers.uptime-kuma-rtr.rule=Host(`kuma.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.uptime-kuma-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
+      - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
+
   ############################# DATABASE
 
   #Prometheus - Database for sensor data
