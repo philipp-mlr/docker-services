@@ -58,9 +58,6 @@ secrets:
     file: $DOCKERDIR/secrets/nextcloud_admin_user
   nextcloud_admin_password:
     file: $DOCKERDIR/secrets/nextcloud_admin_password
-  # Plex
-  plex_claim:
-    file: $DOCKERDIR/secrets/plex_claim
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
@@ -442,6 +439,7 @@ services:
       HOMEPAGE_VAR_SONARR_TOKEN: $SONARR_API_KEY
       HOMEPAGE_VAR_READARR_TOKEN: $READARR_API_KEY
       HOMEPAGE_VAR_QBITTORRENT_PASSWORD: $HOMEPAGE_VAR_QBITTORRENT_PASSWORD
+      HOMEPAGE_VAR_ADGUARDHOME_PASSWORD: $HOMEPAGE_VAR_ADGUARDHOME_PASSWORD
     labels:
       - "traefik.enable=true"
       ## HTTP Routers

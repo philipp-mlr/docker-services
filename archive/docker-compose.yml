@@ -19,6 +19,11 @@
       - "traefik.http.routers.collabora-rtr.service=collabora-svc"
       - "traefik.http.services.collabora-svc.loadbalancer.server.port=9980"
 
+secrets:
+  # Plex
+  plex_claim:
+    file: $DOCKERDIR/secrets/plex_claim
+
   #Plex - Media Server
   plexms:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
