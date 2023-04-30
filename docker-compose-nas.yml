@@ -436,6 +436,7 @@ services:
       - $DOCKERDIR/appdata/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
+      HOMEPAGE_FILE_PLEX_TOKEN: $DOCKERDIR/secrets/homepage_plex_token
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
