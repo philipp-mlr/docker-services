@@ -698,15 +698,15 @@ services:
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
-      #### SABNZBD
-      ## HTTP Routers
-      - "traefik.http.routers.gluetun-sabnzbd-rtr.entrypoints=https"
-      - "traefik.http.routers.gluetun-sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)" # sabnzbd
-      ## Middlewares
-      - "traefik.http.routers.gluetun-sabnzbd-rtr.middlewares=chain-no-auth@file" # sabnzbd # TODO: change to auth later on
-      ## HTTP Services
-      - "traefik.http.routers.gluetun-sabnzbd-rtr.service=gluetun-sabnzbd-svc" # sabnzbd
-      - "traefik.http.services.gluetun-sabnzbd-svc.loadbalancer.server.port=8080" # sabnzbd
+      # #### SABNZBD
+      # ## HTTP Routers
+      # - "traefik.http.routers.gluetun-sabnzbd-rtr.entrypoints=https"
+      # - "traefik.http.routers.gluetun-sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)" # sabnzbd
+      # ## Middlewares
+      # - "traefik.http.routers.gluetun-sabnzbd-rtr.middlewares=chain-no-auth@file" # sabnzbd # TODO: change to auth later on
+      # ## HTTP Services
+      # - "traefik.http.routers.gluetun-sabnzbd-rtr.service=gluetun-sabnzbd-svc" # sabnzbd
+      # - "traefik.http.services.gluetun-sabnzbd-svc.loadbalancer.server.port=8080" # sabnzbd
       #### NZBGET
       ## HTTP Routers Auth
       - "traefik.http.routers.nzbget-rtr.entrypoints=https"
