@@ -665,7 +665,7 @@ services:
       - /dev/net/tun
     ports:
       - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
-      - "$SABNZBD_PORT:8080"
+      # - "$SABNZBD_PORT:8080"
       - "$NZBGET_PORT:6789"
       - 8888:8888/tcp # HTTP proxy
       - 8388:8388/tcp # Shadowsocks
@@ -850,7 +850,6 @@ services:
       PUID: 0
       GUID: 0
       UMASK_SET: 002
-      WEBUI_PORT: $QBITTORRENT_PORT
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
       test: "curl -sf https://example.com  || exit 1"
       interval: 1m
