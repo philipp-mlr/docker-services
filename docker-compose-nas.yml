@@ -665,6 +665,7 @@ services:
       - /dev/net/tun
     ports:
       - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
+      - "$SABNZBD_PORT:8081"
       - 8888:8888/tcp # HTTP proxy
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
@@ -687,6 +688,7 @@ services:
       - "traefik.http.routers.gluetun-rtr.rule=Host(`gluetun.$DOMAINNAME`)"
       - "traefik.http.routers.gluetun-rtr.service=gluetun-svc"
       - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
+      #### qBittorrent
       ## HTTP Routers
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
@@ -695,6 +697,15 @@ services:
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
+      #### SABNZBD
+      ## HTTP Routers
+      - "traefik.http.routers.gluetun-sabnzbd-rtr.entrypoints=https"
+      - "traefik.http.routers.gluetun-sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)" # sabnzbd
+      ## Middlewares
+      - "traefik.http.routers.gluetun-sabnzbd-rtr.middlewares=chain-no-auth@file" # sabnzbd # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.gluetun-sabnzbd-rtr.service=gluetun-sabnzbd-svc" # sabnzbd
+      - "traefik.http.services.gluetun-sabnzbd-svc.loadbalancer.server.port=8081" # sabnzbd
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
@@ -877,8 +888,8 @@ services:
     image: linuxserver/sabnzbd:latest
     container_name: sabnzbd
     network_mode: "service:gluetun"
-    # ports:
-    #   - "$SABNZBD_PORT:8080" # Explosed via gluetun
+    ports:
+      - "$SABNZBD_PORT:8080" # Explosed via gluetun
     volumes:
       - $DOCKERDIR/appdata/sabnzbd:/config
       - $DATADIR/downloads:/data/downloads
