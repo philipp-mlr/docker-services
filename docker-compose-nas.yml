@@ -869,6 +869,24 @@ services:
       - "traefik.http.routers.nzbget-rtr-bypass.service=nzbget-svc"
       - "traefik.http.services.nzbget-svc.loadbalancer.server.port=6789"
 
+  # SABnzbd - Binary newsgrabber (NZB downloader)
+  # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
+  # Needs trailing / if using PathPrefix
+  sabnzbd:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    network_mode: "service:gluetun"
+    # ports:
+    #   - "$SABNZBD_PORT:8080" # Explosed via gluetun
+    volumes:
+      - $DOCKERDIR/appdata/sabnzbd:/config
+      - $DATADIR/downloads:/data/downloads
+    environment:
+      <<: *default-tz-puid-pgid
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"
+
   ############################# INDEXERS
 
   # Prowlarr - Torrent proxy
