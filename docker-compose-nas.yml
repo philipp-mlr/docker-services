@@ -1156,7 +1156,7 @@ services:
     ports:
       - "$MKVTOOLNIX_PORT:5800"
     volumes:
-      - $MEDIADIR/downloads:/data/downloads
+      - $MEDIADIR/:/data/media
       - $APPDATADIR/mkvtoolnix/config:/config:rw
     environment:
       USER_ID: $PUID
@@ -1187,7 +1187,7 @@ services:
     ports:
       - "$MAKEMKV_PORT:5800"
     volumes:
-      - $MEDIADIR/downloads:/data/downloads
+      - $MEDIADIR/:/data/media
       - $APPDATADIR/makemkv/config:/config
       - /dev/shm:/dev/shm
     environment:
