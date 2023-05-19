@@ -117,8 +117,8 @@ services:
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
   # touch $APPDATADIR/traefik/acme/acme.json
   # chmod 600 $APPDATADIR/traefik/acme/acme.json
-  # touch $DOCKERDIR/logs/traefik.log
-  # touch $DOCKERDIR/logs/access.log
+  # touch $SERVICEDIR/logs/traefik.log
+  # touch $SERVICEDIR/logs/access.log
   traefik:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
     container_name: traefik
@@ -194,7 +194,7 @@ services:
     volumes:
       - $APPDATADIR/traefik/nas/rules/:/rules # file provider directory
       - $APPDATADIR/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
-      - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
+      - $SERVICEDIR/logs/traefik:/logs # for fail2ban or crowdsec
     environment:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
@@ -650,7 +650,7 @@ services:
     volumes:
       - $APPDATADIR/adguard/conf:/opt/adguardhome/conf
       - $APPDATADIR/adguard/work:/opt/adguardhome/work
-      #- $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
+      #- $SERVICEDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
 
   # Gluetun - VPN Client for Docker Containers and More
   # Gluetun only for use by torrent clients + on demand lan devices.
@@ -745,7 +745,7 @@ services:
       - no-new-privileges:true
     volumes:
       - $APPDATADIR/traefik/acme:/traefik:ro
-      - $DOCKERDIR/shared/certs/:/output:rw
+      - $SERVICEDIR/shared/certs/:/output:rw
     environment:
       DOMAIN: $DOMAINNAME
 

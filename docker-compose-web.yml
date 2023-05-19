@@ -96,8 +96,8 @@ services:
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
   # touch $APPDATADIR/traefik/acme/acme.json
   # chmod 600 $APPDATADIR/traefik/acme/acme.json
-  # touch $DOCKERDIR/logs/traefik.log
-  # touch $DOCKERDIR/logs/access.log
+  # touch $SERVICEDIR/logs/traefik.log
+  # touch $SERVICEDIR/logs/access.log
 
   traefik:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
@@ -174,7 +174,7 @@ services:
     volumes:
       - $APPDATADIR/traefik/web/rules/:/rules # file provider directory
       - $APPDATADIR/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
-      - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
+      - $SERVICEDIR/logs/traefik:/logs # for fail2ban or crowdsec
     environment:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
@@ -375,7 +375,7 @@ services:
       AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
       LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
     volumes:
-      - $DOCKERDIR/logs/:/logs/:ro
+      - $SERVICEDIR/logs/:/logs/:ro
       - /var/log:/var/log:ro
       - $APPDATADIR/crowdsec/data:/var/lib/crowdsec/data
       - $APPDATADIR/crowdsec/config:/etc/crowdsec
@@ -499,7 +499,7 @@ services:
     ports:
       - "$VSCODE_PORT:8443"
     volumes:
-      - $DOCKERDIR:/data/docker
+      - $SERVICEDIR:/data/docker
       #- $USERDIR/server:/data/server
       #- $MEDIADIR:/data/data
       - $APPDATADIR/vscode:/config

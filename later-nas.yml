@@ -65,7 +65,7 @@
 #     AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
 #     LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
 #   volumes:
-#     - $DOCKERDIR/logs/:/logs/:ro
+#     - $SERVICEDIR/logs/:/logs/:ro
 #     - /var/log:/var/log:ro
 #     - $APPDATADIR/crowdsec/data:/var/lib/crowdsec/data
 #     - $APPDATADIR/crowdsec/config:/etc/crowdsec
@@ -123,7 +123,7 @@
 #     - "$ONLYOFFICE_PORT_HTTPS:443"
 #   volumes:
 #     - $APPDATADIR/onlyoffice/logs:/var/log/onlyoffice
-#     #- $DOCKERDIR/shared/certs:/var/www/onlyoffice/Data/certs
+#     #- $SERVICEDIR/shared/certs:/var/www/onlyoffice/Data/certs
 #     #environment:
 #     #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
 #     #SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
