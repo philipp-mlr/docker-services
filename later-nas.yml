@@ -67,8 +67,8 @@
 #   volumes:
 #     - $DOCKERDIR/logs/:/logs/:ro
 #     - /var/log:/var/log:ro
-#     - $DOCKERDIR/appdata/crowdsec/data:/var/lib/crowdsec/data
-#     - $DOCKERDIR/appdata/crowdsec/config:/etc/crowdsec
+#     - $APPDATADIR/crowdsec/data:/var/lib/crowdsec/data
+#     - $APPDATADIR/crowdsec/config:/etc/crowdsec
 
 # CrowdSec Bouncer - Traefik
 # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
@@ -97,7 +97,7 @@
 #   depends_on:
 #     - crowdsec
 #   volumes:
-#     - $DOCKERDIR/appdata/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+#     - $APPDATADIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
 
 ############################# MONITORING
 # nextcloud-exporter - A prometheus exporter for getting some metrics of a nextcloud server instance.
@@ -122,7 +122,7 @@
 #     - "$ONLYOFFICE_PORT_HTTP:80"
 #     - "$ONLYOFFICE_PORT_HTTPS:443"
 #   volumes:
-#     - $DOCKERDIR/appdata/onlyoffice/logs:/var/log/onlyoffice
+#     - $APPDATADIR/onlyoffice/logs:/var/log/onlyoffice
 #     #- $DOCKERDIR/shared/certs:/var/www/onlyoffice/Data/certs
 #     #environment:
 #     #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem

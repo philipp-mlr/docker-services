@@ -22,7 +22,7 @@
 secrets:
   # Plex
   plex_claim:
-    file: $DOCKERDIR/secrets/plex_claim
+    file: $SECRETSDIR/secrets/plex_claim
 
   #Plex - Media Server
   plexms:
@@ -43,14 +43,14 @@ secrets:
       - "32414:32414/udp"
       - "$PLEX_WEB_TOOLS_PORT:33400"
     volumes:
-      - $DOCKERDIR/appdata/plexms:/config
-      - $DATADIR/downloads:/data/downloads
-      - $DATADIR:/data/media
+      - $APPDATADIR/plexms:/config
+      - $MEDIADIR/downloads:/data/downloads
+      - $MEDIADIR:/data/media
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
       # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $DATADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
-      - $DATADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
-      - $DATADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
+      - $MEDIADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
+      - $MEDIADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+      - $MEDIADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
     environment:
       TZ: $TZ
       HOSTNAME: "plex"
@@ -84,4 +84,4 @@ secrets:
       PMM_TEST: "False" #optional
       PMM_NO_MISSING: "False" #optional
     volumes:
-      - $DOCKERDIR/appdata/plex-meta-manager:/config
+      - $APPDATADIR/plex-meta-manager:/config

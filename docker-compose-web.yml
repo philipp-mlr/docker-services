@@ -23,15 +23,15 @@ networks:
 secrets:
   # Traefik
   htpasswd:
-    file: $DOCKERDIR/secrets/htpasswd
+    file: $SECRETSDIR/htpasswd
   cf_token:
-    file: $DOCKERDIR/secrets/cf_token
+    file: $SECRETSDIR/cf_token
   # Oauth
   traefik_forward_auth:
-    file: $DOCKERDIR/secrets/traefik_forward_auth
+    file: $SECRETSDIR/traefik_forward_auth
   # Webdav
   webdav_password:
-    file: $DOCKERDIR/secrets/webdav_password
+    file: $SECRETSDIR/webdav_password
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
@@ -94,8 +94,8 @@ services:
   # Traefik 2 - Reverse Proxy
   # Cloudflare refs: https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
-  # touch $DOCKERDIR/appdata/traefik/acme/acme.json
-  # chmod 600 $DOCKERDIR/appdata/traefik/acme/acme.json
+  # touch $APPDATADIR/traefik/acme/acme.json
+  # chmod 600 $APPDATADIR/traefik/acme/acme.json
   # touch $DOCKERDIR/logs/traefik.log
   # touch $DOCKERDIR/logs/access.log
 
@@ -172,8 +172,8 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - $DOCKERDIR/appdata/traefik/web/rules/:/rules # file provider directory
-      - $DOCKERDIR/appdata/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
+      - $APPDATADIR/traefik/web/rules/:/rules # file provider directory
+      - $APPDATADIR/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
       - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
     environment:
       - TZ=$TZ
@@ -268,7 +268,7 @@ services:
       - t2_proxy
       - socket_proxy
     volumes:
-      - $DOCKERDIR/appdata/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+      - $APPDATADIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
     environment:
       - TZ=$TZ
     labels:
@@ -293,7 +293,7 @@ services:
     #ports:
     #  - "$HOMEPAGE_PORT:3000"
     volumes:
-      - $DOCKERDIR/appdata/homepage:/app/config
+      - $APPDATADIR/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
       LOG_LEVEL: debug
@@ -377,8 +377,8 @@ services:
     volumes:
       - $DOCKERDIR/logs/:/logs/:ro
       - /var/log:/var/log:ro
-      - $DOCKERDIR/appdata/crowdsec/data:/var/lib/crowdsec/data
-      - $DOCKERDIR/appdata/crowdsec/config:/etc/crowdsec
+      - $APPDATADIR/crowdsec/data:/var/lib/crowdsec/data
+      - $APPDATADIR/crowdsec/config:/etc/crowdsec
 
   # CrowdSec Bouncer - Traefik
   # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
@@ -407,7 +407,7 @@ services:
     depends_on:
       - crowdsec
     volumes:
-      - $DOCKERDIR/appdata/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+      - $APPDATADIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
   ############################# DATABASE
 
   # Prometheus - Database for sensor data
@@ -418,8 +418,8 @@ services:
     ports:
       - "$PROMETHEUS_PORT:9090"
     volumes:
-      - $DOCKERDIR/appdata/prometheus/config:/etc/prometheus
-      - $DOCKERDIR/appdata/prometheus/data:/prometheus
+      - $APPDATADIR/prometheus/config:/etc/prometheus
+      - $APPDATADIR/prometheus/data:/prometheus
     user: $PUID:$PGID
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -450,7 +450,7 @@ services:
       - "$GRAFANA_PORT:3000"
     user: $PUID
     volumes:
-      - $DOCKERDIR/appdata/grafana:/var/lib/grafana
+      - $APPDATADIR/grafana:/var/lib/grafana
     environment:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel"
     labels:
@@ -472,7 +472,7 @@ services:
     ports:
       - "$WEBDAV_PORT:80"
     volumes:
-      - $DOCKERDIR/appdata/webdav/data:/var/lib/dav
+      - $APPDATADIR/webdav/data:/var/lib/dav
     secrets:
       - webdav_password
     environment:
@@ -501,8 +501,8 @@ services:
     volumes:
       - $DOCKERDIR:/data/docker
       #- $USERDIR/server:/data/server
-      #- $DATADIR:/data/data
-      - $DOCKERDIR/appdata/vscode:/config
+      #- $MEDIADIR:/data/data
+      - $APPDATADIR/vscode:/config
     environment:
       <<: *default-tz-puid-pgid
       DOCKER_HOST: tcp://socket-proxy:2375
@@ -536,7 +536,7 @@ services:
       - socket_proxy
     volumes:
       # - /var/run/docker.sock:/var/run/docker.sock # Use Docker Socket Proxy instead for improved security
-      - $DOCKERDIR/appdata/docker-gc/docker-gc-exclude:/etc/docker-gc-exclude
+      - $APPDATADIR/docker-gc/docker-gc-exclude:/etc/docker-gc-exclude
     environment:
       CRON: 12 0 0 * * ? # Everyday at midnight.
       FORCE_IMAGE_REMOVAL: 1

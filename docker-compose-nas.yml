@@ -32,32 +32,32 @@ networks:
 
 secrets:
   postgres_password:
-    file: $DOCKERDIR/secrets/postgres_password
+    file: $SECRETSDIR/postgres_password
   # Traefik
   htpasswd:
-    file: $DOCKERDIR/secrets/htpasswd
+    file: $SECRETSDIR/htpasswd
   cf_token:
-    file: $DOCKERDIR/secrets/cf_token
+    file: $SECRETSDIR/cf_token
   # Cloudflare
   cf_ddns_token:
-    file: $DOCKERDIR/secrets/cf_ddns_token
+    file: $SECRETSDIR/cf_ddns_token
   # Oauth
   traefik_forward_auth:
-    file: $DOCKERDIR/secrets/traefik_forward_auth
+    file: $SECRETSDIR/traefik_forward_auth
   # Paperless
   paperless_user:
-    file: $DOCKERDIR/secrets/paperless_user
+    file: $SECRETSDIR/paperless_user
   paperless_password:
-    file: $DOCKERDIR/secrets/paperless_password
+    file: $SECRETSDIR/paperless_password
   paperless_email:
-    file: $DOCKERDIR/secrets/paperless_email
+    file: $SECRETSDIR/paperless_email
   paperless_key:
-    file: $DOCKERDIR/secrets/paperless_key
+    file: $SECRETSDIR/paperless_key
   # Nextcloud
   nextcloud_admin_user:
-    file: $DOCKERDIR/secrets/nextcloud_admin_user
+    file: $SECRETSDIR/nextcloud_admin_user
   nextcloud_admin_password:
-    file: $DOCKERDIR/secrets/nextcloud_admin_password
+    file: $SECRETSDIR/nextcloud_admin_password
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
@@ -115,8 +115,8 @@ services:
   # Traefik 2 - Reverse Proxy
   # Cloudflare refs: https://www.smarthomebeginner.com/cloudflare-settings-for-traefik-docker/
   # Touch (create empty files) traefik.log and acme/acme.json. Set acme.json permissions to 600.
-  # touch $DOCKERDIR/appdata/traefik/acme/acme.json
-  # chmod 600 $DOCKERDIR/appdata/traefik/acme/acme.json
+  # touch $APPDATADIR/traefik/acme/acme.json
+  # chmod 600 $APPDATADIR/traefik/acme/acme.json
   # touch $DOCKERDIR/logs/traefik.log
   # touch $DOCKERDIR/logs/access.log
   traefik:
@@ -192,8 +192,8 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - $DOCKERDIR/appdata/traefik/nas/rules/:/rules # file provider directory
-      - $DOCKERDIR/appdata/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
+      - $APPDATADIR/traefik/nas/rules/:/rules # file provider directory
+      - $APPDATADIR/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
       - $DOCKERDIR/logs/traefik:/logs # for fail2ban or crowdsec
     environment:
       - TZ=$TZ
@@ -288,7 +288,7 @@ services:
       - t2_proxy
       - socket_proxy
     volumes:
-      - $DOCKERDIR/appdata/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+      - $APPDATADIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
     environment:
       - TZ=$TZ
     labels:
@@ -313,8 +313,8 @@ services:
     ports:
       - "$NEXTCLOUD_PORT:80"
     volumes:
-      - $DOCKERDIR/appdata/nextcloud/:/var/www/html
-      - $DOCKERDIR/appdata/paperless/consume:/external/consume #has to belong to www-data:www-data
+      - $APPDATADIR/nextcloud/:/var/www/html
+      - $APPDATADIR/paperless/consume:/external/consume #has to belong to www-data:www-data
       - /volume1/scan:/external/scan #has to belong to www-data:www-data
     secrets:
       - nextcloud_admin_password
@@ -374,10 +374,10 @@ services:
       - paperless_key
       - paperless_password
     volumes:
-      - $DOCKERDIR/appdata/paperless/data:/usr/src/paperless/data
-      - $DOCKERDIR/appdata/paperless/media:/usr/src/paperless/media
-      - $DOCKERDIR/appdata/paperless/export:/usr/src/paperless/export
-      - $DOCKERDIR/appdata/paperless/consume:/usr/src/paperless/consume
+      - $APPDATADIR/paperless/data:/usr/src/paperless/data
+      - $APPDATADIR/paperless/media:/usr/src/paperless/media
+      - $APPDATADIR/paperless/export:/usr/src/paperless/export
+      - $APPDATADIR/paperless/consume:/usr/src/paperless/consume
     environment:
       # General
       PAPERLESS_URL: https://dms.$DOMAINNAME
@@ -430,7 +430,7 @@ services:
     # ports:
     #  - "$HOMEPAGE_PORT:3000"
     volumes:
-      - $DOCKERDIR/appdata/homepage:/app/config
+      - $APPDATADIR/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
       HOMEPAGE_VAR_PLEX_TOKEN: $HOMEPAGE_VAR_PLEX_TOKEN
@@ -460,7 +460,7 @@ services:
     ports:
       - "$OVERSEER_PORT:5055"
     volumes:
-      - $DOCKERDIR/appdata/overseerr/config:/config:rw
+      - $APPDATADIR/overseerr/config:/config:rw
     environment:
       <<: *default-tz-puid-pgid
     labels:
@@ -482,7 +482,7 @@ services:
     ports:
       - "$SPEEDTEST_PORT:80"
     volumes:
-      - $DOCKERDIR/appdata/speedtest-tracker/config:/config:rw
+      - $APPDATADIR/speedtest-tracker/config:/config:rw
     environment:
       <<: *default-tz-puid-pgid
     labels:
@@ -505,7 +505,7 @@ services:
       - t2_proxy
       - default
     volumes:
-      - $DOCKERDIR/appdata/uptime-kuma:/app/data
+      - $APPDATADIR/uptime-kuma:/app/data
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -527,8 +527,8 @@ services:
     ports:
       - "$PROMETHEUS_PORT:9090"
     volumes:
-      - $DOCKERDIR/appdata/prometheus/config:/etc/prometheus
-      - $DOCKERDIR/appdata/prometheus/data:/prometheus
+      - $APPDATADIR/prometheus/config:/etc/prometheus
+      - $APPDATADIR/prometheus/data:/prometheus
     user: $PUID:$PGID
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -557,7 +557,7 @@ services:
     ports:
       - "$REDIS_PAPERLESS_PORT:$REDIS_PAPERLESS_PORT"
     volumes:
-      - $DOCKERDIR/appdata/redis_paperless/:/data
+      - $APPDATADIR/redis_paperless/:/data
 
   # redis - In memory key-value store - (Nextcloud: database caching)
   redis-nextcloud:
@@ -568,7 +568,7 @@ services:
     ports:
       - "$REDIS_NEXTCLOUD_PORT:$REDIS_NEXTCLOUD_PORT"
     volumes:
-      - $DOCKERDIR/appdata/redis_nextcloud/:/data
+      - $APPDATADIR/redis_nextcloud/:/data
 
   # Postgres - Open source object-relational database (Paperless-ngx)
   postgres-paperless:
@@ -578,7 +578,7 @@ services:
     ports:
       - "$POSTGRES_PAPERLESS_PORT:5432"
     volumes:
-      - $DOCKERDIR/appdata/postgres_paperless/:/var/lib/postgresql/data
+      - $APPDATADIR/postgres_paperless/:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: $PAPERLESS_DATABASE_NAME
       POSTGRES_USER: $PAPERLESS_DATABASE_USER
@@ -594,7 +594,7 @@ services:
     ports:
       - "$POSTGRES_NEXTCLOUD_PORT:5432"
     volumes:
-      - $DOCKERDIR/appdata/postgres_nextcloud/:/var/lib/postgresql/data
+      - $APPDATADIR/postgres_nextcloud/:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: $NEXTCLOUD_DATABASE_NAME
       POSTGRES_USER: $NEXTCLOUD_DATABASE_USER
@@ -616,7 +616,7 @@ services:
       - "$GRAFANA_PORT:3000"
     user: $PUID
     volumes:
-      - $DOCKERDIR/appdata/grafana:/var/lib/grafana
+      - $APPDATADIR/grafana:/var/lib/grafana
     environment:
       GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-worldmap-panel,grafana-piechart-panel"
     labels:
@@ -648,8 +648,8 @@ services:
       - 853/tcp # DNS over TLS
       - 3000/tcp # Web UI
     volumes:
-      - $DOCKERDIR/appdata/adguard/conf:/opt/adguardhome/conf
-      - $DOCKERDIR/appdata/adguard/work:/opt/adguardhome/work
+      - $APPDATADIR/adguard/conf:/opt/adguardhome/conf
+      - $APPDATADIR/adguard/work:/opt/adguardhome/work
       #- $DOCKERDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs
 
   # Gluetun - VPN Client for Docker Containers and More
@@ -671,7 +671,7 @@ services:
       - 8388:8388/tcp # Shadowsocks
       - 8388:8388/udp # Shadowsocks
     volumes:
-      - $DOCKERDIR/appdata/gluetun:/gluetun
+      - $APPDATADIR/gluetun:/gluetun
     environment:
       TZ: $TZ
       # Wireguard
@@ -744,7 +744,7 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - $DOCKERDIR/appdata/traefik/acme:/traefik:ro
+      - $APPDATADIR/traefik/acme:/traefik:ro
       - $DOCKERDIR/shared/certs/:/output:rw
     environment:
       DOMAIN: $DOMAINNAME
@@ -758,7 +758,7 @@ services:
       - 127.0.0.1:$PROTONMAIL_IMAP_PORT:25/tcp #SMTP
       - 127.0.0.1:$PROTONMAIL_SMTP_PORT:143/tcp #IMAP
     volumes:
-      - $DOCKERDIR/appdata/protonmail_bridge:/root
+      - $APPDATADIR/protonmail_bridge:/root
 
   # Glances - System Information
   glances:
@@ -775,8 +775,8 @@ services:
       - "$GLANCES_PORT:61208"
     pid: host
     volumes:
-      #- $DOCKERDIR/appdata/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
-      - $DATADIR:/data/data:ro
+      #- $APPDATADIR/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
+      - $MEDIADIR:/data/data:ro
       # - /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
     environment:
       # GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
@@ -802,8 +802,8 @@ services:
     ports:
       - "$QDIRSTAT_PORT:5800"
     volumes:
-      - $DOCKERDIR/appdata/qdirstat/config:/config:rw
-      - $DATADIR:/data/media:ro
+      - $APPDATADIR/qdirstat/config:/config:rw
+      - $MEDIADIR:/data/media:ro
     environment:
       USER_ID: $PUID
       GROUP_ID: $PGID
@@ -835,8 +835,8 @@ services:
     container_name: qbittorrent
     network_mode: "service:gluetun"
     volumes:
-      - $DOCKERDIR/appdata/qbittorrent:/config
-      - $DATADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
+      - $APPDATADIR/qbittorrent:/config
+      - $MEDIADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
       PUID: 0
       GUID: 0
@@ -856,8 +856,8 @@ services:
     container_name: nzbget
     network_mode: "service:gluetun"
     volumes:
-      - $DOCKERDIR/appdata/nzbget:/config
-      - $DATADIR/downloads:/data/downloads
+      - $APPDATADIR/nzbget:/config
+      - $MEDIADIR/downloads:/data/downloads
     environment:
       <<: *default-tz-puid-pgid
     labels: # Traefik labels added via glueten
@@ -872,8 +872,8 @@ services:
     container_name: sabnzbd
     network_mode: "service:gluetun"
     volumes:
-      - $DOCKERDIR/appdata/sabnzbd:/config
-      - $DATADIR/downloads:/data/downloads
+      - $APPDATADIR/sabnzbd:/config
+      - $MEDIADIR/downloads:/data/downloads
     environment:
       <<: *default-tz-puid-pgid
     labels: # Traefik labels added via glueten
@@ -892,7 +892,7 @@ services:
     ports:
       - "$PROWLARR_PORT:9696"
     volumes:
-      - $DOCKERDIR/appdata/prowlarr:/config
+      - $APPDATADIR/prowlarr:/config
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -921,12 +921,12 @@ services:
     ports:
       - "$RADARR_PORT:7878"
     volumes:
-      - $DOCKERDIR/appdata/radarr:/config
+      - $APPDATADIR/radarr:/config
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $DATADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
-      - $DATADIR:/data
-      # - $DATADIR/downloads:/data/downloads
-      # - $DATADIR/downloads/torrents:/data/downloads/torrents
+      - $MEDIADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
+      - $MEDIADIR:/data
+      # - $MEDIADIR/downloads:/data/downloads
+      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -961,12 +961,12 @@ services:
     ports:
       - "$SONARR_PORT:8989"
     volumes:
-      - $DOCKERDIR/appdata/sonarr:/config
+      - $APPDATADIR/sonarr:/config
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $DATADIR/temp/appdata/sonarr/MediaCover:/config/MediaCover
-      - $DATADIR:/data
-      # - $DATADIR/downloads:/data/downloads
-      # - $DATADIR/downloads/torrents:/data/downloads/torrents
+      - $MEDIADIR/temp/appdata/sonarr/MediaCover:/config/MediaCover
+      - $MEDIADIR:/data
+      # - $MEDIADIR/downloads:/data/downloads
+      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -998,10 +998,10 @@ services:
     ports:
       - "$READARR_PORT:8787"
     volumes:
-      - $DOCKERDIR/appdata/readarr:/config
-      - $DATADIR:/data
-      # - $DATADIR/downloads:/data/downloads
-      # - $DATADIR/downloads/torrents:/data/downloads/torrents
+      - $APPDATADIR/readarr:/config
+      - $MEDIADIR:/data
+      # - $MEDIADIR/downloads:/data/downloads
+      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       <<: *default-tz-puid-pgid
@@ -1034,9 +1034,9 @@ services:
       <<: *default-tz-puid-pgid
       UMASK_SET: 022
     volumes:
-      - $DOCKERDIR/appdata/jellyfin:/config
-      - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
-      - $DATADIR:/data/media
+      - $APPDATADIR/jellyfin:/config
+      - $MEDIADIR/temp/appdata/jellyfin/metadata:/config/metadata
+      - $MEDIADIR:/data/media
       - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
     labels:
       - "traefik.enable=true"
@@ -1059,8 +1059,8 @@ services:
     ports:
       - "$BAZARR_PORT:6767"
     volumes:
-      - $DOCKERDIR/appdata/bazarr:/config
-      - $DATADIR:/data
+      - $APPDATADIR/bazarr:/config
+      - $MEDIADIR:/data
     environment:
       <<: *default-tz-puid-pgid
     labels:
@@ -1082,9 +1082,9 @@ services:
     ports:
       - "$HANDBRAKE_PORT:5800"
     volumes:
-      - $DATADIR/downloads:/data/downloads
-      - $DOCKERDIR/appdata/handbrake/config:/config
-      - $DOCKERDIR/appdata/handbrake/watch:/watch
+      - $MEDIADIR/downloads:/data/downloads
+      - $APPDATADIR/handbrake/config:/config
+      - $APPDATADIR/handbrake/watch:/watch
     environment:
       USER_ID: $PUID
       GROUP_ID: $PGID
@@ -1128,7 +1128,7 @@ services:
       - socket_proxy
     volumes:
       # - /var/run/docker.sock:/var/run/docker.sock # Use Docker Socket Proxy instead for improved security
-      - $DOCKERDIR/appdata/docker-gc/docker-gc-exclude:/etc/docker-gc-exclude
+      - $APPDATADIR/docker-gc/docker-gc-exclude:/etc/docker-gc-exclude
     environment:
       CRON: 12 0 0 * * ? # Everyday at midnight.
       FORCE_IMAGE_REMOVAL: 1
