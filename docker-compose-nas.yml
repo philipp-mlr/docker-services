@@ -1153,8 +1153,8 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: jlesage/mkvtoolnix:latest
     container_name: mkvtoolnix
-    # ports:
-    #   - "$MKVTOOLNIX_PORT:5800"
+    ports:
+      - "$MKVTOOLNIX_PORT:5800"
     volumes:
       - $MEDIADIR/downloads:/data/downloads
       - $APPDATADIR/mkvtoolnix/config:/config:rw
@@ -1184,8 +1184,8 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: jlesage/makemkv:latest
     container_name: makemkv
-    # ports:
-    #   - "$MAKEMKV_PORT:5800"
+    ports:
+      - "$MAKEMKV_PORT:5800"
     volumes:
       - $MEDIADIR/downloads:/data/downloads
       - $APPDATADIR/makemkv/config:/config
