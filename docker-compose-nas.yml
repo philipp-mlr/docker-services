@@ -830,7 +830,10 @@ services:
   # qBittorrent - Torrent downloader
   # Needs trailing / if using PathPrefixStrip
   qbittorrent:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
+    security_opt:
+    - no-new-privileges:true
+    restart: unless-stopped
     image: lscr.io/linuxserver/qbittorrent:latest
     container_name: qbittorrent
     network_mode: "service:gluetun"
