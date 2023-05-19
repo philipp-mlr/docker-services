@@ -17,16 +17,19 @@ networks:
     ipam:
       config:
         - subnet: 192.168.91.0/24
-  dockervlan:
-    name: dockervlan
-    driver: macvlan
-    driver_opts:
-      parent: eth0 # using ifconfig
-    ipam:
-      config:
-        - subnet: "192.168.2.0/24"
-          ip_range: "192.168.2.200/32"
-          gateway: "192.168.2.1"
+  dockeripvlan:
+    external:
+      name: br0
+  # dockervlan:
+  #   name: dockervlan
+  #   driver: macvlan
+  #   driver_opts:
+  #     parent: eth0 # using ifconfig
+  #   ipam:
+  #     config:
+  #       - subnet: "192.168.2.0/24"
+  #         ip_range: "192.168.2.200/32"
+  #         gateway: "192.168.2.1"
 
 ########################### SECRETS
 
@@ -636,8 +639,8 @@ services:
     container_name: adguardhome
     image: adguard/adguardhome
     networks:
-      dockervlan:
-        ipv4_address: 192.168.2.102 # IP address inside defined range
+      dockeripvlan:
+        ipv4_address: 192.168.2.150 # IP address inside defined range
     ports:
       - 53/udp # DNS
       - 67/udp # DHCP
