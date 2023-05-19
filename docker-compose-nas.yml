@@ -1156,7 +1156,7 @@ services:
     # ports:
     #   - "$MKVTOOLNIX_PORT:5800"
     volumes:
-      - $DATADIR/downloads:/data/downloads
+      - $MEDIADIR/downloads:/data/downloads
       - $APPDATADIR/mkvtoolnix/config:/config:rw
     environment:
       USER_ID: $PUID
