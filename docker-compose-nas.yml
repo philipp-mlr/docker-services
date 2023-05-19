@@ -19,6 +19,7 @@ networks:
         - subnet: 192.168.91.0/24
   dockeripvlan:
     external: true
+    name: br0
   # dockervlan:
   #   name: dockervlan
   #   driver: macvlan
