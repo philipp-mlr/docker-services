@@ -869,22 +869,6 @@ services:
     labels: # Traefik labels added via glueten
       - "deunhealth.restart.on.unhealthy=true"
 
-  # SABnzbd - Binary newsgrabber (NZB downloader)
-  # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
-  # Needs trailing / if using PathPrefix
-  sabnzbd:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
-    image: linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    network_mode: "service:gluetun"
-    volumes:
-      - $APPDATADIR/sabnzbd:/config
-      - $MEDIADIR/downloads:/data/downloads
-    environment:
-      <<: *default-tz-puid-pgid
-    labels: # Traefik labels added via glueten
-      - "deunhealth.restart.on.unhealthy=true"
-
   ############################# INDEXERS
 
   # Prowlarr - Torrent proxy
