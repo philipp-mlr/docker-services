@@ -1187,8 +1187,8 @@ services:
     # ports:
     #   - "$MAKEMKV_PORT:5800"
     volumes:
-      - $DATADIR/downloads:/data/downloads
-      - $DOCKERDIR/appdata/makemkv/config:/config
+      - $MEDIADIR/downloads:/data/downloads
+      - $APPDATADIR/makemkv/config:/config
       - /dev/shm:/dev/shm
     environment:
       USER_ID: $PUID
