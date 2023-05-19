@@ -61,6 +61,9 @@ secrets:
     file: $SECRETSDIR/nextcloud_admin_user
   nextcloud_admin_password:
     file: $SECRETSDIR/nextcloud_admin_password
+  # Plex
+  plex_claim:
+    file: $SECRETSDIR/secrets/plex_claim
 
 ########################### EXTENSION FIELDS
 # Helps eliminate repetition of sections
