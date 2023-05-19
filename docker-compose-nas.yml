@@ -851,7 +851,10 @@ services:
 
   # nzbget - Binary newsgrabber (NZB downloader)
   nzbget:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
+    security_opt:
+    - no-new-privileges:true
+    restart: unless-stopped
     image: lscr.io/linuxserver/nzbget
     container_name: nzbget
     network_mode: "service:gluetun"
