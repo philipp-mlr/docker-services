@@ -1050,8 +1050,8 @@ services:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
     image: plexinc/pms-docker:plexpass
     container_name: plexms
-    #devices:
-    #  - /dev/dri:/dev/dri # for harware transcoding
+    devices:
+     - /dev/dri:/dev/dri # for harware transcoding
     ports:
       - "$PLEX_PORT:32400/tcp"
       - "3005:3005/tcp"
