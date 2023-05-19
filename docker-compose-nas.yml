@@ -1206,7 +1206,7 @@ services:
       - "traefik.http.routers.makemkv-rtr.entrypoints=https"
       - "traefik.http.routers.makemkv-rtr.rule=Host(`makemkv.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.makemkv-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.makemkv-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.makemkv-rtr.service=makemkv-svc"
       - "traefik.http.services.makemkv-svc.loadbalancer.server.port=5800"
