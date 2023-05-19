@@ -935,7 +935,7 @@ services:
       ## HTTP Routers Auth Bypass
       - "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
       - "traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
-      - "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      #- "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
       - "traefik.http.routers.radarr-rtr-bypass.priority=100"
       ## HTTP Routers Auth
       - "traefik.http.routers.radarr-rtr.entrypoints=https"
@@ -975,7 +975,7 @@ services:
       ## HTTP Routers Auth Bypass
       - "traefik.http.routers.sonarr-rtr-bypass.entrypoints=https"
       - "traefik.http.routers.sonarr-rtr-bypass.rule=Host(`sonarr.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
-      - "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      #- "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
       - "traefik.http.routers.sonarr-rtr-bypass.priority=100"
       ## HTTP Routers Auth
       - "traefik.http.routers.sonarr-rtr.entrypoints=https"
@@ -1019,6 +1019,35 @@ services:
       - "traefik.http.services.readarr-svc.loadbalancer.server.port=8787"
 
   ############################# MEDIA
+
+  # Jellyfin - Media Server
+  jellyfin:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    #devices:
+    #  - /dev/dri:/dev/dri # for harware transcoding
+    ports:
+      - "$JELLYFIN_PORT:8096"
+      - "8920:8920" # Emby also uses same port if running both
+    environment:
+      <<: *default-tz-puid-pgid
+      UMASK_SET: 022
+    volumes:
+      - $DOCKERDIR/appdata/jellyfin:/config
+      - $DATADIR/temp/appdata/jellyfin/metadata:/config/metadata
+      - $DATADIR:/data/media
+      - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
+      - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
+      - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
 
   ############################# MEDIA FILE MANAGEMENT
 
