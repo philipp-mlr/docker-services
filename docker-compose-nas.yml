@@ -836,7 +836,7 @@ services:
   # luckyBackup - Open Source client/server backup system
   duplicati:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
-    mage: lscr.io/linuxserver/duplicati:latest
+    image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
       <<: *default-tz-puid-pgid
