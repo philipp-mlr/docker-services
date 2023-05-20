@@ -860,6 +860,30 @@ services:
       - "traefik.http.routers.urbackup-rtr.service=urbackup-svc"
       - "traefik.http.services.urbackup-svc.loadbalancer.server.port=55414"
 
+  # luckyBackup - Open Source client/server backup system
+  luckybackup:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: ich777/luckybackup:latest
+    container_name: luckybackup
+    ports:
+      - "$LUCKYBACKUP_PORT:8080"
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - $APPDATADIR/luckybackup:/luckybackup
+      - /mnt/user/:/shares
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.luckybackup-rtr.entrypoints=https"
+      - "traefik.http.routers.luckybackup-rtr.rule=Host(`luckybackup.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.luckybackup-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.luckybackup-rtr.service=luckybackup-svc"
+      - "traefik.http.services.luckybackup-svc.loadbalancer.server.port=8080"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
