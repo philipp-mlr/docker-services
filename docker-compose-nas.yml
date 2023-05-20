@@ -848,7 +848,7 @@ services:
     volumes:
       - $APPDATADIR/urbackup:/var/urbackup
       - /etc/localtime:/etc/localtime:ro
-      - /mnt/user/backup:/backup
+      - /mnt/user/backup/urbackup:/backup
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
