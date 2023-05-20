@@ -839,7 +839,10 @@ services:
     image: tristanteu/urbackup-docker:latest
     container_name: urbackup
     ports:
+      - 55413:55413
       - "$URBACKUP_PORT:55414"
+      - 55415:55415
+      - 35623:35623
     cap_add:
       - SYS_ADMIN
     volumes:
