@@ -379,6 +379,7 @@ services:
       - postgres_password
       - paperless_key
       - paperless_password
+      - paperless_email
     volumes:
       - $APPDATADIR/paperless/data:/usr/src/paperless/data
       - $APPDATADIR/paperless/media:/usr/src/paperless/media
