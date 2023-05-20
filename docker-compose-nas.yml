@@ -321,7 +321,7 @@ services:
     volumes:
       - $APPDATADIR/nextcloud/:/var/www/html
       - $APPDATADIR/paperless/consume:/external/consume #has to belong to www-data:www-data
-      - /volume1/scan:/external/scan #has to belong to www-data:www-data
+      - /mnt/user/scan:/external/scan #has to belong to www-data:www-data
     secrets:
       - nextcloud_admin_password
       - nextcloud_admin_user
