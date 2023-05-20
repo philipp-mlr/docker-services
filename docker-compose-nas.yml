@@ -839,13 +839,13 @@ services:
     image: tristanteu/urbackup-docker:latest
     container_name: urbackup
     ports:
-    - "$URBACKUP_PORT:55414"
+      - "$URBACKUP_PORT:55414"
     cap_add:
-    - SYS_ADMIN
+      - SYS_ADMIN
     volumes:
-    - $APPDATADIR/urbackup:/var/urbackup
-    - /etc/localtime:/etc/localtime:ro
-    - /media/backup:/backup
+      - $APPDATADIR/urbackup:/var/urbackup
+      - /etc/localtime:/etc/localtime:ro
+      - /media/backup:/backup
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
