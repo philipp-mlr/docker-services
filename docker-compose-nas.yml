@@ -401,7 +401,7 @@ services:
       PAPERLESS_TASK_WORKERS: 2 # Default 1
       # User
       PAPERLESS_SECRET_KEY_FILE: /run/secrets/paperless_key
-      PAPERLESS_ADMIN_USER: /run/secrets/paperless_user
+      PAPERLESS_ADMIN_USER_FILE: /run/secrets/paperless_user
       PAPERLESS_ADMIN_MAIL_FILE: /run/secrets/paperless_email
       PAPERLESS_ADMIN_PASSWORD_FILE: /run/secrets/paperless_password
       # Database
