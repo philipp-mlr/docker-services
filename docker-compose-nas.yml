@@ -382,7 +382,7 @@ services:
       - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
-      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=443"
+      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=80"
 
   # Paperless-ngx - a document management system that transforms your physical documents into a searchable online archive
   paperless:
