@@ -283,7 +283,7 @@ services:
   # Portainer - WebUI for Containers
   portainer:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer:latest
     container_name: portainer
     depends_on:
       - socket-proxy
