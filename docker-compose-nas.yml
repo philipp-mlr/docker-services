@@ -365,6 +365,7 @@ services:
     container_name: onlyoffice
     ports:
       - "$ONLYOFFICE_PORT_HTTP:80"
+      - "$ONLYOFFICE_PORT_HTTPS:443"
     volumes:
       - $APPDATADIR/onlyoffice/logs:/var/log/onlyoffice
       - $APPDATADIR/onlyoffice/cache:/var/lib/onlyoffice # File cache
