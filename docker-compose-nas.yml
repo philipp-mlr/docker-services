@@ -839,7 +839,8 @@ services:
     image: lscr.io/linuxserver/duplicati:latest
     container_name: duplicati
     environment:
-      <<: *default-tz-puid-pgid
+      PUID: 0
+      GUID: 0
     ports:
       - "$DUPLICATI_PORT:8200"
     cap_add:
