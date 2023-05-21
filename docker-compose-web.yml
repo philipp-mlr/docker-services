@@ -408,6 +408,7 @@ services:
       - crowdsec
     volumes:
       - $APPDATADIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
+      
   ############################# DATABASE
 
   # Prometheus - Database for sensor data
