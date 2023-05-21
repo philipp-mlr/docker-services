@@ -1092,6 +1092,21 @@ services:
       - "traefik.http.routers.plexms-rtr.service=plexms-svc"
       - "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
 
+  # Plex Meta Manager - Automatic Metadata Manager for Plex
+  plexmm:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/plex-meta-manager:latest
+    container_name: plexmm
+    environment:
+      <<: *default-tz-puid-pgid
+      PMM_CONFIG: /config/config.yml #optional
+      PMM_TIME: 03:00 #optional
+      PMM_RUN: "True" #optional
+      PMM_TEST: "False" #optional
+      PMM_NO_MISSING: "False" #optional
+    volumes:
+      - $APPDATADIR/plex-meta-manager:/config
+
   # Tautulli - Previously PlexPy. Plex statistics and monitoring
   # Set HTTP Root in Tautulli settings if using PathPrefix
   tautulli:
