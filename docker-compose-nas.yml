@@ -874,7 +874,7 @@ services:
     network_mode: "service:gluetun"
     volumes:
       - $APPDATADIR/qbittorrent:/config
-      - $MEDIADIR/downloads:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
+      - $MEDIADIR/torrents:/data/downloads # Ensure that downloads folder is set to /data/downloads in qBittorrent
     environment:
       PUID: 0
       GUID: 0
@@ -898,7 +898,7 @@ services:
     network_mode: "service:gluetun"
     volumes:
       - $APPDATADIR/nzbget:/config
-      - $MEDIADIR/downloads:/data/downloads
+      - $MEDIADIR/usenet:/data/downloads
     environment:
       <<: *default-tz-puid-pgid
     labels: # Traefik labels added via glueten
