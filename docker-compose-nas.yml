@@ -897,8 +897,7 @@ services:
     container_name: homeassistant
     environment:
       <<: *default-tz-puid-pgid
-    network_mode:
-      - host
+    network_mode: host
     ports:
       - "$HOMEASSISTANT_PORT:8123"
     volumes:
