@@ -912,7 +912,7 @@ services:
       - "traefik.http.routers.homeassistant-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.homeassistant-rtr.service=homeassistant-svc"
-      - "traefik.http.services.homeassistant-svc.loadbalancer.server.port=8123"
+      - "traefik.http.services.homeassistant-svc.loadbalancer.servers=192.168.2.100:8123"
 
   ############################# DOWNLOADERS
 
