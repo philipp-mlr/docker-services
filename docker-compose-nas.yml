@@ -283,7 +283,7 @@ services:
   # Portainer - WebUI for Containers
   portainer:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: portainer/portainer-ce:latest
+    image: portainer/portainer-ee:latest
     container_name: portainer
     depends_on:
       - socket-proxy
@@ -321,7 +321,7 @@ services:
     volumes:
       - $APPDATADIR/nextcloud/:/var/www/html
       - $APPDATADIR/paperless/consume:/external/consume #has to belong to www-data:www-data
-      - /volume1/scan:/external/scan #has to belong to www-data:www-data
+      - /mnt/user/scan:/external/scan #has to belong to www-data:www-data
     secrets:
       - nextcloud_admin_password
       - nextcloud_admin_user
@@ -357,6 +357,35 @@ services:
       - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
       - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=80"
 
+  # Onlyoffice - Feature-rich web-based office suite with a vast range of collaborative capabilities
+  # Currently only seems to work without Cloudflare Tunnel
+  onlyoffice:
+    <<: *common-keys-apps
+    image: onlyoffice/documentserver:latest
+    container_name: onlyoffice
+    ports:
+      - "$ONLYOFFICE_PORT_HTTP:80"
+      - "$ONLYOFFICE_PORT_HTTPS:443"
+    volumes:
+      - $APPDATADIR/onlyoffice/logs:/var/log/onlyoffice
+      - $APPDATADIR/onlyoffice/cache:/var/lib/onlyoffice # File cache
+      - $APPDATADIR/onlyoffice/db:/var/lib/postgresql # Database
+      #- $SERVICEDIR/shared/certs:/var/www/onlyoffice/Data/certs
+      #environment:
+      #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
+      #SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.onlyoffice-rtr.tls=true"
+      - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
+      - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
+      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=443"
+
   # Paperless-ngx - a document management system that transforms your physical documents into a searchable online archive
   paperless:
     <<: *common-keys-apps
@@ -379,6 +408,8 @@ services:
       - postgres_password
       - paperless_key
       - paperless_password
+      - paperless_email
+      - paperless_user
     volumes:
       - $APPDATADIR/paperless/data:/usr/src/paperless/data
       - $APPDATADIR/paperless/media:/usr/src/paperless/media
@@ -399,7 +430,7 @@ services:
       PAPERLESS_TASK_WORKERS: 2 # Default 1
       # User
       PAPERLESS_SECRET_KEY_FILE: /run/secrets/paperless_key
-      PAPERLESS_ADMIN_USER: /run/secrets/paperless_user
+      PAPERLESS_ADMIN_USER_FILE: /run/secrets/paperless_user
       PAPERLESS_ADMIN_MAIL_FILE: /run/secrets/paperless_email
       PAPERLESS_ADMIN_PASSWORD_FILE: /run/secrets/paperless_password
       # Database
@@ -831,6 +862,33 @@ services:
       - "traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
       - "traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"
 
+  # luckyBackup - Open Source client/server backup system
+  duplicati:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    environment:
+      PUID: 0
+      GUID: 0
+    ports:
+      - "$DUPLICATI_PORT:8200"
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - $APPDATADIR/duplicati/config:/config
+      - /mnt/user/:/shares
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.duplicati-rtr.entrypoints=https"
+      - "traefik.http.routers.duplicati-rtr.rule=Host(`duplicati.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.duplicati-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.duplicati-rtr.service=duplicati-svc"
+      - "traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
@@ -1016,42 +1074,13 @@ services:
 
   ############################# MEDIA
 
-  # Jellyfin - Media Server
-  jellyfin:
-    <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: jellyfin/jellyfin:latest
-    container_name: jellyfin
-    #devices:
-    #  - /dev/dri:/dev/dri # for harware transcoding
-    ports:
-      - "$JELLYFIN_PORT:8096"
-      - "8920:8920" # Emby also uses same port if running both
-    environment:
-      <<: *default-tz-puid-pgid
-      UMASK_SET: 022
-    volumes:
-      - $APPDATADIR/jellyfin:/config
-      - $MEDIADIR/temp/appdata/jellyfin/metadata:/config/metadata
-      - $MEDIADIR:/data/media
-      - /dev/shm:/data/transcode # Offload transcoding to RAM if you have enough RAM
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.jellyfin-rtr.entrypoints=https"
-      - "traefik.http.routers.jellyfin-rtr.rule=Host(`jellyfin.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.jellyfin-rtr.middlewares=chain-no-auth@file"
-      ## HTTP Services
-      - "traefik.http.routers.jellyfin-rtr.service=jellyfin-svc"
-      - "traefik.http.services.jellyfin-svc.loadbalancer.server.port=8096"
-
   #Plex - Media Server
   plexms:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
     image: plexinc/pms-docker:plexpass
     container_name: plexms
-    #devices:
-    #  - /dev/dri:/dev/dri # for harware transcoding
+    devices:
+     - /dev/dri:/dev/dri # for harware transcoding
     ports:
       - "$PLEX_PORT:32400/tcp"
       - "3005:3005/tcp"
@@ -1091,6 +1120,53 @@ services:
       ## HTTP Servicesnoauth
       - "traefik.http.routers.plexms-rtr.service=plexms-svc"
       - "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"
+
+  # Plex Meta Manager - Automatic Metadata Manager for Plex
+  plexmm:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/plex-meta-manager:latest
+    container_name: plexmm
+    environment:
+      <<: *default-tz-puid-pgid
+      PMM_CONFIG: /config/config.yml #optional
+      PMM_TIME: 03:00 #optional
+      PMM_RUN: "True" #optional
+      PMM_TEST: "False" #optional
+      PMM_NO_MISSING: "False" #optional
+    volumes:
+      - $APPDATADIR/plex-meta-manager:/config
+
+  # Tautulli - Previously PlexPy. Plex statistics and monitoring
+  # Set HTTP Root in Tautulli settings if using PathPrefix
+  tautulli:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    ports:
+      - "$TAUTULLI_PORT:8181"
+    volumes:
+      - $APPDATADIR/tautulli/config:/config
+      - $APPDATADIR/plexms/Library/Application Support/Plex Media Server/Logs:/logs:ro # For tautulli Plex log viewer
+    environment:
+      <<: *default-tz-puid-pgid
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$TAUTULLI_API_KEY`) || Query(`apikey`, `$TAUTULLI_API_KEY`))"
+      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.tautulli-rtr-bypass.priority=100"
+      ## HTTP Routers
+      - "traefik.http.routers.tautulli-rtr.entrypoints=https"
+      - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME`)"
+      - "traefik.http.routers.tautulli-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.tautulli-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
+      - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"
+      - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
 
   ############################# MEDIA FILE MANAGEMENT
 
@@ -1147,6 +1223,69 @@ services:
       ## HTTP Services
       - "traefik.http.routers.handbrake-rtr.service=handbrake-svc"
       - "traefik.http.services.handbrake-svc.loadbalancer.server.port=5800"
+
+  # MKVToolNix - Video Editing (Remuxing - changing media container while keeping original source quality)
+  mkvtoolnix:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: jlesage/mkvtoolnix:latest
+    container_name: mkvtoolnix
+    ports:
+      - "$MKVTOOLNIX_PORT:5800"
+    volumes:
+      - $MEDIADIR/:/data/media
+      - $APPDATADIR/mkvtoolnix/config:/config:rw
+    environment:
+      USER_ID: $PUID
+      GROUP_ID: $PGID
+      UMASK: 002
+      TZ: $TZ
+      KEEP_APP_RUNNING: 1
+      CLEAN_TMP_DIR: 1
+      DISPLAY_WIDTH: 1600
+      DISPLAY_HEIGHT: 960
+      VNC_PASSWORD: $MKVTOOLNIX_VNC_PASSWD
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.mkvtoolnix-rtr.entrypoints=https"
+      - "traefik.http.routers.mkvtoolnix-rtr.rule=Host(`mkvtoolnix.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.mkvtoolnix-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.mkvtoolnix-rtr.service=mkvtoolnix-svc"
+      - "traefik.http.services.mkvtoolnix-svc.loadbalancer.server.port=5800"
+
+  # MakeMKV - Video Editing (Ripping from Disks)
+  makemkv:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: jlesage/makemkv:latest
+    container_name: makemkv
+    ports:
+      - "$MAKEMKV_PORT:5800"
+    volumes:
+      - $MEDIADIR/:/data/media
+      - $APPDATADIR/makemkv/config:/config
+      - /dev/shm:/dev/shm
+    environment:
+      USER_ID: $PUID
+      GROUP_ID: $PGID
+      UMASK: 002
+      TZ: $TZ
+      KEEP_APP_RUNNING: 1
+      CLEAN_TMP_DIR: 1
+      DISPLAY_WIDTH: 1600
+      DISPLAY_HEIGHT: 960
+      VNC_PASSWORD: $MAKEMKV_VNC_PASSWD
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.makemkv-rtr.entrypoints=https"
+      - "traefik.http.routers.makemkv-rtr.rule=Host(`makemkv.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.makemkv-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.makemkv-rtr.service=makemkv-svc"
+      - "traefik.http.services.makemkv-svc.loadbalancer.server.port=5800"
 
   ############################# MAINTENANCE
 
