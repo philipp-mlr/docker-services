@@ -890,15 +890,14 @@ services:
       - "traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"
 
   # Home Assistant Core - Home Automation
-  # Added temporarily since HASS.io (Home Assistant Supervised) on Docker has been deprecated.
+  # https://community.home-assistant.io/t/home-assistant-400-bad-request-docker-proxy-solution/322163
   homeassistant:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
-    container_name: homeassistant
     image: homeassistant/home-assistant:latest
+    container_name: homeassistant
     environment:
       <<: *default-tz-puid-pgid
-    ports:
-      - "$HOMEASSISTANT_PORT:8123"
+    network_mode: host
     volumes:
       - $APPDATADIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
