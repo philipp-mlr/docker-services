@@ -889,6 +889,30 @@ services:
       - "traefik.http.routers.duplicati-rtr.service=duplicati-svc"
       - "traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"
 
+  # Home Assistant Core - Home Automation
+  # Added temporarily since HASS.io (Home Assistant Supervised) on Docker has been deprecated.
+  homeassistant:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    container_name: homeassistant
+    image: homeassistant/home-assistant:latest
+    environment:
+      <<: *default-tz-puid-pgid
+    ports:
+      - "$HOMEASSISTANT_PORT:8123"
+    volumes:
+      - $APPDATADIR/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.homeassistant-rtr.entrypoints=https"
+      - "traefik.http.routers.homeassistant-rtr.rule=Host(`homeassistant.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.homeassistant-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.homeassistant-rtr.service=homeassistant-svc"
+      - "traefik.http.services.homeassistant-svc.loadbalancer.server.port=8123"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
