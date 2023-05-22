@@ -898,8 +898,6 @@ services:
     environment:
       <<: *default-tz-puid-pgid
     network_mode: host
-    ports:
-      - "$HOMEASSISTANT_PORT:8123"
     volumes:
       - $APPDATADIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
