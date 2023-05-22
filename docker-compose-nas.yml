@@ -892,12 +892,15 @@ services:
   # Home Assistant Core - Home Automation
   # https://community.home-assistant.io/t/home-assistant-400-bad-request-docker-proxy-solution/322163
   homeassistant:
-    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: homeassistant/home-assistant:latest
     container_name: homeassistant
     environment:
       <<: *default-tz-puid-pgid
-    network_mode: host
+    network_mode:
+      - host
+    ports:
+      - "$HOMEASSISTANT_PORT:8123"
     volumes:
       - $APPDATADIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
