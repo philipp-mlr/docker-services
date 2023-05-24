@@ -585,6 +585,29 @@ services:
       - "traefik.http.routers.prometheus-rtr.service=prometheus-svc"
       - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
 
+  # InfluxDB - Database for sensor data
+  # Create influxdb.conf
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: always
+    ports:
+      - "$INFLUXDB_PORT:8086"
+    volumes:
+      - $APPDATADIR/influxdb/db:/var/lib/influxdb
+     #- $USERDIR/docker/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+    #command: -config /etc/influxdb/influxdb.conf
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.influxdb-rtr.entrypoints=https"
+      - "traefik.http.routers.influxdb-rtr.rule=Host(`influxdb.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.influxdb-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.influxdb-rtr.service=influxdb-svc"
+      - "traefik.http.services.influxdb-svc.loadbalancer.server.port=8086"
+
   # redis - In memory key-value store - (Paperless-ngx: Task scheduler and advanced features)
   redis-paperless:
     <<: *common-keys-core
