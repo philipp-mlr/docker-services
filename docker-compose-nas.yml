@@ -595,7 +595,7 @@ services:
       - "$INFLUXDB_PORT:8086"
     volumes:
       - $APPDATADIR/influxdb/db:/var/lib/influxdb
-     #- $USERDIR/docker/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - $APPDATADIR/influxdb:/etc/influxdb/
     #command: -config /etc/influxdb/influxdb.conf
     labels:
       - "traefik.enable=true"
