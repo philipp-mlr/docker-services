@@ -591,7 +591,6 @@ services:
     <<: *common-keys-core
     image: influxdb:latest
     container_name: influxdb
-    restart: always
     ports:
       - "$INFLUXDB_PORT:8086"
     volumes:
@@ -608,6 +607,26 @@ services:
       ## HTTP Services
       - "traefik.http.routers.influxdb-rtr.service=influxdb-svc"
       - "traefik.http.services.influxdb-svc.loadbalancer.server.port=8086"
+
+  # Telegraf - Database for sensor data
+  telegraf:
+    <<: *common-keys-core
+    image: telegraf:latest
+    container_name: telegraf
+    # ports:
+    #   - "$TELEGRAF_PORT:8086"
+    volumes:
+      - $APPDATADIR/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers
+    #   - "traefik.http.routers.telegraf-rtr.entrypoints=https"
+    #   - "traefik.http.routers.telegraf-rtr.rule=Host(`telegraf.$DOMAINNAME`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.telegraf-rtr.middlewares=chain-no-auth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.telegraf-rtr.service=telegraf-svc"
+    #   - "traefik.http.services.telegraf-svc.loadbalancer.server.port=8086"
 
   # redis - In memory key-value store - (Paperless-ngx: Task scheduler and advanced features)
   redis-paperless:
