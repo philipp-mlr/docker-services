@@ -588,6 +588,7 @@ services:
   # InfluxDB - Database for sensor data
   # Create influxdb.conf
   influxdb:
+    <<: *common-keys-core
     image: influxdb:latest
     container_name: influxdb
     restart: always
