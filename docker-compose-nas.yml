@@ -1008,7 +1008,7 @@ services:
     container_name: sabnzbd
     # network_mode: "service:gluetun"
     ports:
-      - "8099:8080"
+      - "8099:8085"
     volumes:
       - $APPDATADIR/sabnzbd:/config
       - $MEDIADIR/usenet:/data/usenet
