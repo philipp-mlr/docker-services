@@ -790,6 +790,18 @@ services:
       - "traefik.http.routers.nzbget-rtr.service=nzbget-svc"
       - "traefik.http.routers.nzbget-rtr-bypass.service=nzbget-svc"
       - "traefik.http.services.nzbget-svc.loadbalancer.server.port=6789"
+      #### SABnzbd
+      ## HTTP Routers Auth
+      - "traefik.http.routers.sabnzbd-rtr.entrypoints=https"
+      - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
+      - "traefik.http.routers.sabnzbd-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.sabnzbd-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
+      ## HTTP Services
+      - "traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
+      - "traefik.http.routers.sabnzbd-rtr-bypass.service=sabnzbd-svc"
+      - "traefik.http.services.sabnzbd-svc.loadbalancer.server.port=8085"
 
   # gotenberg - an API server for convering document formats (Paperless-ngx)
   gotenberg:
@@ -1006,9 +1018,7 @@ services:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: linuxserver/sabnzbd:latest
     container_name: sabnzbd
-    # network_mode: "service:gluetun"
-    ports:
-      - "8099:8085"
+    network_mode: "service:gluetun"
     volumes:
       - $APPDATADIR/sabnzbd:/config
       - $MEDIADIR/usenet:/data/usenet
