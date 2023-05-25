@@ -1015,7 +1015,10 @@ services:
   # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
   # Needs trailing / if using PathPrefix
   sabnzbd:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
     image: linuxserver/sabnzbd:latest
     container_name: sabnzbd
     network_mode: "service:gluetun"
