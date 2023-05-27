@@ -932,7 +932,9 @@ services:
     container_name: homeassistant
     environment:
       <<: *default-tz-puid-pgid
-    network_mode: host
+    # network_mode: host
+    ports:
+      - "$HOMEASSISTANT_PORT:8123"
     volumes:
       - $APPDATADIR/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
@@ -945,9 +947,10 @@ services:
       - "traefik.http.routers.homeassistant-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
       ## HTTP Services
       - "traefik.http.routers.homeassistant-rtr.service=homeassistant-svc"
-      - "traefik.http.services.homeassistant-svc.loadbalancer.servers=192.168.2.100:8123"
+      - "traefik.http.services.homeassistant-svc.loadbalancer.server.port=8123"
 
   # iperf - A tool for measurements of network bandwidth with the benefits of Clear Linux OS 
+  # check speed on the client with: iperf3 -c 192.168.2.100
   iperf-server:
     <<: *common-keys-core
     image: clearlinux/iperf:latest
