@@ -954,6 +954,7 @@ services:
     container_name: iperf-server
     ports:
       - "$IPERF_PORT:5201"
+    command: -s
 
   ############################# DOWNLOADERS
 
