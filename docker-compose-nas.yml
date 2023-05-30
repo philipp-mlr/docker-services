@@ -717,7 +717,7 @@ services:
   # Arr apps do not need VPN (not recommended), unless you have ISP/country restrictions.
   gluetun:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:latest
     container_name: gluetun
     cap_add:
       - NET_ADMIN
