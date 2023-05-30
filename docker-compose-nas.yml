@@ -734,6 +734,9 @@ services:
       - $APPDATADIR/gluetun:/gluetun
     environment:
       TZ: $TZ
+      HEALTH_TARGET_ADDRESS: google.com
+      HEALTH_VPN_DURATION_INITIAL: 20s
+      HEALTH_VPN_DURATION_ADDITION: 10s
       # Wireguard
       VPN_SERVICE_PROVIDER: custom
       VPN_TYPE: wireguard
