@@ -1092,7 +1092,7 @@ services:
     ports:
       - "7879:7878"
     volumes:
-      - $APPDATADIR/radarr:/config
+      - $APPDATADIR/radarr-de:/config
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
       - $MEDIADIR/german/temp/appdata/radarr/MediaCover:/config/MediaCover
       - $MEDIADIR/german:/data
