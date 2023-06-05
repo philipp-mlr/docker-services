@@ -1080,46 +1080,6 @@ services:
       - "traefik.http.routers.radarr-rtr-bypass.service=radarr-svc"
       - "traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
 
-  # Radarr - Movie management
-  # Set url_base in radarr settings if using PathPrefix
-  radarr-de:
-    <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: lscr.io/linuxserver/radarr:latest
-    container_name: radarr-de
-    networks:
-      t2_proxy:
-        ipv4_address: 192.168.90.165
-    ports:
-      - "7879:7878"
-    volumes:
-      - $APPDATADIR/radarr-de:/config
-      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $MEDIADIR/german/temp/appdata/radarr/MediaCover:/config/MediaCover
-      - $MEDIADIR/german:/data
-      # - $MEDIADIR/downloads:/data/downloads
-      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
-      - "/etc/localtime:/etc/localtime:ro"
-    environment:
-      <<: *default-tz-puid-pgid
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers Auth Bypass
-      - "traefik.http.routers.radarr-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.radarr-rtr-bypass.rule=Host(`radarr-de.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
-      #- "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
-      - "traefik.http.routers.radarr-rtr-bypass.priority=100"
-      ## HTTP Routers Auth
-      - "traefik.http.routers.radarr-rtr.entrypoints=https"
-      - "traefik.http.routers.radarr-rtr.rule=Host(`radarr-de.$DOMAINNAME`)"
-      - "traefik.http.routers.radarr-rtr.priority=99"
-      ## Middlewares
-      - "traefik.http.routers.radarr-rtr-bypass.middlewares=chain-no-auth@file"
-      - "traefik.http.routers.radarr-rtr.middlewares=chain-no-auth@file" # TODO: change to auth later on
-      ## HTTP Services
-      - "traefik.http.routers.radarr-rtr.service=radarr-svc"
-      - "traefik.http.routers.radarr-rtr-bypass.service=radarr-svc"
-      - "traefik.http.services.radarr-svc.loadbalancer.server.port=7878"
-
   # Sonarr - TV Shows management
   # Set url_base in sonarr settings if using PathPrefix
   sonarr:
