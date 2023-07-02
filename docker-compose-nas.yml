@@ -506,7 +506,7 @@ services:
       - "traefik.http.routers.overseerr-rtr.entrypoints=https"
       - "traefik.http.routers.overseerr-rtr.rule=Host(`overseerr.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.overseerr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.overseerr-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.overseerr-rtr.service=overseerr-svc"
       - "traefik.http.services.overseerr-svc.loadbalancer.server.port=5055"
