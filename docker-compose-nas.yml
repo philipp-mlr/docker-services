@@ -483,7 +483,7 @@ services:
       - "traefik.http.routers.paperless-rtr.entrypoints=https"
       - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.paperless-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.paperless-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.paperless-rtr.service=paperless-svc"
       - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
