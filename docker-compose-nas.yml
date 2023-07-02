@@ -1409,15 +1409,11 @@ services:
 
   # Cloudflare DDNS - Dynamic DNS Updater
   cloudddns:
-    container_name: cloudddns:latest
-    restart: always
-    image: joshava/cloudflare-ddns
+    <<: *common-keys-core # See EXTENSION FIELDS at the top
+    container_name: cloudddns
+    image: joshava/cloudflare-ddns:latest
     volumes:
       - $APPDATADIR/cloudflare-ddns/config.yaml:/app/config.yaml
-    environment:
-      - PUID=$PUID
-      - PGID=$PGID
-      - TZ=$TZ
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
