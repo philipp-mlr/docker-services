@@ -609,7 +609,7 @@ services:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
     ports:
-      - "$CROWDSEC_API_PORT:8095"
+      - "$CROWDSEC_API_PORT:8080"
       - "$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
     environment:
       COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd crowdsecurity/nextcloud LePresidente/adguardhome"
@@ -619,7 +619,7 @@ services:
       # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
       # AGENT_USERNAME: $CROWDSEC_AGENT_USERNAME
       # AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
-      LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
+      #LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
     volumes:
       - $SERVICEDIR/logs/:/logs/:ro
       - /var/log:/var/log:ro
@@ -640,7 +640,7 @@ services:
     environment:
       GIN_MODE: release # default is debug (more logs)
       CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_BOUNCER_TRAEFIK_API_KEY
-      CROWDSEC_AGENT_HOST: crowdsec:8095 #$CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port
+      CROWDSEC_AGENT_HOST: crowdsec:8080 #$CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port
 
   # CrowdSec Bouncer - Cloudflare
   # https://www.smarthomebeginner.com/crowdsec-cloudflare-bouncer/
