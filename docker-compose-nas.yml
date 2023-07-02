@@ -1409,11 +1409,11 @@ services:
 
   # Cloudflare DDNS - Dynamic DNS Updater
   cloudddns:
-    container_name: cloudddns
+    container_name: cloudddns:latest
     restart: always
     image: joshava/cloudflare-ddns
     volumes:
-      - $USERDIR/docker/cloudflare-ddns/config.yaml:/app/config.yaml
+      - $APPDATADIR/cloudflare-ddns/config.yaml:/app/config.yaml
     environment:
       - PUID=$PUID
       - PGID=$PGID
