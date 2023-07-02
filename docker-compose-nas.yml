@@ -1398,15 +1398,6 @@ services:
 
   ############################# MAINTENANCE
 
-  # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge.
-  # cf-tunnel:
-  #   <<: *common-keys-core # See EXTENSION FIELDS at the top
-  #   container_name: cf-tunnel
-  #   image: cloudflare/cloudflared
-  #   command: tunnel run
-  #   environment:
-  #     TUNNEL_TOKEN: $CF_TUNNEL_TOKEN
-
   # Cloudflare DDNS - Dynamic DNS Updater
   cloudddns:
     <<: *common-keys-core # See EXTENSION FIELDS at the top
