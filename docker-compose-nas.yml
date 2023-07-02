@@ -825,7 +825,7 @@ services:
     devices:
       - /dev/net/tun
     ports:
-      - "$QBITTORRENT_PORT:8080" # Exposing qBittorrent through Docker Host LAN IP
+      - "$QBITTORRENT_PORT:8095" # Exposing qBittorrent through Docker Host LAN IP
       - "$SABNZBD_PORT:8085"
       - "$NZBGET_PORT:6789"
       - 8888:8888/tcp # HTTP proxy
@@ -858,7 +858,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
-      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8080" # qBittorrent
+      - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8095" # qBittorrent
       #### NZBGET
       ## HTTP Routers Auth
       - "traefik.http.routers.nzbget-rtr.entrypoints=https"
@@ -1067,6 +1067,7 @@ services:
       PUID: 0
       GUID: 0
       UMASK_SET: 002
+      WEBUI_PORT: $QBITTORRENT_PORT
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
       test: "curl -sf https://example.com  || exit 1"
       interval: 1m
