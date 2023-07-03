@@ -47,13 +47,15 @@ http:
           - middlewares-oauth-external
           - middlewares-compress
 
-    chain-nextcloud:
+    chain-nextcloud-oauth:
       chain:
         middlewares:
-          #- middlewares-rate-limit
-          #- middlewares-https-redirectscheme
-          #- middlewares-secure-headers
-          #- middlewares-compress
           - middlewares-oauth-external
+          - middlewares-nextcloud
+          - middlewares-nextcloud-redirect
+
+    chain-nextcloud-no-auth:
+      chain:
+        middlewares:
           - middlewares-nextcloud
           - middlewares-nextcloud-redirect

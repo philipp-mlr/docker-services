@@ -357,8 +357,8 @@ services:
       - "traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)"
       - "traefik.http.routers.nextcloud-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud@file"
-      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
+      - "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud-no-auth@file"
+      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.nextcloud-rtr-bypass.service=nextcloud-svc"
       - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
