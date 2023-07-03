@@ -382,6 +382,9 @@ services:
       #environment:
       #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
       #SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
+    environment:
+      JWT_ENABLED: true
+      JWT_SECRET: $ONLYOFFICE_SECRET
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
