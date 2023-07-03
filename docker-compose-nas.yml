@@ -347,13 +347,20 @@ services:
       PHP_UPLOAD_LIMIT: 100G
     labels:
       - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && PathPrefix(`/remote.php/dav/files`)"
+      - "traefik.http.routers.nextcloud-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.nextcloud-rtr.tls=true"
       - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
       - "traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)"
+      - "traefik.http.routers.nextcloud-rtr.priority=99"
       ## Middlewares
+      - "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud@file"
       - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud@file"
       ## HTTP Services
+      - "traefik.http.routers.nextcloud-rtr-bypass.service=nextcloud-svc"
       - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
       - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=80"
 
