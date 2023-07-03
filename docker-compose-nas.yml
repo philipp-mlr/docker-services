@@ -350,7 +350,7 @@ services:
       ## HTTP Routers Auth Bypass
       - "traefik.http.routers.nextcloud-rtr-bypass.tls=true"
       - "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && PathPrefix(`/remote.php/dav/files`)"
+      - "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && (PathPrefix(`/remote.php/dav/files`) || PathPrefix(`/apps/onlyoffice`))"
       - "traefik.http.routers.nextcloud-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.nextcloud-rtr.tls=true"
