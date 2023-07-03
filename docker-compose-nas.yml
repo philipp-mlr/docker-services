@@ -1076,23 +1076,6 @@ services:
     labels: # Traefik labels added via glueten
       - "deunhealth.restart.on.unhealthy=true"
 
-  # nzbget - Binary newsgrabber (NZB downloader)
-  nzbget:
-    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
-    security_opt:
-    - no-new-privileges:true
-    restart: unless-stopped
-    image: lscr.io/linuxserver/nzbget
-    container_name: nzbget
-    network_mode: "service:gluetun"
-    volumes:
-      - $APPDATADIR/nzbget:/config
-      - $MEDIADIR/usenet:/data/usenet
-    environment:
-      <<: *default-tz-puid-pgid
-    labels: # Traefik labels added via glueten
-      - "deunhealth.restart.on.unhealthy=true"
-
   # SABnzbd - Binary newsgrabber (NZB downloader)
   # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
   # Needs trailing / if using PathPrefix
