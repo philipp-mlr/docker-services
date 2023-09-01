@@ -1341,6 +1341,43 @@ services:
       - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"
       - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
 
+  #Plex - Media Server
+  notifiarr:
+    <<: *common-keys-media # See EXTENSION FIELDS at the top
+    image: golift/notifiarr:latest
+    container_name: notifiarr
+    ports:
+      - "$NOTIFIARR_PORT:5454"
+    volumes:
+      - $APPDATADIR/notifiarr:/config
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      <<: *default-tz-puid-pgid
+      DN_API_KEY: $NOTIFIARR_API_KEY
+      DN_UI_PASSWORD: $NOTIFIARR_UI_PASSWORD
+      # Prowlarr
+      DN_PROWLARR_0_URL: http://prowlarr:$PROWLARR_PORT
+      DN_PROWLARR_0_API_KEY: $PROWLARR_API_KEY
+      # Readarr
+      DN_RADARR_0_URL: http://radarr:$RADARR_PORT
+      DN_RADARR_0_API_KEY: $RADARR_API_KEY
+      # Sonarr
+      DN_SONARR_0_URL: http://sonarr:$SONARR_PORT
+      DN_SONARR_0_API_KEY: $SONARR_API_KEY
+      # Plex
+      DN_PLEX_URL:
+      DN_PLEX_TOKEN:
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.notifiarr-rtr.entrypoints=https"
+      - "traefik.http.routers.notifiarr-rtr.rule=Host(`notifiarr.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.notifiarr-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.notifiarr-rtr.service=notifiarr-svc"
+      - "traefik.http.services.notifiarr-svc.loadbalancer.server.port=5454"
+
   ############################# MEDIA FILE MANAGEMENT
 
   # Bazarr - Subtitle Management
