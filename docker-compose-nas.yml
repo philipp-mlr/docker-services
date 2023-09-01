@@ -481,7 +481,7 @@ services:
       - $APPDATADIR/homepage:/app/config
     environment:
       <<: *default-tz-puid-pgid
-      HOMEPAGE_VAR_PLEX_TOKEN: $HOMEPAGE_VAR_PLEX_TOKEN
+      HOMEPAGE_VAR_PLEX_TOKEN: $PLEX_TOKEN
       HOMEPAGE_VAR_OVERSEERR_TOKEN: $OVERSEERR_API_KEY
       HOMEPAGE_VAR_RADARR_TOKEN: $RADARR_API_KEY
       HOMEPAGE_VAR_SONARR_TOKEN: $SONARR_API_KEY
@@ -1341,7 +1341,7 @@ services:
       - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"
       - "traefik.http.services.tautulli-svc.loadbalancer.server.port=8181"
 
-  #Plex - Media Server
+  #Notifiarr - Enables content requests from Media Bot
   notifiarr:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
     image: golift/notifiarr:latest
@@ -1367,9 +1367,14 @@ services:
       DN_SONARR_0_NAME: Sonarr
       DN_SONARR_0_URL: http://sonarr:$SONARR_PORT
       DN_SONARR_0_API_KEY: $SONARR_API_KEY
+      # Readarr
+      DN_READARR_0_NAME: Readarr
+      DN_READARR_0_URL: http://readarr:$READARR_PORT
+      DN_READARR_0_API_KEY: $READARR_API_KEY
       # Plex
-      DN_PLEX_URL:
-      DN_PLEX_TOKEN:
+      DN_PLEX_URL: http://plex:$PLEX_PORT
+      DN_PLEX_TOKEN: 
+
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
