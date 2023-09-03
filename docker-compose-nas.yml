@@ -1224,7 +1224,7 @@ services:
     container_name: radarr-anime
     networks:
       t2_proxy:
-        ipv4_address: 192.168.90.164
+        ipv4_address: 192.168.90.165
     ports:
       - "$RADARR_ANIME_PORT:7878"
     volumes:
@@ -1264,7 +1264,7 @@ services:
     container_name: sonarr-anime
     networks:
       t2_proxy:
-        ipv4_address: 192.168.90.167
+        ipv4_address: 192.168.90.168
     ports:
       - "$SONARR_ANIME_PORT:8989"
     volumes:
