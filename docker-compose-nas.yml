@@ -1330,7 +1330,7 @@ services:
   #Plex - Media Server
   plexms:
     <<: *common-keys-media # See EXTENSION FIELDS at the top
-    image: plexinc/pms-docker:1.32.5.7328-2632c9d3a
+    image: plexinc/pms-docker:1.32.5.7349-8f4248874
     container_name: plexms
     devices:
      - /dev/dri:/dev/dri # for harware transcoding
