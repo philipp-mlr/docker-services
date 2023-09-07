@@ -1578,7 +1578,7 @@ services:
   ############################# GAMES
 
   quakejs:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    #<<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: 'treyyoder/quakejs:latest'
     container_name: quakejs
     environment:
@@ -1586,13 +1586,13 @@ services:
     ports:
         - "$QUAKEJS_PORT:80"
         - '27960:27960'
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers Auth
-      - "traefik.http.routers.quake-rtr.entrypoints=https"
-      - "traefik.http.routers.quake-rtr.rule=Host(`quake.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.quake-rtr.middlewares=chain-no-auth@file"
-      ## HTTP Services
-      - "traefik.http.routers.quake-rtr.service=quake-svc"
-      - "traefik.http.services.quake-svc.loadbalancer.server.port=80"
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers Auth
+    #   - "traefik.http.routers.quake-rtr.entrypoints=https"
+    #   - "traefik.http.routers.quake-rtr.rule=Host(`quake.$DOMAINNAME`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.quake-rtr.middlewares=chain-no-auth@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.quake-rtr.service=quake-svc"
+    #   - "traefik.http.services.quake-svc.loadbalancer.server.port=80"
