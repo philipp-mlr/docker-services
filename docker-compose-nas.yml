@@ -1589,10 +1589,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth
-      - "traefik.http.routers.quake-rtr.entrypoints=https"
+      - "traefik.http.routers.quake-rtr.entrypoints=http"
       - "traefik.http.routers.quake-rtr.rule=Host(`quake.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.quake-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.quake-rtr.middlewares=chain-no-auth-http@file"
       ## HTTP Services
       - "traefik.http.routers.quake-rtr.service=quake-svc"
       - "traefik.http.services.quake-svc.loadbalancer.server.port=80"
