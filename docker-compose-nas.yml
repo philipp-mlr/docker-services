@@ -1061,6 +1061,24 @@ services:
       - "traefik.http.routers.spdf-rtr.service=spdf-svc"
       - "traefik.http.services.spdf-svc.loadbalancer.server.port=8080"
 
+  # it-tools - Collection of handy online tools for developer
+  it-tools:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    ports:
+      - "$ITTOOLS_PORT:80"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.it-tools-rtr.entrypoints=https"
+      - "traefik.http.routers.it-tools-rtr.rule=Host(`it-tools.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.it-tools-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.it-tools-rtr.service=it-tools-svc"
+      - "traefik.http.services.it-tools-svc.loadbalancer.server.port=80"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
