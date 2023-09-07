@@ -19,3 +19,18 @@
       - "traefik.http.routers.collabora-rtr.service=collabora-svc"
       - "traefik.http.services.collabora-svc.loadbalancer.server.port=9980"
 
+  # Traefik Certs Dumper - Extract LetsEncrypt Certificates - Traefik2 Compatible
+  certdumper:
+    <<: *common-keys-core
+    container_name: traefik_certdumper
+    image: humenius/traefik-certs-dumper:latest
+    command: --restart-containers onlyoffice
+    networks:
+      - socket_proxy
+    security_opt:
+      - no-new-privileges:true
+    volumes:
+      - $APPDATADIR/traefik/acme:/traefik:ro
+      - $SERVICEDIR/shared/certs/:/output:rw
+    environment:
+      DOMAIN: $DOMAINNAME

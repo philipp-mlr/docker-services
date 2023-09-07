@@ -917,22 +917,6 @@ services:
     ports:
       - "$TIKA_PORT:9998"
 
-  # Traefik Certs Dumper - Extract LetsEncrypt Certificates - Traefik2 Compatible
-  certdumper:
-    <<: *common-keys-core
-    container_name: traefik_certdumper
-    image: humenius/traefik-certs-dumper:latest
-    command: --restart-containers onlyoffice
-    networks:
-      - socket_proxy
-    security_opt:
-      - no-new-privileges:true
-    volumes:
-      - $APPDATADIR/traefik/acme:/traefik:ro
-      - $SERVICEDIR/shared/certs/:/output:rw
-    environment:
-      DOMAIN: $DOMAINNAME
-
   # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container
   protonmail-bridge:
     <<: *common-keys-core
@@ -1454,7 +1438,6 @@ services:
       # Plex
       DN_PLEX_URL: http://plex:$PLEX_PORT
       DN_PLEX_TOKEN: 
-
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -1556,3 +1539,28 @@ services:
       TZ: $TZ
       DOCKER_HOST: tcp://socket-proxy:2375
 
+  # WireGuard - VPN
+  wireguard:
+    <<: *common-keys-core
+    image: linuxserver/wireguard:latest
+    container_name: wireguard
+    ports:
+      - "$WIREGUARD_PORT:51820"
+    volumes:
+      - $APPDATADIR/wireguard:/config
+    environment:
+      <<: *default-tz-puid-pgid
+      SERVERURL: wireguard.$DOMAINNAME
+      SERVERPORT: 51820
+      PEERS: 1
+      LOG_CONFS: true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.wireguard-rtr.entrypoints=https"
+      - "traefik.http.routers.wireguard-rtr.rule=Host(`wireguard.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.wireguard-rtr.middlewares=no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.wireguard-rtr.service=bazarr-svc"
+      - "traefik.http.services.wireguard-svc.loadbalancer.server.port=51820"
