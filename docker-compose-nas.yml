@@ -1097,7 +1097,7 @@ services:
       - "traefik.http.routers.languagetool-rtr.entrypoints=https"
       - "traefik.http.routers.languagetool-rtr.rule=Host(`languagetool.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.languagetool-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.languagetool-rtr.middlewares=no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.languagetool-rtr.service=languagetool-svc"
       - "traefik.http.services.languagetool-svc.loadbalancer.server.port=8010"
