@@ -1574,29 +1574,3 @@ services:
       HEALTH_SERVER_ADDRESS: 127.0.0.1:9999
       TZ: $TZ
       DOCKER_HOST: tcp://socket-proxy:2375
-
-  # WireGuard - VPN
-  wireguard:
-    <<: *common-keys-core
-    image: linuxserver/wireguard:latest
-    container_name: wireguard
-    ports:
-      - "$WIREGUARD_PORT:51820"
-    volumes:
-      - $APPDATADIR/wireguard:/config
-    environment:
-      <<: *default-tz-puid-pgid
-      SERVERURL: wireguard.$DOMAINNAME
-      SERVERPORT: 51820
-      PEERS: 1
-      LOG_CONFS: true
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers Auth
-      - "traefik.http.routers.wireguard-rtr.entrypoints=https"
-      - "traefik.http.routers.wireguard-rtr.rule=Host(`wireguard.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.wireguard-rtr.middlewares=no-auth@file"
-      ## HTTP Services
-      - "traefik.http.routers.wireguard-rtr.service=bazarr-svc"
-      - "traefik.http.services.wireguard-svc.loadbalancer.server.port=51820"
