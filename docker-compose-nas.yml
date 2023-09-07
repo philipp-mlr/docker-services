@@ -993,7 +993,7 @@ services:
       - "traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
       - "traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"
 
-  # luckyBackup - Open Source client/server backup system
+  # duplicati - Open Source client/server backup system
   duplicati:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
     image: lscr.io/linuxserver/duplicati:latest
