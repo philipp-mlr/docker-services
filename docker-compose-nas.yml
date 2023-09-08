@@ -1079,6 +1079,30 @@ services:
       - "traefik.http.routers.it-tools-rtr.service=it-tools-svc"
       - "traefik.http.services.it-tools-svc.loadbalancer.server.port=80"
 
+  # languagetool - Open Source proofreading software
+  languagetool:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: erikvl87/languagetool
+    container_name: languagetool
+    ports:
+        - $LANGUAGETOOL_PORT:8010  # Using default port from the image
+    environment:
+        - Java_Xms=512m
+        - Java_Xmx=1g
+    #   - langtool_languageModel=/ngrams  # OPTIONAL: Using ngrams data
+    # volumes:
+    #     - /path/to/ngrams/data:/ngrams
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.languagetool-rtr.entrypoints=https"
+      - "traefik.http.routers.languagetool-rtr.rule=Host(`languagetool.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.languagetool-rtr.middlewares=no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.languagetool-rtr.service=languagetool-svc"
+      - "traefik.http.services.languagetool-svc.loadbalancer.server.port=8010"
+
   ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
