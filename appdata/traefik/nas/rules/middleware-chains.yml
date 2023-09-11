@@ -1,13 +1,5 @@
 http:
   middlewares:
-    chain-no-auth-http:
-      chain:
-        middlewares:
-          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
-          #- middlewares-rate-limit
-          #- middlewares-secure-headers
-          #- middlewares-compress
-
     chain-no-auth:
       chain:
         middlewares:

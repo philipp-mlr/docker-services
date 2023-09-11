@@ -1068,7 +1068,7 @@ services:
       - "traefik.http.routers.it-tools-rtr.service=it-tools-svc"
       - "traefik.http.services.it-tools-svc.loadbalancer.server.port=80"
 
-  ############################# DOWNLOADERS
+  ############################# DOWNLOADnoticERS
 
   # qBittorrent - Torrent downloader
   # Needs trailing / if using PathPrefixStrip
@@ -1414,8 +1414,8 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
-      - "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$TAUTULLI_API_KEY`) || Query(`apikey`, `$TAUTULLI_API_KEY`))"
+      #- "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$TAUTULLI_API_KEY`) || Query(`apikey`, `$TAUTULLI_API_KEY`))"
       #- "traefik.http.routers.tautulli-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
       - "traefik.http.routers.tautulli-rtr-bypass.priority=100"
       ## HTTP Routers
@@ -1566,22 +1566,3 @@ services:
 
   ############################# GAMES
 
-  quakejs:
-    <<: *common-keys-apps # See EXTENSION FIELDS at the top
-    image: 'treyyoder/quakejs:latest'
-    container_name: quakejs
-    environment:
-        - HTTP_PORT=$QUAKEJS_PORT
-    ports:
-        - "$QUAKEJS_PORT:80"
-        - '27960:27960'
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers Auth
-      - "traefik.http.routers.quake-rtr.entrypoints=http"
-      - "traefik.http.routers.quake-rtr.rule=Host(`quake.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.quake-rtr.middlewares=chain-no-auth-http@file"
-      ## HTTP Services
-      - "traefik.http.routers.quake-rtr.service=quake-svc"
-      - "traefik.http.services.quake-svc.loadbalancer.server.port=80"
