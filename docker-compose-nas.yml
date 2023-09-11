@@ -917,17 +917,6 @@ services:
     ports:
       - "$TIKA_PORT:9998"
 
-  # ProtonmailBridge - ProtonMail IMAP/SMTP Bridge Docker container
-  protonmail-bridge:
-    <<: *common-keys-core
-    container_name: protonmail-bridge
-    image: shenxn/protonmail-bridge:2.3.0-1
-    ports:
-      - 127.0.0.1:$PROTONMAIL_IMAP_PORT:25/tcp #SMTP
-      - 127.0.0.1:$PROTONMAIL_SMTP_PORT:143/tcp #IMAP
-    volumes:
-      - $APPDATADIR/protonmail_bridge:/root
-
   # Glances - System Information
   glances:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
