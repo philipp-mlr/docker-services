@@ -467,6 +467,30 @@ services:
       - "traefik.http.routers.paperless-rtr.service=paperless-svc"
       - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"
 
+  # calibre - an e-book manager
+  calibre:
+    <<: *common-keys-apps
+    image: lscr.io/linuxserver/calibre:latest
+    container_name: calibre
+    ports:
+      - $CALIBRE_PORT:8081
+    environment:
+      <<: *default-tz-puid-pgid
+    volumes:
+      - $APPDATADIR/calibre:/config
+      - $MEDIADIR/books:/books
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.calibre-rtr.tls=true"
+      - "traefik.http.routers.calibre-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-rtr.rule=Host(`calibre.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.calibre-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.calibre-rtr.service=calibre-svc"
+      - "traefik.http.services.calibre-svc.loadbalancer.server.port=8081"
+
   # calibre-web - a web app that offers a clean and intuitive interface for browsing, reading, and downloading eBooks
   calibre-web:
     <<: *common-keys-apps
@@ -480,18 +504,19 @@ services:
       OAUTHLIB_RELAX_TOKEN_SCOPE: 1 #optional
     volumes:
       - $APPDATADIR/calibre_web:/config
+      - $APPDATADIR/calibre:/calibre
       - $MEDIADIR/books:/books
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.calibre-rtr.tls=true"
-      - "traefik.http.routers.calibre-rtr.entrypoints=https"
-      - "traefik.http.routers.calibre-rtr.rule=Host(`books.$DOMAINNAME`)"
+      - "traefik.http.routers.calibre-web-rtr.tls=true"
+      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-web-rtr.rule=Host(`books.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.calibre-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
-      - "traefik.http.routers.calibre-rtr.service=calibre-svc"
-      - "traefik.http.services.calibre-svc.loadbalancer.server.port=8083"
+      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
+      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
 
   # Homepage - Application Dashboard
   homepage:
