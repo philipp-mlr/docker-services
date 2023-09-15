@@ -1755,7 +1755,7 @@ services:
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
       CF_SLUG: prominence-2-forge
+      CF_API_KEY: ${$CURSEFORGE_API_KEY}
       CURSEFORGE_FILES: https://www.curseforge.com/minecraft/modpacks/prominence-2-forge
-      CF_API_KEY: $CURSEFORGE_API_KEY
     volumes:
       - $APPDATADIR/minecraft_prominence2:/data
