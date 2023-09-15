@@ -1754,7 +1754,7 @@ services:
       <<: *default-tz-puid-pgid
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
-      #CF_SLUG: prominence-2-forge
+      CF_SLUG: prominence-2-forge
       CURSEFORGE_FILES: https://www.curseforge.com/minecraft/modpacks/prominence-2-forge
       CF_API_KEY: $CURSEFORGE_API_KEY
     volumes:
