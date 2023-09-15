@@ -1634,7 +1634,7 @@ services:
       - $APPDATADIR/tdarr/logs:/app/logs
       - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node/assets/app/plugins/
       - $MEDIADIR/transcode/tdarr:/data/temp
-      - $MEDIADIR/:/data/media:ro
+      - $MEDIADIR/:/data/media
       - $MEDIADIR/:/data/output
     environment:
       <<: *default-tz-puid-pgid
@@ -1673,7 +1673,7 @@ services:
       - $APPDATADIR/tdarr/logs:/app/logs
       - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node/assets/app/plugins/
       - $MEDIADIR/transcode/tdarr:/data/temp
-      - $MEDIADIR/:/data/media:ro
+      - $MEDIADIR/:/data/media
       - $MEDIADIR/:/data/output
 
   ############################# MAINTENANCE
