@@ -1612,6 +1612,7 @@ services:
       - $APPDATADIR/tdarr/server:/app/server
       - $APPDATADIR/tdarr/configs:/app/configs
       - $APPDATADIR/tdarr/logs:/app/logs
+      - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node
       - $MEDIADIR/transcode/tdarr:/data/temp
       - $MEDIADIR/:/data/media:ro
       - $MEDIADIR/:/data/output
@@ -1650,6 +1651,7 @@ services:
     volumes:
       - $APPDATADIR/tdarr/configs:/app/configs
       - $APPDATADIR/tdarr/logs:/app/logs
+      - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node
       - $MEDIADIR/transcode/tdarr:/data/temp
       - $MEDIADIR/:/data/media:ro
       - $MEDIADIR/:/data/output
