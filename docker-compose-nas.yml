@@ -619,6 +619,11 @@ services:
       - $APPDATADIR/speedtest-tracker/config:/config:rw
     environment:
       <<: *default-tz-puid-pgid
+      DB_HOST: postgres-speedtest
+      DB_PORT: 5432
+      DB_DATABASE: $SPEEDTEST_DATABASE_NAME
+      DB_USERNAME: $SPEEDTEST_DATABASE_USER
+      DB_PASSWORD: $SPEEDTEST_DATABASE_PASSWORD
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
@@ -860,7 +865,7 @@ services:
     secrets:
       - postgres_password
 
-  # Postgres - Open source object-relational database (Nextcloud)
+  # Postgres - Open source object-relational database (Recipes)
   postgres-recipes:
     <<: *common-keys-core
     image: postgres:latest
@@ -873,6 +878,20 @@ services:
       POSTGRES_DB: $RECIPES_DATABASE_NAME
       POSTGRES_USER: $RECIPES_DATABASE_USER
       POSTGRES_PASSWORD: $RECIPES_DATABASE_PASSWORD
+
+  # Postgres - Open source object-relational database (Speedtest)
+  postgres-speedtest:
+    <<: *common-keys-core
+    image: postgres:latest
+    container_name: postgres-speedtest
+    ports:
+      - "$POSTGRES_SPEEDTEST_PORT:5432"
+    volumes:
+      - $APPDATADIR/postgres_speedtest/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $SPEEDTEST_DATABASE_NAME
+      POSTGRES_USER: $SPEEDTEST_DATABASE_USER
+      POSTGRES_PASSWORD: $SPEEDTEST_DATABASE_PASSWORD
 
   ############################# UTILITIES
 
