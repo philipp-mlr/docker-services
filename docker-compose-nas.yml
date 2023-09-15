@@ -611,7 +611,7 @@ services:
   # Speedtest - Internet performance tracking
   speedtest:
     <<: *common-keys-apps # See EXTENSION FIELDS at the top
-    image: ghcr.io/alexjustesen/speedtest-tracker:v0.12.beta.6
+    image: ghcr.io/alexjustesen/speedtest-tracker:v0.12.beta.5
     container_name: speedtest
     ports:
       - "$SPEEDTEST_PORT:80"
