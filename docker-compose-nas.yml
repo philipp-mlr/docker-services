@@ -837,7 +837,7 @@ services:
   # Postgres - Open source object-relational database (Paperless-ngx)
   postgres-paperless:
     <<: *common-keys-core
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres-paperless
     ports:
       - "$POSTGRES_PAPERLESS_PORT:5432"
@@ -853,7 +853,7 @@ services:
   # Postgres - Open source object-relational database (Nextcloud)
   postgres-nextcloud:
     <<: *common-keys-core
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres-nextcloud
     ports:
       - "$POSTGRES_NEXTCLOUD_PORT:5432"
@@ -869,7 +869,7 @@ services:
   # Postgres - Open source object-relational database (Recipes)
   postgres-recipes:
     <<: *common-keys-core
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres-recipes
     ports:
       - "$POSTGRES_RECIPES_PORT:5432"
@@ -883,7 +883,7 @@ services:
   # Postgres - Open source object-relational database (Speedtest)
   postgres-speedtest:
     <<: *common-keys-core
-    image: postgres:latest
+    image: postgres:15
     container_name: postgres-speedtest
     ports:
       - "$POSTGRES_SPEEDTEST_PORT:5432"
