@@ -1188,7 +1188,30 @@ services:
       - "traefik.http.routers.it-tools-rtr.service=it-tools-svc"
       - "traefik.http.services.it-tools-svc.loadbalancer.server.port=80"
 
-  ############################# DOWNLOADnoticERS
+  filebrowser:
+    <<: *common-keys-apps # See EXTENSION FIELDS at the top
+    image: hurlenko/filebrowser:latest
+    container_name: filebrowser
+    user: "${PUID}:${PGID}"
+    ports:
+      - $FILEBROWSER_PORT:8080
+    volumes:
+      - $MEDIADIR:/data
+      - $APPDATADIR/filebrowser:/config
+    environment:
+      FB_BASEURL: /
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.filebrowser-rtr.entrypoints=https"
+      - "traefik.http.routers.filebrowser-rtr.rule=Host(`files.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.filebrowser-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.filebrowser-rtr.service=filebrowser-svc"
+      - "traefik.http.services.filebrowser-svc.loadbalancer.server.port=8080"
+
+  ############################# DOWNLOADERS
 
   # qBittorrent - Torrent downloader
   # Needs trailing / if using PathPrefixStrip
@@ -1634,7 +1657,7 @@ services:
       - $APPDATADIR/tdarr/logs:/app/logs
       - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node/assets/app/plugins/
       - $MEDIADIR/transcode/tdarr:/data/temp
-      - $MEDIADIR/:/data/media:ro
+      - $MEDIADIR/:/data/media
       - $MEDIADIR/:/data/output
     environment:
       <<: *default-tz-puid-pgid
@@ -1673,7 +1696,7 @@ services:
       - $APPDATADIR/tdarr/logs:/app/logs
       - $APPDATADIR/tdarr/Tdarr_Node:/app/Tdarr_Node/assets/app/plugins/
       - $MEDIADIR/transcode/tdarr:/data/temp
-      - $MEDIADIR/:/data/media:ro
+      - $MEDIADIR/:/data/media
       - $MEDIADIR/:/data/output
 
   ############################# MAINTENANCE
@@ -1743,3 +1766,19 @@ services:
 
   ############################# GAMES
 
+  minecraft-prominence2:
+    image: itzg/minecraft-server
+    container_name: minecraft-prominence2
+    tty: true
+    stdin_open: true
+    ports:
+      - $MINECRAFT_PROMINENCE2_PORT:25565
+    environment:
+      <<: *default-tz-puid-pgid
+      EULA: "TRUE"
+      TYPE: AUTO_CURSEFORGE
+      CF_SLUG: prominence-2-forge
+      CF_API_KEY: ${CURSEFORGE_API_KEY}
+      CURSEFORGE_FILES: https://www.curseforge.com/minecraft/modpacks/prominence-2-forge
+    volumes:
+      - $APPDATADIR/minecraft_prominence2:/data
