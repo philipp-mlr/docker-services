@@ -348,20 +348,21 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
-      - "traefik.http.routers.nextcloud-rtr-bypass.tls=true"
-      - "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && (PathPrefix(`/remote.php/dav/files`) || PathPrefix(`/apps/onlyoffice`))"
-      - "traefik.http.routers.nextcloud-rtr-bypass.priority=100"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.tls=true"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && (PathPrefix(`/remote.php/dav/files`) || PathPrefix(`/apps/onlyoffice`))"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.nextcloud-rtr.tls=true"
       - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
       - "traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)"
-      - "traefik.http.routers.nextcloud-rtr.priority=99"
+      #- "traefik.http.routers.nextcloud-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud-no-auth@file"
-      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud-oauth@file"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud-no-auth@file"
+      #- "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud-oauth@file"  # Uncomment this
+      - "traefik.http.routers.nextcloud-rtr.middlewares=chain-nextcloud-no-auth@file" # Comment out this
       ## HTTP Services
-      - "traefik.http.routers.nextcloud-rtr-bypass.service=nextcloud-svc"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.service=nextcloud-svc"
       - "traefik.http.routers.nextcloud-rtr.service=nextcloud-svc"
       - "traefik.http.services.nextcloud-svc.loadbalancer.server.port=80"
 
