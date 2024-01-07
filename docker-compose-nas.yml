@@ -1776,34 +1776,5 @@ services:
 
   ############################# GAMES
 
-  # minecraft-prominence2:
-  #   image: itzg/minecraft-server
-  #   container_name: minecraft-prominence2
-  #   tty: true
-  #   stdin_open: true
-  #   ports:
-  #     - $MINECRAFT_PROMINENCE2_PORT:25565
-  #   environment:
-  #     <<: *default-tz-puid-pgid
-  #     EULA: "TRUE"
-  #     TYPE: AUTO_CURSEFORGE
-  #     CF_SLUG: prominence-2-forge
-  #     CF_API_KEY: ${CURSEFORGE_API_KEY}
-  #     CURSEFORGE_FILES: https://www.curseforge.com/minecraft/modpacks/prominence-2-forge
-  #   volumes:
-  #     - $APPDATADIR/minecraft_prominence2:/data
-
-  linuxgsm-gmod:
-    image: gameservermanagers/gameserver:csgo
-    # image: ghcr.io/gameservermanagers/gameserver:csgo
-    container_name: csgoserver
-    volumes:
-      - /path/to/csgoserver:/data
-    ports:
-      - "27015:27015/tcp"
-      - "27015:27015/udp"
-      - "27020:27020/udp"
-      - "27005:27005/udp"
-    restart: unless-stopped
    
 
