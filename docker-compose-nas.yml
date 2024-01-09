@@ -9,6 +9,12 @@ networks:
     ipam:
       config:
         - subnet: 192.168.90.0/24
+  games:
+    name: games
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.1.0.0/24
   default:
     driver: bridge
   socket_proxy:
@@ -1710,15 +1716,6 @@ services:
     volumes:
       - $APPDATADIR/cloudflare-ddns/config.yaml:/app/config.yaml
 
-  # Cloudflared - Client for Cloudflare Tunnel, a daemon that exposes private services through the Cloudflare edge.
-  cf-tunnel:
-    <<: *common-keys-core # See EXTENSION FIELDS at the top
-    container_name: cf-tunnel
-    image: cloudflare/cloudflared
-    command: tunnel run
-    environment:
-      TUNNEL_TOKEN: $CF_TUNNEL_TOKEN
-
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
   dockergc:
@@ -1776,5 +1773,33 @@ services:
 
   ############################# GAMES
 
-   
+  # playit.gg - a global proxy that allows anyone to host a server without port forwarding
+  playit:
+    image: embeddedt/playit
+    container_name: playit
+    networks:
+      games:
+        ipv4_address: 10.1.0.2
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/playit/:/etc/playit
 
+  # TTT - a multiplayer gamemode included with Garry's Mod
+  ttt:
+    image: jusito/docker-ttt:gmod_ttt_debian
+    container_name: ttt
+    networks:
+      games:
+        ipv4_address: 10.1.0.3
+    ports:
+     - $TTT_PORT:27015/udp
+    restart: unless-stopped
+    volumes:
+      - TTTDev:/home/steam/serverfiles # doesn't work with a mounted volume for some reason
+    environment:
+      SERVER_PORT: 27015
+      SERVER_NAME: "TTT2 on Athena"
+      SERVER_PASSWORD: $TTT_SERVER_PASSWORD
+      SERVER_DEFAULT_MAP: "ttt_minecraftcity_v4_dark"
+      SERVER_LOGIN_TOKEN: $TTT_SERVER_LOGIN_TOKEN
+      SERVER_MAX_PLAYERS: 69
