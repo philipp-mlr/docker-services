@@ -1791,13 +1791,15 @@ services:
     networks:
       games:
         ipv4_address: 10.1.0.3
-    ports:
-     - $TTT_PORT:27015/udp
+    expose:
+      - $TTT_PORT/udp
     restart: unless-stopped
     volumes:
       - $APPDATADIR/ttt:/home/steam/serverfiles # doesn't work with a mounted volume for some reason
     environment:
-      SERVER_PORT: 27015
+      INSTALL_CSS: "true"
+      SERVER_PORT: 15074
+      SERVER_IP: 10.1.0.3
       SERVER_NAME: "TTT2 on Athena"
       SERVER_PASSWORD: $TTT_SERVER_PASSWORD
       SERVER_DEFAULT_MAP: "ttt_minecraftcity_v4_dark"
