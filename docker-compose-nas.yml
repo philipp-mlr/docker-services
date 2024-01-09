@@ -1795,7 +1795,7 @@ services:
      - $TTT_PORT:27015/udp
     restart: unless-stopped
     volumes:
-      - TTTDev:/home/steam/serverfiles # doesn't work with a mounted volume for some reason
+      - $APPDATADIR/ttt:/home/steam/serverfiles # doesn't work with a mounted volume for some reason
     environment:
       SERVER_PORT: 27015
       SERVER_NAME: "TTT2 on Athena"
