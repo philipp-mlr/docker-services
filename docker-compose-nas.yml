@@ -1817,7 +1817,5 @@ services:
     expose:
       - $FACTORIO_PORT/udp
     restart: unless-stopped
-    PUID: $PUID
-    PGID: $PGID
     volumes:
       - $APPDATADIR/factorio:/data
