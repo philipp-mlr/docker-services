@@ -1835,4 +1835,4 @@ services:
     environment:
       EULA: true
       MOTD: "All the Mods 9 on Athena"
-      JVM_OPTS: "-Xms2G -Xmx16G"
+      JVM_OPTS: "-Xms2G -Xmx24G"
