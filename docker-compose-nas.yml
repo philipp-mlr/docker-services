@@ -1795,7 +1795,7 @@ services:
       - $TTT_PORT/udp
     restart: unless-stopped
     volumes:
-      - $APPDATADIR/ttt:/home/steam/serverfiles # doesn't work with a mounted volume for some reason
+      - $APPDATADIR/ttt:/home/steam/serverfiles
     environment:
       INSTALL_CSS: "true"
       SERVER_PORT: 15074
@@ -1806,3 +1806,18 @@ services:
       SERVER_LOGIN_TOKEN: $TTT_SERVER_LOGIN_TOKEN
       SERVER_MAX_PLAYERS: 69
       WORKSHOP_COLLECTION_ID: $TTT_SERVER_COLLECTION_ID
+
+  # Factorio - a game in which you build and maintain factories
+  factorio:
+    image: gameservermanagers/gameserver:fctr
+    container_name: factorio
+    networks:
+      games:
+        ipv4_address: 10.1.0.4
+    expose:
+      - $FACTORIO_PORT/udp
+    restart: unless-stopped
+    PUID: $PUID
+    PGID: $PGID
+    volumes:
+      - $APPDATADIR/factorio:/data
