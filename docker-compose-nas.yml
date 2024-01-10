@@ -1819,3 +1819,20 @@ services:
     restart: unless-stopped
     volumes:
       - $APPDATADIR/factorio:/data
+
+  # Factorio - a game in which you build and maintain factories
+  minecraft-allthemods9:
+    image: goobaroo/allthemods9:latest
+    container_name: minecraft-allthemods9
+    networks:
+      games:
+        ipv4_address: 10.1.0.5
+    expose:
+      - $MINECRAFT_ALLTHEMODS9_PORT/tcp
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/minecraft_allthemods9:/data
+    environment:
+      EULA: true
+      MOTD: "All the Mods 9 on Athena"
+      JVM_OPTS: "-Xms2G -Xmx16G"
