@@ -1861,7 +1861,7 @@ services:
   # Valheim - a game about exploring a huge fantasy world inspired by Norse mythology and Viking culture
   valheim:
     image: gameservermanagers/gameserver:vh
-    container_name: factorio
+    container_name: valheim
     networks:
       games:
         ipv4_address: 10.1.0.4
