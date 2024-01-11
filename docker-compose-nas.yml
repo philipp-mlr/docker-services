@@ -1862,9 +1862,9 @@ services:
   valheim:
     image: gameservermanagers/gameserver:vh
     container_name: valheim
-    networks:
-      games:
-        ipv4_address: 10.1.0.6
+    # networks:
+    #   games:
+    #     ipv4_address: 10.1.0.6
     expose:
       - $VALHEIM_PORT/udp
     restart: unless-stopped
