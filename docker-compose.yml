@@ -2059,7 +2059,7 @@ services:
       - "traefik.http.routers.rcon-rtr.entrypoints=https"
       - "traefik.http.routers.rcon-rtr.rule=Host(`rcon.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.rcon-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.rcon-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.rcon-rtr.service=rcon-svc"
       - "traefik.http.services.rcon-svc.loadbalancer.server.port=4326"
