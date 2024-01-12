@@ -2046,10 +2046,11 @@ services:
     volumes:
       - $APPDATADIR/rcon:/opt/rcon-web-admin/db
     environment:
-      RWA_ENV: "TRUE"
+      RWA_ENV: TRUE
+      RWA_WEB_RCON: TRUE
       RWA_USERNAME: admin
       RWA_PASSWORD: $RCON_SERVICE_PASSWORD
-      RWA_ADMIN: "TRUE"
+      RWA_ADMIN: TRUE
       RWA_RCON_HOST: minecraft-allthemods9
       RWA_RCON_PASSWORD: $MINECRAFT_ALLTHEMODS9_RCON_PASSWORD
     labels:
