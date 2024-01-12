@@ -2046,6 +2046,7 @@ services:
     volumes:
       - $APPDATADIR/rcon:/opt/rcon-web-admin/db
     environment:
+      RWA_ENV: "TRUE"
       RWA_USERNAME: admin
       RWA_PASSWORD: $RCON_SERVICE_PASSWORD
       RWA_ADMIN: "TRUE"
