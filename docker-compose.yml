@@ -2002,6 +2002,7 @@ services:
         ipv4_address: 10.1.0.5
     expose:
       - $MINECRAFT_ALLTHEMODS9_PORT/tcp
+      - $MINECRAFT_ALLTHEMODS9_RCON_PORT/tcp
     restart: unless-stopped
     volumes:
       - $APPDATADIR/minecraft_allthemods9:/data
@@ -2030,3 +2031,33 @@ services:
       SERVER_PASS: $VALHEIM_PASSWORD
       PUID: $PUID
       PGID: $PGID
+
+  # playit.gg - a global proxy that allows anyone to host a server without port forwarding
+  rcon:
+    image: itzg/rcon
+    container_name: rcon
+    networks:
+      - games
+      - t2_proxy
+    restart: unless-stopped
+    ports:
+      - $RCON_PORT:4326
+      - $RCON_WEBSOCKET_PORT:4327
+    volumes:
+      - $APPDATADIR/rcon:/opt/rcon-web-admin/db
+    environment:
+      RWA_USERNAME: admin
+      RWA_PASSWORD: $RCON_SERVICE_PASSWORD
+      RWA_ADMIN: "TRUE"
+      RWA_RCON_HOST: minecraft-allthemods9
+      RWA_RCON_PASSWORD: $MINECRAFT_ALLTHEMODS9_RCON_PASSWORD
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.rcon-rtr.entrypoints=https"
+      - "traefik.http.routers.rcon-rtr.rule=Host(`rcon.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.rcon-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.rcon-rtr.service=rcon-svc"
+      - "traefik.http.services.rcon-svc.loadbalancer.server.port=4326"
