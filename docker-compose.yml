@@ -276,7 +276,6 @@ services:
 
   # Nextcloud - A suite of client-server software for creating and using file hosting services
   nextcloud:
-    <<: *common-keys-apps
     image: nextcloud:latest
     container_name: nextcloud
     depends_on:
