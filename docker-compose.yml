@@ -941,7 +941,7 @@ services:
 
   # Postgres - Open source object-relational database (Speedtest)
   postgres-speedtest:
-    image: postgres:15
+    image: postgres:latest
     container_name: postgres-speedtest
     networks:
       - t2_proxy
