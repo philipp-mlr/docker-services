@@ -2040,6 +2040,8 @@ services:
     expose:
       - $PALWORLD_PORT/udp        
     restart: unless-stopped
+    volumes:
+      - $APPDATADIR/palworld:/palworld    
     environment:
       - TZ=Europe/Berlin # Change this for logging and backup, see "Environment-Variables" 
       - ALWAYS_UPDATE_ON_START=true
@@ -2110,5 +2112,3 @@ services:
       - REGION=
       - USEAUTH=true
       - BAN_LIST_URL=https://api.palworldgame.com/api/banlist.txt
-    volumes:
-      - $APPDATADIR/palworld:/palworld
