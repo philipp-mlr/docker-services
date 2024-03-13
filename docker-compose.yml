@@ -120,8 +120,8 @@ services:
       - --entrypoints.https.http.tls.certresolver=dns-cloudflare
       - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME
       - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME
-      - --entrypoints.https.http.tls.domains[0].main=$PUBLIC_DOMAINNAME
-      - --entrypoints.https.http.tls.domains[0].sans=*.$PUBLIC_DOMAINNAME
+      - --entrypoints.https.http.tls.domains[1].main=$PUBLIC_DOMAINNAME
+      - --entrypoints.https.http.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME
       - --providers.docker=true
       # Automatically set Host rule for services
       # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
@@ -167,6 +167,7 @@ services:
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
       - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
+      - PUBLIC_DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
     secrets:
       - cf_token
       - htpasswd
