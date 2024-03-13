@@ -183,6 +183,8 @@ services:
       - "traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
       - "traefik.http.routers.traefik-rtr.tls.domains[0].main=$DOMAINNAME"
       - "traefik.http.routers.traefik-rtr.tls.domains[0].sans=*.$DOMAINNAME"
+      - "traefik.http.routers.traefik-rtr.tls.domains[1].main=$DOMAINNAME"
+      - "traefik.http.routers.traefik-rtr.tls.domains[1].sans=*.$DOMAINNAME"
       ## Services - API
       - "traefik.http.routers.traefik-rtr.service=api@internal"
       ## Healthcheck/ping
