@@ -677,6 +677,8 @@ services:
       - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
       - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
 
+  ############################# SECURITY
+
   # Google OAuth - Single Sign On using OAuth 2.0
   # https://www.smarthomebeginner.com/google-oauth-with-traefik-docker/
   oauth:
@@ -712,8 +714,6 @@ services:
       ## HTTP Services
       - "traefik.http.routers.oauth-rtr.service=oauth-svc"
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
-
-  ############################# SECURITY
 
   # CrowdSec - Open-source & collaborative security IPS
   # https://www.smarthomebeginner.com/crowdsec-docker-compose-1-fw-bouncer/
