@@ -1893,7 +1893,7 @@ services:
       - no-new-privileges:true
     restart: always
     volumes:
-      - $APPDATADIR/cloudflare-ddns-private/config.yaml:/app/config.yaml
+      - $APPDATADIR/cloudflare-ddns-public/config.yaml:/app/config.yaml
 
   # Docker-GC - Automatic Docker Garbage Collection
   # Create docker-gc-exclude file
