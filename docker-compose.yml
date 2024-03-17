@@ -70,6 +70,12 @@ secrets:
   # Plex
   plex_claim:
     file: $SECRETSDIR/plex_claim
+  # Wordpress
+  wordpress_db_password:
+    file: $SECRETSDIR/wordpress_db_password
+  # MySQL
+  mysql_root_password:
+    file: $SECRETSDIR/mysql_root_password
 
   ########################### SERVICES
 services:
@@ -677,6 +683,40 @@ services:
       - "traefik.http.routers.uptime-kuma-rtr.service=uptime-kuma-svc"
       - "traefik.http.services.uptime-kuma-svc.loadbalancer.server.port=3001"
 
+  # Wordpress - An open source platform for building websites
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$WORDPRESS_PORT:80"
+    volumes:
+      - $APPDATADIR/wordpress/:/var/www/html
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      WORDPRESS_DB_HOST: mysql-wordpress
+      WORDPRESS_DB_USER: $WORDPRESS_DATABASE_USER
+      WORDPRESS_DB_NAME: $WORDPRESS_DATABASE_NAME
+      WORDPRESS_DB_PASSWORD: /run/secrets/wordpress_db_password
+    secrets:
+      - wordpress_db_password
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.wordpress-rtr.entrypoints=https"
+      - "traefik.http.routers.wordpress-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.wordpress-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.wordpress-rtr.service=wordpress-svc"
+      - "traefik.http.services.wordpress-svc.loadbalancer.server.port=80"
+
   ############################# SECURITY
 
   # Google OAuth - Single Sign On using OAuth 2.0
@@ -886,6 +926,21 @@ services:
     volumes:
       - $APPDATADIR/redis_nextcloud/:/data
 
+  # redis - In memory key-value store - (Wordpress: database caching)
+  redis-wordpress:
+    image: redis:latest
+    container_name: redis-wordpress
+    networks:
+    - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: --port $REDIS_WORDPRESS_PORT
+    ports:
+      - "$REDIS_WORDPRESS_PORT:$REDIS_WORDPRESS_PORT"
+    volumes:
+      - $APPDATADIR/redis_wordpress/:/data
+
   # Postgres - Open source object-relational database (Paperless-ngx)
   postgres-paperless:
     image: postgres:15
@@ -961,6 +1016,27 @@ services:
       POSTGRES_DB: $SPEEDTEST_DATABASE_NAME
       POSTGRES_USER: $SPEEDTEST_DATABASE_USER
       POSTGRES_PASSWORD: $SPEEDTEST_DATABASE_PASSWORD
+
+  mysql-wordpress:
+    image: mysql:8.0
+    container_name: mysql-wordpress
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$MYSQL_WORDPRESS_PORT:5432"
+    environment:
+      MYSQL_DATABASE: $WORDPRESS_DATABASE_NAME
+      MYSQL_USER: $WORDPRESS_DATABASE_USER
+      MYSQL_ROOT_PASSWORD: /run/secrets/mysql_root_password
+      MYSQL_PASSWORD: /run/secrets/wordpress_db_password
+    secrets:
+      - mysql_root_password
+      - wordpress_db_password
+    volumes:
+      - $APPDATADIR/mysql_wordpress/:/var/lib/mysql
 
   ############################# UTILITIES
 
