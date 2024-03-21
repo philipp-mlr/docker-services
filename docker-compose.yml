@@ -76,13 +76,8 @@ secrets:
   # MySQL
   mysql_root_password:
     file: $SECRETSDIR/mysql_root_password
-  # VSCode
-  # vscode_password:
-  #   file: $SECRETSDIR/vscode_password
-  vscode_sudo_password:
-    file: $SECRETSDIR/vscode_sudo_password
 
-  ########################### SERVICES
+########################### SERVICES
 include:
   # CORE
   - compose/traefik.yml
