@@ -15,7 +15,7 @@ services:
       TZ: $TZ
       PUID: $PUID
       PGID: $PGID
-      SUDO_PASSWORD_HASH: $VSCODE_SUDO_PASSWORD_HASH #FILE__ does not seem to work
+      SUDO_PASSWORD: $VSCODE_SUDO_PASSWORD #FILE__ does not seem to work
       DEFAULT_WORKSPACE: /config/workspace
       PROXY_DOMAIN: code.$DOMAINNAME
     labels:
