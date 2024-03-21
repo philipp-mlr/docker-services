@@ -88,7 +88,6 @@ include:
   - compose/traefik-bouncer.yml
   - compose/cloudflare-bouncer.yml
   # FRONTEND
-  - compose/qdirstat.yml
   - compose/filebrowser.yml
   - compose/calibre-web.yml
   - compose/portainer.yml
@@ -126,7 +125,6 @@ include:
   - compose/notifiarr.yml
   - compose/tika.yml
   - compose/gotenberg.yml
-  - compose/iperf-server.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
@@ -134,8 +132,6 @@ include:
   - compose/sonarr.yml
   - compose/sonarr-anime.yml
   - compose/prowlarr.yml
-  - compose/tdarr.yml
-  - compose/tdarr-node1.yml
   - compose/bazarr.yml
   # DOWNLOADERS
   - compose/qbittorrent.yml
