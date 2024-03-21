@@ -5,8 +5,6 @@ services:
     container_name: vscode
     networks:
       - t2_proxy
-    security_opt:
-      - no-new-privileges:true
     restart: unless-stopped
     ports:
       - "$VSCODE_PORT:8443"
