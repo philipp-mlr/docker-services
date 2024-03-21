@@ -79,8 +79,8 @@ secrets:
   # VSCode
   # vscode_password:
   #   file: $SECRETSDIR/vscode_password
-  # vscode_sudo_password:
-  #   file: $SECRETSDIR/vscode_sudo_password
+  vscode_sudo_password:
+    file: $SECRETSDIR/vscode_sudo_password
 
   ########################### SERVICES
 include:
