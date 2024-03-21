@@ -76,6 +76,11 @@ secrets:
   # MySQL
   mysql_root_password:
     file: $SECRETSDIR/mysql_root_password
+  # VSCode
+  vscode_password:
+    file: $SECRETSDIR/vscode_password
+  vscode_sudo_password:
+    file: $SECRETSDIR/vscode_sudo_password
 
   ########################### SERVICES
 include:
@@ -125,6 +130,7 @@ include:
   - compose/notifiarr.yml
   - compose/tika.yml
   - compose/gotenberg.yml
+  - compose/vscode.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
