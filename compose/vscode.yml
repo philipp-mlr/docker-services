@@ -19,9 +19,9 @@ services:
       # FILE__SUDO_PASSWORD: /run/secrets/vscode_sudo_password
       DEFAULT_WORKSPACE: /config/workspace
       PROXY_DOMAIN: code.$DOMAINNAME
-    secrets:
-      - vscode_password
-      - vscode_sudo_password
+    # secrets:
+    #   - vscode_password
+    #   - vscode_sudo_password
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
