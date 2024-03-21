@@ -1,0 +1,12 @@
+services:
+  # Cloudflare DDNS - Dynamic DNS Updater - cloud-domain
+  cloudddns-cloud:
+    container_name: cloudddns-cloud
+    image: joshava/cloudflare-ddns:latest
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/cloudflare-ddns-cloud/config.yaml:/app/config.yaml

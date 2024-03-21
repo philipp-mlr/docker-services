@@ -1,0 +1,13 @@
+services:
+  # Factorio - a game in which you build and maintain factories
+  factorio:
+    image: gameservermanagers/gameserver:fctr
+    container_name: factorio
+    networks:
+      games:
+        ipv4_address: 10.1.0.4
+    expose:
+      - $FACTORIO_PORT/udp
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/factorio:/data

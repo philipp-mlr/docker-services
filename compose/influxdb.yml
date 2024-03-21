@@ -1,0 +1,27 @@
+services:
+  # InfluxDB - Database for sensor data
+  # Create influxdb.conf
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$INFLUXDB_PORT:8086"
+    volumes:
+      - $APPDATADIR/influxdb/db:/var/lib/influxdb
+      - $APPDATADIR/influxdb:/etc/influxdb/
+    #command: -config /etc/influxdb/influxdb.conf
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.influxdb-rtr.entrypoints=https"
+      - "traefik.http.routers.influxdb-rtr.rule=Host(`influxdb.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.influxdb-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.influxdb-rtr.service=influxdb-svc"
+      - "traefik.http.services.influxdb-svc.loadbalancer.server.port=8086"

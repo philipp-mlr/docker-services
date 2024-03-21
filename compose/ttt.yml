@@ -1,0 +1,23 @@
+services:
+  # TTT - a multiplayer gamemode included with Garry's Mod
+  ttt:
+    image: jusito/docker-ttt:gmod_ttt_debian
+    container_name: ttt
+    networks:
+      games:
+        ipv4_address: 10.1.0.3
+    expose:
+      - $TTT_PORT/udp
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/ttt:/home/steam/serverfiles
+    environment:
+      INSTALL_CSS: "true"
+      SERVER_PORT: 15074
+      SERVER_IP: 10.1.0.3
+      SERVER_NAME: "TTT2 on ATHENA"
+      SERVER_PASSWORD: $TTT_SERVER_PASSWORD
+      SERVER_DEFAULT_MAP: "ttt_minecraftcity_v4_dark"
+      SERVER_LOGIN_TOKEN: $TTT_SERVER_LOGIN_TOKEN
+      SERVER_MAX_PLAYERS: 69
+      WORKSHOP_COLLECTION_ID: $TTT_SERVER_COLLECTION_ID

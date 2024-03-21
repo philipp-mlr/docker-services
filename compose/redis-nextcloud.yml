@@ -1,0 +1,15 @@
+services:
+  # redis - In memory key-value store - (Nextcloud: database caching)
+  redis-nextcloud:
+    image: redis:latest
+    container_name: redis-nextcloud
+    networks:
+    - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: --port $REDIS_NEXTCLOUD_PORT
+    ports:
+      - "$REDIS_NEXTCLOUD_PORT:$REDIS_NEXTCLOUD_PORT"
+    volumes:
+      - $APPDATADIR/redis_nextcloud/:/data

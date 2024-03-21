@@ -1,0 +1,31 @@
+services:
+  # duplicati - Open Source client/server backup system
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    environment:
+      PUID: 0
+      GUID: 0
+    ports:
+      - "$DUPLICATI_PORT:8200"
+    cap_add:
+      - SYS_ADMIN
+    volumes:
+      - $APPDATADIR/duplicati/config:/config
+      - /mnt/user/:/shares
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.duplicati-rtr.entrypoints=https"
+      - "traefik.http.routers.duplicati-rtr.rule=Host(`duplicati.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.duplicati-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.duplicati-rtr.service=duplicati-svc"
+      - "traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"

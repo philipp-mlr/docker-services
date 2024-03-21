@@ -1,0 +1,32 @@
+services:
+  # Portainer - WebUI for Containers
+  portainer:
+    image: portainer/portainer-ee:latest
+    container_name: portainer
+    depends_on:
+      - socket-proxy
+    networks:
+      - t2_proxy
+      - socket_proxy
+    security_opt:
+    - no-new-privileges:true
+    restart: always
+    command: -H tcp://socket-proxy:2375
+    ports:
+      - "$PORTAINER_PORT:9000"
+    volumes:
+      - $APPDATADIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.portainer-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.portainer-rtr.service=portainer-svc"
+      - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"

@@ -1,0 +1,12 @@
+services:
+  # tika - detects and extracts metadata and text from different file types (Paperless-ngx)
+  tika:
+    image: ghcr.io/paperless-ngx/tika:latest
+    container_name: tika
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$TIKA_PORT:9998"

@@ -1,0 +1,14 @@
+services:
+  # Home Assistant Core - Home Automation
+  # https://community.home-assistant.io/t/home-assistant-400-bad-request-docker-proxy-solution/322163
+  homeassistant:
+    image: homeassistant/home-assistant:latest
+    container_name: homeassistant
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    network_mode: host
+    volumes:
+      - $APPDATADIR/homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro

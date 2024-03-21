@@ -1,0 +1,42 @@
+services:
+  # CrowdSec - Open-source & collaborative security IPS
+  # https://www.smarthomebeginner.com/crowdsec-docker-compose-1-fw-bouncer/
+  # - check collections: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli collections list
+  # - update hub: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli hub update
+  # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
+  # - accept enrollment: https://app.crowdsec.net/instances
+  # - update acquis.yml in /home/USER/docker-services/appdata/crowdsec/config/acquis.yaml
+  # - move custom_whitelists.yaml to /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/ 
+  # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
+  ### install firewall bouncer
+  # https://doc.crowdsec.net/docs/getting_started/install_crowdsec/##install-our-repositories
+  # - curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
+  # - sudo apt update
+  # - sudo apt install crowdsec-firewall-bouncer-iptables
+  # - add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add host-firewall-bouncer-HOSTNAME
+  # - edit config: /etc/crowdsec/bouncers/crowdsec-firewall-bouncer.yaml
+  crowdsec:
+    image: crowdsecurity/crowdsec
+    container_name: crowdsec
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$CROWDSEC_API_PORT:8080"
+      - "$CROWDSEC_PROMETHEUS_EXPORT:6060" # If you don't use ZeroTier remove use just $CROWDSEC_PROMETHEUS_EXPORT:6060
+    environment:
+      COLLECTIONS: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors crowdsecurity/iptables crowdsecurity/linux crowdsecurity/nginx crowdsecurity/sshd crowdsecurity/nextcloud LePresidente/adguardhome"
+      GID: "${GID-1000}"
+      CUSTOM_HOSTNAME: vps
+      #DISABLE_LOCAL_API: "true" # Only after successfully registering and validating remote agent below.
+      # For the following, check local_api_credentials.yaml after cscli lapi register (secondary machine) and cscli machine validate (on primary machine)
+      # AGENT_USERNAME: $CROWDSEC_AGENT_USERNAME
+      # AGENT_PASSWORD: $CROWDSEC_AGENT_PASSWORD
+      #LOCAL_API_URL: $CROWDSEC_LOCAL_API_URL
+    volumes:
+      - $SERVICEDIR/logs/:/logs/:ro
+      - /var/log:/var/log:ro
+      - $APPDATADIR/crowdsec/data:/var/lib/crowdsec/data
+      - $APPDATADIR/crowdsec/config:/etc/crowdsec

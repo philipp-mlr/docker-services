@@ -1,0 +1,40 @@
+services:
+  # Recipes - recipe manager that allows you to manage your ever growing collection of digital recipes
+  recipes:
+    image: vabene1111/recipes
+    container_name: recipes
+    depends_on:
+      - postgres-recipes
+    networks:
+    - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+        - $RECIPES_PORT:8080
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      POSTGRES_DB: $RECIPES_DATABASE_NAME
+      POSTGRES_PASSWORD: $RECIPES_DATABASE_PASSWORD
+      POSTGRES_USER: $RECIPES_DATABASE_USER
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres-recipes
+      DB_ENGINE: django.db.backends.postgresql
+      SECRET_KEY: $RECIPES_SECRET_KEY
+      DEBUG: 0
+    volumes:
+        - $APPDATADIR/recipes/mediafiles:/opt/recipes/mediafiles
+        - $APPDATADIR/recipes/staticfiles:/opt/recipes/staticfiles
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.recipes-rtr.tls=true"
+      - "traefik.http.routers.recipes-rtr.entrypoints=https"
+      - "traefik.http.routers.recipes-rtr.rule=Host(`recipes.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.recipes-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.recipes-rtr.service=recipes-svc"
+      - "traefik.http.services.recipes-svc.loadbalancer.server.port=8080"

@@ -1,0 +1,44 @@
+services:
+  # Sonarr for anime - TV Shows management
+  # Set url_base in sonarr settings if using PathPrefix
+  sonarr-anime:
+    image: lscr.io/linuxserver/sonarr:4.0.0-develop
+    container_name: sonarr-anime
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.168
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$SONARR_ANIME_PORT:8989"
+    volumes:
+      - $APPDATADIR/sonarr-anime:/config
+      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
+      - $MEDIADIR/temp/appdata/sonarr-anime/MediaCover:/config/MediaCover
+      - $MEDIADIR:/data
+      # - $MEDIADIR/downloads:/data/downloads
+      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.sonarr-anime-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.sonarr-anime-rtr-bypass.rule=Host(`sonarr-anime.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$SONARR_API_KEY`) || Query(`apikey`, `$SONARR_API_KEY`))"
+      #- "traefik.http.routers.sonarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.sonarr-anime-rtr-bypass.priority=100"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.sonarr-anime-rtr.entrypoints=https"
+      - "traefik.http.routers.sonarr-anime-rtr.rule=Host(`sonarr-anime.$DOMAINNAME`)"
+      - "traefik.http.routers.sonarr-anime-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.sonarr-anime-rtr-bypass.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sonarr-anime-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.sonarr-anime-rtr.service=sonarr-anime-svc"
+      - "traefik.http.routers.sonarr-anime-rtr-bypass.service=sonarr-anime-svc"
+      - "traefik.http.services.sonarr-anime-svc.loadbalancer.server.port=8989"

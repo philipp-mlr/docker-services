@@ -1,0 +1,18 @@
+services:
+  # gotenberg - an API server for convering document formats (Paperless-ngx)
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:latest
+    container_name: gotenberg
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$GOTENBERG_PORT:3000"
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - "gotenberg"
+      - "--chromium-disable-javascript=true"
+      - "--chromium-allow-list=file:///tmp/.*"
