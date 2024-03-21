@@ -1,0 +1,15 @@
+services:
+  # redis - In memory key-value store - (Wordpress: database caching)
+  redis-wordpress:
+    image: redis:latest
+    container_name: redis-wordpress
+    networks:
+    - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: --port $REDIS_WORDPRESS_PORT
+    ports:
+      - "$REDIS_WORDPRESS_PORT:$REDIS_WORDPRESS_PORT"
+    volumes:
+      - $APPDATADIR/redis_wordpress/:/data

@@ -1,0 +1,22 @@
+services:
+  # Stirling-PDF - PDF manipulation tool that allows you to perform various operations on PDF files
+  s-pdf:
+    image: frooodle/s-pdf:latest
+    container_name: s-pdf
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$SPDF_PORT:8080"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.spdf-rtr.entrypoints=https"
+      - "traefik.http.routers.spdf-rtr.rule=Host(`pdf.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.spdf-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.spdf-rtr.service=spdf-svc"
+      - "traefik.http.services.spdf-svc.loadbalancer.server.port=8080"

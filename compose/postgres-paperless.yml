@@ -1,0 +1,20 @@
+services:
+  # Postgres - Open source object-relational database (Paperless-ngx)
+  postgres-paperless:
+    image: postgres:15
+    container_name: postgres-paperless
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$POSTGRES_PAPERLESS_PORT:5432"
+    volumes:
+      - $APPDATADIR/postgres_paperless/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $PAPERLESS_DATABASE_NAME
+      POSTGRES_USER: $PAPERLESS_DATABASE_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password

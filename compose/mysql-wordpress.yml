@@ -1,0 +1,21 @@
+services:
+  mysql-wordpress:
+    image: mysql:8.0
+    container_name: mysql-wordpress
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$MYSQL_WORDPRESS_PORT:5432"
+    environment:
+      MYSQL_DATABASE: $WORDPRESS_DATABASE_NAME
+      MYSQL_USER: $WORDPRESS_DATABASE_USER
+      MYSQL_ROOT_PASSWORD: /run/secrets/mysql_root_password
+      MYSQL_PASSWORD: /run/secrets/wordpress_db_password
+    secrets:
+      - mysql_root_password
+      - wordpress_db_password
+    volumes:
+      - $APPDATADIR/mysql_wordpress/:/var/lib/mysql

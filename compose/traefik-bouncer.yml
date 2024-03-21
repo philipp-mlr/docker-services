@@ -1,0 +1,20 @@
+services:
+  # CrowdSec Bouncer - Traefik
+  # https://www.smarthomebeginner.com/crowdsec-traefik-bouncer/
+  # - add bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers add traefik-bouncer-HOSTNAME
+  # - update the api key for compose file
+  # - check bouncer: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli bouncers list
+  traefik-bouncer:
+    image: fbonalair/traefik-crowdsec-bouncer
+    container_name: traefik-bouncer
+    depends_on:
+      - crowdsec
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    environment:
+      GIN_MODE: release # default is debug (more logs)
+      CROWDSEC_BOUNCER_API_KEY: $CROWDSEC_BOUNCER_TRAEFIK_API_KEY
+      CROWDSEC_AGENT_HOST: crowdsec:8080 #$CROWDSEC_LAPI_HOST:$CROWDSEC_LAPI_PORT # CrowdSec host and port

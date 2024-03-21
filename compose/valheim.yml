@@ -1,0 +1,21 @@
+services:
+  # Valheim - a game about exploring a huge fantasy world inspired by Norse mythology and Viking culture
+  valheim:
+    image: lloesche/valheim-server
+    container_name: valheim
+    networks:
+      games:
+        ipv4_address: 10.1.0.6
+    cap_add:
+      - SYS_NICE
+    expose:
+      - $VALHEIM_PORT/udp
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/valheim/data:/opt/valheim
+      - $APPDATADIR/valheim/config:/config
+    environment:
+      SERVER_NAME: "VALHEIM on ATHENA"
+      SERVER_PASS: $VALHEIM_PASSWORD
+      PUID: $PUID
+      PGID: $PGID

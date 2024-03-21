@@ -1,0 +1,24 @@
+services:
+  # AdGuard Home - DNS AdBlocking
+  adguardhome:
+    container_name: adguardhome
+    image: adguard/adguardhome
+    networks:
+      dockeripvlan:
+        ipv4_address: 192.168.2.150 # IP address inside defined range
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - 53/udp # DNS
+      - 67/udp # DHCP
+      - 68/tcp # DHCP
+      - 68/udp # DHCP
+      - 80/tcp # Web UI
+      - 443/tcp # Web UI
+      - 853/tcp # DNS over TLS
+      - 3000/tcp # Web UI
+    volumes:
+      - $APPDATADIR/adguard/conf:/opt/adguardhome/conf
+      - $APPDATADIR/adguard/work:/opt/adguardhome/work
+      #- $SERVICEDIR/shared/certs/$DOMAINNAME_HOME_SYNOLOGY:/certs

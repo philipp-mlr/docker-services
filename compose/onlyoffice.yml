@@ -1,0 +1,35 @@
+services:
+  # Onlyoffice - Feature-rich web-based office suite with a vast range of collaborative capabilities
+  onlyoffice:
+    image: onlyoffice/documentserver:latest
+    container_name: onlyoffice
+    networks:
+    - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$ONLYOFFICE_PORT_HTTP:80"
+      - "$ONLYOFFICE_PORT_HTTPS:443"
+    volumes:
+      - $APPDATADIR/onlyoffice/logs:/var/log/onlyoffice
+      - $APPDATADIR/onlyoffice/cache:/var/lib/onlyoffice # File cache
+      - $APPDATADIR/onlyoffice/db:/var/lib/postgresql # Database
+      #- $SERVICEDIR/shared/certs:/var/www/onlyoffice/Data/certs
+      #environment:
+      #SSL_CERTIFICATE_PATH: /var/www/onlyoffice/Data/certs/cert.pem
+      #SSL_KEY_PATH: /var/www/onlyoffice/Data/certs/key.pem
+    environment:
+      JWT_ENABLED: true
+      JWT_SECRET: $ONLYOFFICE_SECRET
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.onlyoffice-rtr.tls=true"
+      - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
+      - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
+      - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=80"

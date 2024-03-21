@@ -1,0 +1,20 @@
+services:
+  # SABnzbd - Binary newsgrabber (NZB downloader)
+  # Disable SABNnzbd's built-in HTTPS support for traefik proxy to work
+  # Needs trailing / if using PathPrefix
+  sabnzbd:
+    image: linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    network_mode: "service:gluetun"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/sabnzbd:/config
+      - $MEDIADIR/usenet:/data/usenet
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"

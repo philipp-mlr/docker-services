@@ -1,0 +1,44 @@
+services:
+  # Radarr for anime - Movie management
+  # Set url_base in radarr settings if using PathPrefix
+  radarr-anime:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr-anime
+    networks:
+      t2_proxy:
+        ipv4_address: 192.168.90.165
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$RADARR_ANIME_PORT:7878"
+    volumes:
+      - $APPDATADIR/radarr-anime:/config
+      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
+      - $MEDIADIR/temp/appdata/radarr-anime/MediaCover:/config/MediaCover
+      - $MEDIADIR:/data
+      # - $MEDIADIR/downloads:/data/downloads
+      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
+      - "/etc/localtime:/etc/localtime:ro"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers Auth Bypass
+      - "traefik.http.routers.radarr-anime-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.radarr-anime-rtr-bypass.rule=Host(`radarr-anime.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$RADARR_API_KEY`) || Query(`apikey`, `$RADARR_API_KEY`))"
+      #- "traefik.http.routers.radarr-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      - "traefik.http.routers.radarr-anime-rtr-bypass.priority=100"
+      ## HTTP Routers Auth
+      - "traefik.http.routers.radarr-anime-rtr.entrypoints=https"
+      - "traefik.http.routers.radarr-anime-rtr.rule=Host(`radarr-anime.$DOMAINNAME`)"
+      - "traefik.http.routers.radarr-anime-rtr.priority=99"
+      ## Middlewares
+      - "traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-oauth@file"
+      - "traefik.http.routers.radarr-anime-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
+      - "traefik.http.routers.radarr-anime-rtr-bypass.service=radarr-anime-svc"
+      - "traefik.http.services.radarr-anime-svc.loadbalancer.server.port=7878"

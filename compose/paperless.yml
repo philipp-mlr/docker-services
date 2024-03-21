@@ -1,0 +1,74 @@
+services:
+  # Paperless-ngx - a document management system that transforms your physical documents into a searchable online archive
+  paperless:
+    image: paperlessngx/paperless-ngx:latest
+    container_name: paperless
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$PAPERLESS_PORT:8000"
+    depends_on:
+      - postgres-paperless
+      - redis-paperless
+      - gotenberg
+      - tika
+    healthcheck:
+      test:
+        ["CMD", "curl", "-fs", "-S", "--max-time", "2", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    secrets:
+      - postgres_password
+      - paperless_key
+      - paperless_password
+      - paperless_email
+      - paperless_user
+    volumes:
+      - $APPDATADIR/paperless/data:/usr/src/paperless/data
+      - $APPDATADIR/paperless/media:/usr/src/paperless/media
+      - $APPDATADIR/paperless/export:/usr/src/paperless/export
+      - $APPDATADIR/paperless/consume:/usr/src/paperless/consume
+    environment:
+      # General
+      PAPERLESS_URL: https://dms.$DOMAINNAME
+      PAPERLESS_ALLOWED_HOSTS: localhost,paperless,synology,nas,$DOMAINNAME,dms.$DOMAINNAME
+      USERMAP_UID: $PUID
+      USERMAP_GID: $PGID
+      PAPERLESS_TIME_ZONE: $TZ
+      PAPERLESS_OCR_LANGUAGE: deu+eng
+      PAPERLESS_CONSUMER_ENABLE_BARCODES: true
+      PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: true
+      PAPERLESS_CONSUMER_ASN_BARCODE_PREFIX: ASN
+      PAPERLESS_WEBSERVER_WORKERS: 2 # Default 1
+      PAPERLESS_TASK_WORKERS: 2 # Default 1
+      # User
+      PAPERLESS_SECRET_KEY_FILE: /run/secrets/paperless_key
+      PAPERLESS_ADMIN_USER_FILE: /run/secrets/paperless_user
+      PAPERLESS_ADMIN_MAIL_FILE: /run/secrets/paperless_email
+      PAPERLESS_ADMIN_PASSWORD_FILE: /run/secrets/paperless_password
+      # Database
+      PAPERLESS_DBENGINE: postgresql
+      PAPERLESS_DBHOST: postgres-paperless
+      PAPERLESS_DBNAME: $PAPERLESS_DATABASE_NAME
+      PAPERLESS_DBUSER: $PAPERLESS_DATABASE_USER
+      PAPERLESS_DBPASS_FILE: /run/secrets/postgres_password
+      PAPERLESS_REDIS: redis://redis-paperless:$REDIS_PAPERLESS_PORT
+      # Tika & Gotenberg
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:$GOTENBERG_PORT
+      PAPERLESS_TIKA_ENDPOINT: http://tika:$TIKA_PORT
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.paperless-rtr.tls=true"
+      - "traefik.http.routers.paperless-rtr.entrypoints=https"
+      - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.paperless-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.paperless-rtr.service=paperless-svc"
+      - "traefik.http.services.paperless-svc.loadbalancer.server.port=8000"

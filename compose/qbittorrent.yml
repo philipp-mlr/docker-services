@@ -1,0 +1,25 @@
+services:
+  # qBittorrent - Torrent downloader
+  # Needs trailing / if using PathPrefixStrip
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/qbittorrent:/config
+      - $MEDIADIR/torrents:/data/torrents # Ensure that downloads folder is set to /data/downloads in qBittorrent
+    environment:
+      PUID: 0
+      GUID: 0
+      UMASK_SET: 002
+      WEBUI_PORT: $QBITTORRENT_PORT
+    healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
+      test: "curl -sf https://example.com  || exit 1"
+      interval: 1m
+      timeout: 10s
+      retries: 1
+    labels: # Traefik labels added via glueten
+      - "deunhealth.restart.on.unhealthy=true"

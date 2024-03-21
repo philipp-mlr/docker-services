@@ -1,0 +1,18 @@
+services:
+  # Postgres - Open source object-relational database (Speedtest)
+  postgres-speedtest:
+    image: postgres:latest
+    container_name: postgres-speedtest
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$POSTGRES_SPEEDTEST_PORT:5432"
+    volumes:
+      - $APPDATADIR/postgres_speedtest/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $SPEEDTEST_DATABASE_NAME
+      POSTGRES_USER: $SPEEDTEST_DATABASE_USER
+      POSTGRES_PASSWORD: $SPEEDTEST_DATABASE_PASSWORD
