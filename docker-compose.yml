@@ -77,10 +77,10 @@ secrets:
   mysql_root_password:
     file: $SECRETSDIR/mysql_root_password
   # VSCode
-  vscode_password:
-    file: $SECRETSDIR/vscode_password
-  vscode_sudo_password:
-    file: $SECRETSDIR/vscode_sudo_password
+  vscode_password_hash:
+    file: $SECRETSDIR/vscode_password_hash
+  vscode_sudo_password_hash:
+    file: $SECRETSDIR/vscode_sudo_password_hash
 
   ########################### SERVICES
 include:
