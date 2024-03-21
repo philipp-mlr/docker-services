@@ -16,7 +16,7 @@ services:
       PUID: $PUID
       PGID: $PGID
       # FILE__PASSWORD: /run/secrets/vscode_password
-      # FILE__SUDO_PASSWORD: /run/secrets/vscode_sudo_password
+      FILE__SUDO_PASSWORD: /run/secrets/vscode_sudo_password
       DEFAULT_WORKSPACE: /config/workspace
       PROXY_DOMAIN: code.$DOMAINNAME
     secrets:
