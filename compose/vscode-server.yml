@@ -1,23 +1,22 @@
 services:
   # VSCode - VSCode Editing
-  vscode:
-    image: lscr.io/linuxserver/code-server:latest
-    container_name: vscode
+  vscode-server:
+    image: ahmadnassri/vscode-server:latest
+    container_name: vscode-server
     networks:
       - t2_proxy
     restart: unless-stopped
     ports:
-      - "$VSCODE_PORT:8443"
+      - "$VSCODE_PORT:8000"
     volumes:
-      - $APPDATADIR/vscode:/config
+      - $APPDATADIR/vscode/data:/root/.vscode-server
+      - $APPDATADIR/vscode/init:/usr/local/bin/init
     environment:
-      DOCKER_HOST: tcp://socket-proxy:2375
       TZ: $TZ
       PUID: $PUID
       PGID: $PGID
-      SUDO_PASSWORD: $VSCODE_SUDO_PASSWORD #FILE__ does not seem to work
-      DEFAULT_WORKSPACE: /config/workspace
-      PROXY_DOMAIN: code.$DOMAINNAME
+      VSCODE_SERVE_MODE: serve-local
+      VSCODE_KEYRING_PASS: $VSCODE_SUDO_PASSWORD
     labels:
       - "traefik.enable=true"
       ## HTTP Routers

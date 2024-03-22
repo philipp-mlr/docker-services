@@ -125,7 +125,7 @@ include:
   - compose/notifiarr.yml
   - compose/tika.yml
   - compose/gotenberg.yml
-  - compose/vscode.yml
+  - compose/vscode-server.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
