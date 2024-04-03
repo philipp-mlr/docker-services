@@ -36,7 +36,7 @@ services:
       - "traefik.http.routers.radarr-anime-rtr.rule=Host(`radarr-anime.$DOMAINNAME`)"
       - "traefik.http.routers.radarr-anime-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-oauth@file"
+      - "traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-no-auth@file"
       - "traefik.http.routers.radarr-anime-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
