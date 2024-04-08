@@ -9,7 +9,7 @@ services:
       - no-new-privileges:true
     restart: unless-stopped
     ports:
-      - 8080
+      - 3000
     volumes:
       - $APPDATADIR/obsidian/vaults:/vaults
       - $APPDATADIR/obsidian/config:/config
@@ -27,4 +27,4 @@ services:
       - "traefik.http.routers.obsidian-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.obsidian-rtr.service=obsidian-svc"
-      - "traefik.http.services.obsidian-svc.loadbalancer.server.port=8080"
+      - "traefik.http.services.obsidian-svc.loadbalancer.server.port=3000"
