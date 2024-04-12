@@ -101,6 +101,7 @@ include:
   - compose/it-tools.yml
   - compose/s-pdf.yml
   - compose/glances.yml
+  - compose/website.yml
   # MONITORING
   - compose/uptime-kuma.yml
   - compose/grafana.yml
