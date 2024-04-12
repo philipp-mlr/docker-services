@@ -1,5 +1,5 @@
 services:
-  filebrowser:
+  website:
     image: philippmue/philipp.software-website:latest
     container_name: website
     networks:
