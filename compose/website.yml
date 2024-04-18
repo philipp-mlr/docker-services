@@ -13,9 +13,9 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.website-rtr.entrypoints=https"
-      - "traefik.http.routers.website-rtr.rule=Host(`website.$DOMAINNAME`)"
+      - "traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.website-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.website-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.website-rtr.service=website-svc"
       - "traefik.http.services.website-svc.loadbalancer.server.port=1323"

@@ -97,7 +97,7 @@ include:
   - compose/overseerr.yml
   - compose/homepage.yml
   - compose/speedtest.yml
-  - compose/wordpress.yml
+  # - compose/wordpress.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
   - compose/glances.yml
@@ -107,7 +107,7 @@ include:
   - compose/grafana.yml
   # DATABASE
   - compose/influxdb.yml
-  - compose/mysql-wordpress.yml
+  # - compose/mysql-wordpress.yml
   - compose/prometheus.yml
   - compose/postgres-paperless.yml
   - compose/postgres-nextcloud.yml
@@ -115,7 +115,7 @@ include:
   - compose/postgres-speedtest.yml
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
-  - compose/redis-wordpress.yml
+  # - compose/redis-wordpress.yml
   # UTILITY
   - compose/adguardhome.yml
   - compose/homeassistant.yml
