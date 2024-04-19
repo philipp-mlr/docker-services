@@ -13,6 +13,7 @@ services:
     volumes:
       - $MEDIADIR:/data/media
       - $APPDATADIR:/data/appdata
+      - /mnt/user/isos:/data/isos
       - $APPDATADIR/filebrowser:/config
     environment:
       FB_BASEURL: /
