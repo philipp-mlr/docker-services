@@ -1,0 +1,21 @@
+services:
+  website:
+    image: philippmue/philipp.software-website:latest
+    container_name: website
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - $WEBSITE_PORT:1323
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.website-rtr.entrypoints=https"
+      - "traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.website-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.website-rtr.service=website-svc"
+      - "traefik.http.services.website-svc.loadbalancer.server.port=1323"
