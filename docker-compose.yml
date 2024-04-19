@@ -26,16 +26,6 @@ networks:
   dockeripvlan:
     external: true
     name: br0
-  # dockervlan:
-  #   name: dockervlan
-  #   driver: macvlan
-  #   driver_opts:
-  #     parent: eth0 # using ifconfig
-  #   ipam:
-  #     config:
-  #       - subnet: "192.168.2.0/24"
-  #         ip_range: "192.168.2.200/32"
-  #         gateway: "192.168.2.1"
 
 ########################### SECRETS
 
