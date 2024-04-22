@@ -9,6 +9,13 @@ services:
     restart: always
     ports:
       - $WEBSITE_PORT:1323
+    environment:
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
+      CF_TURNSTILE_SECRET: $CF_TURNSTILE_SECRET
+      PHILIPP_SOFTWARE_EMAIL_PASSWORD: $PHILIPP_SOFTWARE_EMAIL_PASSWORD
+
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
