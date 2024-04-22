@@ -26,16 +26,6 @@ networks:
   dockeripvlan:
     external: true
     name: br0
-  # dockervlan:
-  #   name: dockervlan
-  #   driver: macvlan
-  #   driver_opts:
-  #     parent: eth0 # using ifconfig
-  #   ipam:
-  #     config:
-  #       - subnet: "192.168.2.0/24"
-  #         ip_range: "192.168.2.200/32"
-  #         gateway: "192.168.2.1"
 
 ########################### SECRETS
 
@@ -70,12 +60,6 @@ secrets:
   # Plex
   plex_claim:
     file: $SECRETSDIR/plex_claim
-  # Wordpress
-  wordpress_db_password:
-    file: $SECRETSDIR/wordpress_db_password
-  # MySQL
-  mysql_root_password:
-    file: $SECRETSDIR/mysql_root_password
 
 ########################### SERVICES
 include:
@@ -97,7 +81,6 @@ include:
   - compose/overseerr.yml
   - compose/homepage.yml
   - compose/speedtest.yml
-  # - compose/wordpress.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
   - compose/glances.yml
@@ -107,7 +90,6 @@ include:
   - compose/grafana.yml
   # DATABASE
   - compose/influxdb.yml
-  # - compose/mysql-wordpress.yml
   - compose/prometheus.yml
   - compose/postgres-paperless.yml
   - compose/postgres-nextcloud.yml
@@ -115,7 +97,6 @@ include:
   - compose/postgres-speedtest.yml
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
-  # - compose/redis-wordpress.yml
   # UTILITY
   - compose/adguardhome.yml
   - compose/homeassistant.yml
