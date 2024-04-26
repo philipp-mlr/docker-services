@@ -41,6 +41,27 @@ http:
           # https://community.traefik.io/t/how-to-make-websockets-work-with-traefik-2-0-setting-up-rancher/1732
           # X-Forwarded-Proto: "https"
 
+    middlewares-secure-headers-public:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+        accessControlMaxAge: 100
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        customFrameOptionsValue: "allow-from https:{{env "PUBLIC_DOMAINNAME"}}" #CSP takes care of this but may be needed for organizr.
+        contentTypeNosniff: true
+        browserXssFilter: true
+        sslForceHost: true # add sslHost to all of the services
+        sslHost: "{{env "PUBLIC_DOMAINNAME"}}"
+        referrerPolicy: "same-origin"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=()"
+
     middlewares-oauth:
       forwardAuth:
         address: "http://oauth:4181" # Make sure you have the OAuth service in docker-compose.yml

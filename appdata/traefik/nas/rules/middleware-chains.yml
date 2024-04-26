@@ -9,6 +9,15 @@ http:
           - middlewares-secure-headers
           - middlewares-compress
 
+    chain-no-auth-public:
+      chain:
+        middlewares:
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
+          - middlewares-rate-limit
+          - middlewares-https-redirectscheme
+          - middlewares-secure-headers-public
+          - middlewares-compress
+
     chain-no-auth-no-crowdsec:
       chain:
         middlewares:
