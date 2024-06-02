@@ -1,0 +1,32 @@
+services:
+  # Factorio - a game in which you build and maintain factories
+  minecraft-crazycraftupdated:
+    image: itzg/minecraft-server:latest
+    container_name: minecraft-crazycraftupdated
+    networks:
+      games:
+        ipv4_address: 10.1.0.5
+    expose:
+      - $MINECRAFT_CRAZYCRAFTUPDATED_PORT/tcp
+    restart: unless-stopped
+    volumes:
+      - $APPDATADIR/minecraft_crazycraftupdated:/data
+    environment:
+      EULA: true
+      ###### Custom Server
+      TYPE: "CUSTOM"
+      GENERIC_PACK: "/modpacks/CrazyCraft4Server.zip"
+      CUSTOM_SERVER: "crazycraft.jar"
+      ###### JAVA
+      MEMORY: "2G"
+      MAX_MEMORY: "24G"
+      ###### GENERAL MINECRAFT SETTINGS
+      OVERRIDE_SERVER_PROPERTIES: "true" # If you would like to override the server configuration each time the container starts up, you can set the OVERRIDE_SERVER_PROPERTIES environment variable
+      ANNOUNCE_PLAYER_ACHIEVEMENTS: "true" # Allows server to announce when a player gets an achievement.
+      SPAWN_ANIMALS: "true" # Determines if animals will be able to spawn.
+      SPAWN_MONSTERS: "true" # Determines if monsters will be spawned.
+      SPAWN_NPCS: "true" # Determines if villagers will be spawned.
+      MOTD: "CRAZY CRAFT UPDATED on ATHENA" # The message of the day, shown below each server entry in the UI
+      MAX_PLAYERS: 420
+      CONSOLE: "true"
+      LEVEL: world
