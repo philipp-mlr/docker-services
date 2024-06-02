@@ -1,7 +1,7 @@
 services:
   # Factorio - a game in which you build and maintain factories
   minecraft-crazycraftupdated:
-    image: itzg/minecraft-server:latest
+    image: itzg/minecraft-server:java8
     container_name: minecraft-crazycraftupdated
     networks:
       games:
