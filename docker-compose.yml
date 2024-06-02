@@ -132,7 +132,8 @@ include:
   - compose/playit.yml
   - compose/ttt.yml
   - compose/factorio.yml
-  - compose/minecraft-allthemods9.yml
+  #- compose/minecraft-allthemods9.yml
+  - compose/minecraft-crazycraftupdated.yml
   - compose/valheim.yml
   - compose/palworld.yml
 
