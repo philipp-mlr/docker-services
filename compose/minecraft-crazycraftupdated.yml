@@ -15,7 +15,7 @@ services:
       EULA: true
       ###### Custom Server
       TYPE: "CUSTOM"
-      GENERIC_PACK: "/modpacks/CrazyCraft4Server.zip"
+      GENERIC_PACK: "/data/modpacks/CrazyCraft4Server.zip"
       CUSTOM_SERVER: "crazycraft.jar"
       ###### JAVA
       MEMORY: "2G"
