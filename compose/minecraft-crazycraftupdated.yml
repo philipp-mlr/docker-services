@@ -16,7 +16,7 @@ services:
       ###### Custom Server
       TYPE: "CUSTOM"
       GENERIC_PACK: "/data/modpacks/CrazyCraftUpdated.zip"
-      CUSTOM_SERVER: "crazycraft.jar"
+      CUSTOM_SERVER: "crazycraftupdated.jar"
       ###### JAVA
       MEMORY: "2G"
       MAX_MEMORY: "24G"
