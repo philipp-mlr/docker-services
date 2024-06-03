@@ -1,7 +1,7 @@
 services:
   # Speedtest - Internet performance tracking
   speedtest:
-    image: ghcr.io/alexjustesen/speedtest-tracker:latest
+    image: lscr.io/linuxserver/speedtest-tracker:latest
     container_name: speedtest
     networks:
       - t2_proxy
@@ -15,7 +15,7 @@ services:
     environment:
       TZ: $TZ
       PUID: $PUID
-      PGID: $PGID      
+      PGID: $PGID
       DB_CONNECTION: pgsql
       DB_HOST: postgres-speedtest
       DB_PORT: 5432
