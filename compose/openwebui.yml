@@ -1,0 +1,23 @@
+services:
+  openwebui:
+    image: "ghcr.io/open-webui/open-webui:main"
+    container_name: open-webui
+    networks:
+      - t2_proxy
+    restart: always
+    ports:
+      - "$OPENWEBUI_PORT:8080"
+    volumes:
+      - "$APPDATADIR/open_webui:/app/backend/data"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.openwebui-rtr.entrypoints=https"
+      - "traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.openwebui-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.openwebui-rtr.service=openwebui-svc"
+      - "traefik.http.services.openwebui-svc.loadbalancer.server.port=8080"
