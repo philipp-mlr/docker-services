@@ -137,5 +137,5 @@ include:
   - compose/palworld.yml
   # AI
   - compose/ollama.yml
-
+  - compose/openwebui.yml
 
