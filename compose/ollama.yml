@@ -1,0 +1,16 @@
+services:
+  #Ollama - The easiest way to get up and running with large language models.
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "$OLLAMA_PORT:11434"
+    volumes:
+      - "$APPDATADIR/ollama:/root/.ollama"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
