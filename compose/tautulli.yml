@@ -22,8 +22,8 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
       #- "traefik.http.routers.tautulli-rtr-bypass.entrypoints=https"
-      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME`) && (Headers(`X-Api-Key`, `$TAUTULLI_API_KEY`) || Query(`apikey`, `$TAUTULLI_API_KEY`))"
-      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Headers(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
+      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Host(`tautulli.$DOMAINNAME`) && (Header(`X-Api-Key`, `$TAUTULLI_API_KEY`) || Query(`apikey`, `$TAUTULLI_API_KEY`))"
+      #- "traefik.http.routers.tautulli-rtr-bypass.rule=Header(`traefik-auth-bypass-key`, `$TRAEFIK_AUTH_BYPASS_KEY`)" # Bypass Auth for LunaSea on iOS
       - "traefik.http.routers.tautulli-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.tautulli-rtr.entrypoints=https"
