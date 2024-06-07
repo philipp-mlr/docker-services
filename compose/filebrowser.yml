@@ -11,6 +11,7 @@ services:
     ports:
       - $FILEBROWSER_PORT:8080
     volumes:
+      - $SERVICEDIR:/data/service
       - $MEDIADIR:/data/media
       - $APPDATADIR:/data/appdata
       - /mnt/user/isos:/data/isos
