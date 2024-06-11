@@ -7,7 +7,7 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    user: "${PUID}:${PGID}"
+    user: "0:0"
     ports:
       - $FILEBROWSER_PORT:8080
     volumes:
