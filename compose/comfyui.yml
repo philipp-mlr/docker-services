@@ -23,10 +23,10 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.website-rtr.entrypoints=https"
-      - "traefik.http.routers.website-rtr.rule=Host(`gen.$DOMAINNAME`)"
+      - "traefik.http.routers.comfyui-rtr.entrypoints=https"
+      - "traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.website-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.comfyui-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
-      - "traefik.http.routers.website-rtr.service=website-svc"
-      - "traefik.http.services.website-svc.loadbalancer.server.port=8188"
+      - "traefik.http.routers.comfyui-rtr.service=comfyui-svc"
+      - "traefik.http.services.comfyui-svc.loadbalancer.server.port=8188"
