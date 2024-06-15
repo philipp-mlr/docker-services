@@ -1,5 +1,5 @@
 services:
-  website:
+  comfyui:
     image: yanwk/comfyui-boot:latest
     container_name: comfyui
     networks:
