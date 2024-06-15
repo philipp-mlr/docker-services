@@ -1,0 +1,25 @@
+services:
+  website:
+    image: yanwk/comfyui-boot:latest
+    container_name: comfyui
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - $COMFYUI_PORT:8188
+    environment:
+      CLI_ARGS=""
+    volumes:
+      - $APPDATADIR/comfyui:/home/runner
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.website-rtr.entrypoints=https"
+      - "traefik.http.routers.website-rtr.rule=Host(`gen.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.website-rtr.middlewares=chain-oauth@file"
+      ## HTTP Services
+      - "traefik.http.routers.website-rtr.service=website-svc"
+      - "traefik.http.services.website-svc.loadbalancer.server.port=8188"
