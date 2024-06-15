@@ -13,6 +13,13 @@ services:
       CLI_ARGS: ""
     volumes:
       - $APPDATADIR/comfyui:/home/runner
+    deploy:
+      resources:
+        reservations:
+          devices:
+              - driver: nvidia
+                device_ids: ['0']
+                capabilities: [compute, utility]
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
