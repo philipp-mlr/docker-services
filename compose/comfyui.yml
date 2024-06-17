@@ -10,7 +10,7 @@ services:
     ports:
       - $COMFYUI_PORT:8188
     environment:
-      CLI_ARGS: ""
+      CLI_ARGS: "--lowvram"
     volumes:
       - $APPDATADIR/comfyui:/home/runner
     deploy:
