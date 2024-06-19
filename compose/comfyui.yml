@@ -10,7 +10,7 @@ services:
     ports:
       - $COMFYUI_PORT:8188
     environment:
-      CLI_ARGS: "--disable-smart-memory"
+      CLI_ARGS: "--highvram"
     volumes:
       - $APPDATADIR/comfyui:/home/runner
     deploy:
