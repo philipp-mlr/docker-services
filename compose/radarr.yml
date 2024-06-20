@@ -5,7 +5,7 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     networks:
-      t2_proxy:
+      t3_proxy:
         ipv4_address: 192.168.90.164
     security_opt:
       - no-new-privileges:true

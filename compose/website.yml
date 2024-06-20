@@ -3,7 +3,7 @@ services:
     image: ghcr.io/philipp-mlr/philipp.software:main
     container_name: website
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

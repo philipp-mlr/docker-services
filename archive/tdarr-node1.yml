@@ -4,7 +4,7 @@ services:
     image: haveagitgat/tdarr_node:latest
     container_name: tdarr-node1
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

@@ -4,7 +4,7 @@ services:
     image: ghcr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
     networks:
-      t2_proxy:
+      t3_proxy:
         ipv4_address: 192.168.90.162
     security_opt:
       - no-new-privileges:true

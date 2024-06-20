@@ -5,7 +5,7 @@ services:
     image: lscr.io/linuxserver/tautulli:latest
     container_name: tautulli
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

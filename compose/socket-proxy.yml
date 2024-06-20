@@ -4,7 +4,7 @@ services:
     container_name: socket-proxy
     image: tecnativa/docker-socket-proxy
     networks:
-      t2_proxy:
+      t3_proxy:
       socket_proxy:
         ipv4_address: 192.168.91.254 # You can specify a static IP
     security_opt:

@@ -4,7 +4,7 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     networks:
-      - t2_proxy
+      - t3_proxy
       - default
     security_opt:
     - no-new-privileges:true

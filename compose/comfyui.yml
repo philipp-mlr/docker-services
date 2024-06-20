@@ -3,7 +3,7 @@ services:
     image: yanwk/comfyui-boot:latest
     container_name: comfyui
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

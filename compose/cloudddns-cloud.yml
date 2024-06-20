@@ -4,7 +4,7 @@ services:
     container_name: cloudddns-cloud
     image: joshava/cloudflare-ddns:latest
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

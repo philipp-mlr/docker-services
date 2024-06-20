@@ -4,7 +4,7 @@ services:
     image: lscr.io/linuxserver/plex-meta-manager:latest
     container_name: plexmm
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: "no"

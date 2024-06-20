@@ -4,7 +4,7 @@
       image: louislam/uptime-kuma:latest
       container_name: uptime-kuma
       networks:
-        - t2_proxy
+        - t3_proxy
         - socket_proxy
       security_opt:
         - no-new-privileges:true

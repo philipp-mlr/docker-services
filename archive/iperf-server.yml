@@ -5,7 +5,7 @@ services:
     image: clearlinux/iperf:latest
     container_name: iperf-server
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

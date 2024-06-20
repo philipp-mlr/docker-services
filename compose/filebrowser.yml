@@ -3,7 +3,7 @@ services:
     image: hurlenko/filebrowser:latest
     container_name: filebrowser
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

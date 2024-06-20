@@ -4,7 +4,7 @@ services:
     image: lscr.io/linuxserver/calibre:latest
     container_name: calibre
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

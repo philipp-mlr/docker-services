@@ -4,7 +4,7 @@ services:
     image: ghcr.io/paperless-ngx/tika:latest
     container_name: tika
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

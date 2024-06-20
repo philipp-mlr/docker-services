@@ -4,7 +4,7 @@ services:
     image: frooodle/s-pdf:latest
     container_name: s-pdf
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

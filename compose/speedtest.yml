@@ -4,7 +4,7 @@ services:
     image: lscr.io/linuxserver/speedtest-tracker:latest
     container_name: speedtest
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

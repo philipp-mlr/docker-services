@@ -3,7 +3,7 @@ services:
     image: "ghcr.io/open-webui/open-webui:main"
     container_name: open-webui
     networks:
-      - t2_proxy
+      - t3_proxy
     restart: always
     ports:
       - "$OPENWEBUI_PORT:8080"

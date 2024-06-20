@@ -19,7 +19,7 @@ services:
     image: crowdsecurity/crowdsec
     container_name: crowdsec
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

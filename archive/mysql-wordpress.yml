@@ -3,7 +3,7 @@ services:
     image: mysql:8.0
     container_name: mysql-wordpress
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always

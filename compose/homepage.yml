@@ -4,7 +4,7 @@ services:
     image: ghcr.io/benphelps/homepage:latest
     container_name: homepage
     networks:
-      - t2_proxy
+      - t3_proxy
       - socket_proxy
     security_opt:
     - no-new-privileges:true

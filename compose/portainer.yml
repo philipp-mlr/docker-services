@@ -6,7 +6,7 @@ services:
     depends_on:
       - socket-proxy
     networks:
-      - t2_proxy
+      - t3_proxy
       - socket_proxy
     security_opt:
     - no-new-privileges:true

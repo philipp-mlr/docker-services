@@ -4,7 +4,7 @@ services:
     image: golift/notifiarr:latest
     container_name: notifiarr
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

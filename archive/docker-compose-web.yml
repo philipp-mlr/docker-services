@@ -3,8 +3,8 @@ version: "3.9"
 ########################### NETWORKS
 
 networks:
-  t2_proxy:
-    name: t2_proxy
+  t3_proxy:
+    name: t3_proxy
     driver: bridge
     ipam:
       config:
@@ -37,17 +37,15 @@ secrets:
 # Helps eliminate repetition of sections
 
 # Common environment values
-x-environment:
-  &default-tz-puid-pgid
+x-environment: &default-tz-puid-pgid
   TZ: $TZ
   PUID: $PUID
   PGID: $PGID
 
 # Keys common to some of the services in basic-services.txt
-x-common-keys-core:
-  &common-keys-core
+x-common-keys-core: &common-keys-core
   networks:
-    - t2_proxy
+    - t3_proxy
   security_opt:
     - no-new-privileges:true
   restart: always
@@ -55,10 +53,9 @@ x-common-keys-core:
   # - core
 
   # Keys common to some of the services in basic-services.txt
-x-common-keys-monitoring:
-  &common-keys-monitoring
+x-common-keys-monitoring: &common-keys-monitoring
   networks:
-    - t2_proxy
+    - t3_proxy
   security_opt:
     - no-new-privileges:true
   restart: always
@@ -66,10 +63,9 @@ x-common-keys-monitoring:
   # - monitoring
 
   # Keys common to some of the dependent services/apps
-x-common-keys-apps:
-  &common-keys-apps
+x-common-keys-apps: &common-keys-apps
   networks:
-    - t2_proxy
+    - t3_proxy
   security_opt:
     - no-new-privileges:true
   restart: unless-stopped
@@ -77,10 +73,9 @@ x-common-keys-apps:
   # - apps
 
   # Keys common to some of the services in media-services.txt
-x-common-keys-media:
-  &common-keys-media
+x-common-keys-media: &common-keys-media
   networks:
-    - t2_proxy
+    - t3_proxy
   security_opt:
     - no-new-privileges:true
   restart: "no"
@@ -137,7 +132,7 @@ services:
       - --providers.docker.exposedByDefault=false
       ### Use Docker Socket Proxy instead for improved security
       - --providers.docker.endpoint=tcp://socket-proxy:2375
-      - --providers.docker.network=t2_proxy
+      - --providers.docker.network=t3_proxy
       - --providers.docker.swarmMode=false
       - --providers.file.directory=/rules # Load dynamic configuration from one or more .toml or .yml files in a directory
       # - --providers.file.filename=/path/to/file # Load dynamic configuration from a file
@@ -151,11 +146,11 @@ services:
       - --metrics.prometheus=true
       - --metrics.prometheus.buckets=0.1,0.3,1.2,5.0
     networks:
-      t2_proxy:
+      t3_proxy:
         ipv4_address: 192.168.90.254 # You can specify a static IP
       socket_proxy:
     healthcheck:
-      test: [ "CMD", "traefik", "healthcheck", "--ping" ]
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
       interval: 5s
       retries: 3
     ports:
@@ -179,7 +174,7 @@ services:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
-      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules. 
+      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
     secrets:
       - cf_token
       - htpasswd
@@ -265,7 +260,7 @@ services:
     ports:
       - "$PORTAINER_PORT:9000"
     networks:
-      - t2_proxy
+      - t3_proxy
       - socket_proxy
     volumes:
       - $APPDATADIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
@@ -288,7 +283,7 @@ services:
     image: ghcr.io/benphelps/homepage:main
     container_name: homepage
     networks:
-      - t2_proxy
+      - t3_proxy
       - socket_proxy
     #ports:
     #  - "$HOMEPAGE_PORT:3000"
@@ -349,7 +344,7 @@ services:
   # - connect intance: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli console enroll KEY_XXX
   # - accept enrollment: https://app.crowdsec.net/instances
   # - update acquis.yml in /home/USER/docker-services/appdata/crowdsec/config/acquis.yaml
-  # - move custom_whitelists.yaml to /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/ 
+  # - move custom_whitelists.yaml to /home/USER/docker-services/appdata/crowdsec/config/parsers/s02-enrich/
   # - check metrics: sudo docker compose -f /home/USERNAME/docker-services/docker-compose.yml exec -t crowdsec cscli metrics
   ### install firewall bouncer
   # https://doc.crowdsec.net/docs/getting_started/install_crowdsec/##install-our-repositories
@@ -408,7 +403,7 @@ services:
       - crowdsec
     volumes:
       - $APPDATADIR/cloudflare-bouncer/cfg.yaml:/etc/crowdsec/bouncers/crowdsec-cloudflare-bouncer.yaml
-      
+
   ############################# DATABASE
 
   # Prometheus - Database for sensor data
@@ -423,12 +418,12 @@ services:
       - $APPDATADIR/prometheus/data:/prometheus
     user: $PUID:$PGID
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
-      - '--web.enable-lifecycle'
-      - '--web.enable-admin-api'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
     labels:
       - "traefik.enable=true"
       ## HTTP Routers

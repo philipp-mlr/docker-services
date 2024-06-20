@@ -6,7 +6,7 @@ services:
     image: qmcgaw/gluetun:v3.38.0
     container_name: gluetun
     networks:
-      - t2_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: always
