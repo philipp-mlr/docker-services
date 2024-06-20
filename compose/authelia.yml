@@ -12,7 +12,7 @@ services:
     # ports:
     #   - "9091:9091"
     volumes:
-      - $DOCKERDIR/appdata/authelia:/config
+      - $APPDATADIR/appdata/authelia:/config
     environment:
       - TZ=$TZ
       - PUID=$PUID
@@ -30,7 +30,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.authelia-rtr.entrypoints=websecure"
-      - "traefik.http.routers.authelia-rtr.rule=Host(`authelia.$DOMAINNAME_HS`)"
+      - "traefik.http.routers.authelia-rtr.rule=Host(`authelia.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.authelia-rtr.middlewares=chain-no-auth@file" # Should be chain-no-auth and not chain-authelia
       ## HTTP Services
