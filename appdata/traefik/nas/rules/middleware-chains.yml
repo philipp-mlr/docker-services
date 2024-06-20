@@ -46,23 +46,12 @@ http:
           - middlewares-oauth
           - middlewares-compress
 
-    chain-oauth-external:
+    chain-authelia:
       chain:
         middlewares:
-          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
           - middlewares-rate-limit
-          - middlewares-https-redirectscheme
           - middlewares-secure-headers
-          - middlewares-oauth-external
-          - middlewares-compress
-
-    chain-nextcloud-oauth:
-      chain:
-        middlewares:
-          - middlewares-traefik-bouncer
-          - middlewares-oauth-external
-          - middlewares-nextcloud
-          - middlewares-nextcloud-redirect
+          - middlewares-authelia
 
     chain-nextcloud-no-auth:
       chain:

@@ -1,0 +1,15 @@
+services:
+  # redis - In memory key-value store - (Authelia: performance)
+  redis-authelia:
+    image: redis:latest
+    container_name: redis-authelia
+    networks:
+      - t2_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: --port $REDIS_PAPERLESS_PORT
+    ports:
+      - "$REDIS_AUTHELIA_PORT:$REDIS_AUTHELIA_PORT"
+    volumes:
+      - $APPDATADIR/redis_authelia/:/data

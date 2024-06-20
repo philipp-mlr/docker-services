@@ -43,6 +43,15 @@ secrets:
   # Oauth
   traefik_forward_auth:
     file: $SECRETSDIR/traefik_forward_auth
+  # Authelia
+  authelia_jwt_secret:
+    file: $SECRETSDIR/authelia_jwt_secret
+  authelia_storage_encryption_key:
+    file: $SECRETSDIR/authelia_storage_encryption_key
+  authelia_session_secret:
+    file: $SECRETSDIR/authelia_session_secret
+  authelia_session_redis_password:
+    file: $SECRETSDIR/authelia_session_redis_password
   # Paperless
   paperless_user:
     file: $SECRETSDIR/paperless_user
@@ -67,6 +76,7 @@ include:
   - compose/traefik.yml
   - compose/socket-proxy.yml
   - compose/oauth.yml
+  - compose/authelia.yml
   # SECURITY
   - compose/crowdsec.yml
   - compose/traefik-bouncer.yml
@@ -97,6 +107,7 @@ include:
   - compose/postgres-speedtest.yml
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
+  - compose/redis-authelia.yml
   # UTILITY
   - compose/adguardhome.yml
   - compose/homeassistant.yml
