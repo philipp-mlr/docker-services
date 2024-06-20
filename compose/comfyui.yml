@@ -26,7 +26,7 @@ services:
       - "traefik.http.routers.comfyui-rtr.entrypoints=https"
       - "traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.comfyui-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.comfyui-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.comfyui-rtr.service=comfyui-svc"
       - "traefik.http.services.comfyui-svc.loadbalancer.server.port=8188"

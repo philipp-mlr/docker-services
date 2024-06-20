@@ -16,7 +16,7 @@ services:
       - "traefik.http.routers.it-tools-rtr.entrypoints=https"
       - "traefik.http.routers.it-tools-rtr.rule=Host(`it-tools.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.it-tools-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.it-tools-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.it-tools-rtr.service=it-tools-svc"
       - "traefik.http.services.it-tools-svc.loadbalancer.server.port=80"

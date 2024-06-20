@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.glances-rtr.entrypoints=https"
       - "traefik.http.routers.glances-rtr.rule=Host(`glances.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.glances-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.glances-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.glances-rtr.service=glances-svc"
       - "traefik.http.services.glances-svc.loadbalancer.server.port=61208"

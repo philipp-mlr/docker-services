@@ -34,7 +34,7 @@ services:
       - "traefik.http.routers.tdarr-rtr.entrypoints=https"
       - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.tdarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.tdarr-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.tdarr-rtr.service=tdarr-svc"
       - "traefik.http.services.tdarr-svc.loadbalancer.server.port=8265"

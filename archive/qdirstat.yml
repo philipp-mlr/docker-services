@@ -30,7 +30,7 @@ services:
       - "traefik.http.routers.qdirstat-rtr.entrypoints=https"
       - "traefik.http.routers.qdirstat-rtr.rule=Host(`qdirstat.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.qdirstat-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.qdirstat-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.qdirstat-rtr.service=qdirstat-svc"
       - "traefik.http.services.qdirstat-svc.loadbalancer.server.port=5800"

@@ -34,7 +34,7 @@ services:
       - "traefik.http.routers.recipes-rtr.entrypoints=https"
       - "traefik.http.routers.recipes-rtr.rule=Host(`recipes.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.recipes-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.recipes-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.recipes-rtr.service=recipes-svc"
       - "traefik.http.services.recipes-svc.loadbalancer.server.port=8080"

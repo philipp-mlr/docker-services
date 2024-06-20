@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
       ## Middlewares
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-oauth@file" # qBittorrent
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-authelia@file" # qBittorrent
       ## HTTP Services
       - "traefik.http.routers.gluetun-qbitorrent-rtr.service=gluetun-bitorrent-svc" # qBittorrent
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8095" # qBittorrent
@@ -55,8 +55,8 @@ services:
       - "traefik.http.routers.nzbget-rtr.rule=Host(`nzbget.$DOMAINNAME`)"
       - "traefik.http.routers.nzbget-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.nzbget-rtr-bypass.middlewares=chain-oauth@file"
-      - "traefik.http.routers.nzbget-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.nzbget-rtr-bypass.middlewares=chain-authelia@file"
+      - "traefik.http.routers.nzbget-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.nzbget-rtr.service=nzbget-svc"
       - "traefik.http.routers.nzbget-rtr-bypass.service=nzbget-svc"
@@ -67,8 +67,8 @@ services:
       - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
       - "traefik.http.routers.sabnzbd-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.sabnzbd-rtr-bypass.middlewares=chain-oauth@file"
-      - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.sabnzbd-rtr-bypass.middlewares=chain-authelia@file"
+      - "traefik.http.routers.sabnzbd-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.sabnzbd-rtr.service=sabnzbd-svc"
       - "traefik.http.routers.sabnzbd-rtr-bypass.service=sabnzbd-svc"

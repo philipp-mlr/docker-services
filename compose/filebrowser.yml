@@ -24,7 +24,7 @@ services:
       - "traefik.http.routers.filebrowser-rtr.entrypoints=https"
       - "traefik.http.routers.filebrowser-rtr.rule=Host(`files.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.filebrowser-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.filebrowser-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.filebrowser-rtr.service=filebrowser-svc"
       - "traefik.http.services.filebrowser-svc.loadbalancer.server.port=8080"

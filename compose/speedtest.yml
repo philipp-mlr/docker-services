@@ -28,7 +28,7 @@ services:
       - "traefik.http.routers.speedtest-rtr.entrypoints=https"
       - "traefik.http.routers.speedtest-rtr.rule=Host(`speedtest.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.speedtest-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.speedtest-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.speedtest-rtr.service=speedtest-svc"
       - "traefik.http.services.speedtest-svc.loadbalancer.server.port=80"

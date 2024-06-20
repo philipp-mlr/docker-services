@@ -24,7 +24,7 @@ services:
       - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
       - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.prowlarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.prowlarr-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.prowlarr-rtr.service=prowlarr-svc"
       - "traefik.http.services.prowlarr-svc.loadbalancer.server.port=9696"

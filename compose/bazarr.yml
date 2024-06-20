@@ -23,7 +23,7 @@ services:
       - "traefik.http.routers.bazarr-rtr.entrypoints=https"
       - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.bazarr-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.bazarr-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.bazarr-rtr.service=bazarr-svc"
       - "traefik.http.services.bazarr-svc.loadbalancer.server.port=6767"

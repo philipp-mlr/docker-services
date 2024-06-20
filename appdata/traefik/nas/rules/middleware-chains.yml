@@ -36,7 +36,7 @@ http:
           - middlewares-basic-auth
           - middlewares-compress
 
-    chain-oauth:
+    chain-authelia:
       chain:
         middlewares:
           - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
@@ -45,13 +45,6 @@ http:
           - middlewares-secure-headers
           - middlewares-oauth
           - middlewares-compress
-
-    chain-authelia:
-      chain:
-        middlewares:
-          - middlewares-rate-limit
-          - middlewares-secure-headers
-          - middlewares-authelia
 
     chain-nextcloud-no-auth:
       chain:

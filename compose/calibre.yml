@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.calibre-rtr.entrypoints=https"
       - "traefik.http.routers.calibre-rtr.rule=Host(`calibre.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.calibre-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.calibre-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.calibre-rtr.service=calibre-svc"
       - "traefik.http.services.calibre-svc.loadbalancer.server.port=8080"

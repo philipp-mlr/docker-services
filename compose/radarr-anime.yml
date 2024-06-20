@@ -37,7 +37,7 @@ services:
       - "traefik.http.routers.radarr-anime-rtr.priority=99"
       ## Middlewares
       - "traefik.http.routers.radarr-anime-rtr-bypass.middlewares=chain-no-auth@file"
-      - "traefik.http.routers.radarr-anime-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.radarr-anime-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.radarr-anime-rtr.service=radarr-anime-svc"
       - "traefik.http.routers.radarr-anime-rtr-bypass.service=radarr-anime-svc"

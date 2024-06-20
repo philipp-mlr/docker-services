@@ -120,7 +120,7 @@ services:
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
       - --accessLog.filters.statusCodes=204-299,400-499,500-599
 
-      # - --entrypoints.https.http.middlewares=chain-oauth@file
+      # - --entrypoints.https.http.middlewares=chain-authelia@file
       - --entrypoints.https.http.tls.options=tls-opts@file
       # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
       - --entrypoints.https.http.tls.certresolver=dns-cloudflare
@@ -200,7 +200,7 @@ services:
       - "traefik.http.routers.ping.tls=true"
       - "traefik.http.routers.ping.service=ping@internal"
       ## Middlewares
-      - "traefik.http.routers.traefik-rtr.middlewares=chain-oauth@file" # For Google OAuth
+      - "traefik.http.routers.traefik-rtr.middlewares=chain-authelia@file" # For Google OAuth
 
   # Docker Socket Proxy - Security Enchanced Proxy for Docker Socket
   socket-proxy:
@@ -272,7 +272,7 @@ services:
       - "traefik.http.routers.portainer-rtr.entrypoints=https"
       - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.portainer-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.portainer-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.portainer-rtr.service=portainer-svc"
       - "traefik.http.services.portainer-svc.loadbalancer.server.port=9000"
@@ -298,7 +298,7 @@ services:
       - "traefik.http.routers.homepage-rtr.entrypoints=https"
       - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`,`www.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.homepage-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.homepage-rtr.service=homepage-svc"
       - "traefik.http.services.homepage-svc.loadbalancer.server.port=3030"
@@ -330,7 +330,7 @@ services:
       - "traefik.http.routers.oauth-rtr.entrypoints=https"
       - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.oauth-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.oauth-rtr.service=oauth-svc"
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
@@ -430,7 +430,7 @@ services:
       - "traefik.http.routers.prometheus-rtr.entrypoints=https"
       - "traefik.http.routers.prometheus-rtr.rule=Host(`prom.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.prometheus-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.prometheus-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.prometheus-rtr.service=prometheus-svc"
       - "traefik.http.services.prometheus-svc.loadbalancer.server.port=9090"
@@ -455,7 +455,7 @@ services:
       - "traefik.http.routers.grafana-rtr.entrypoints=https"
       - "traefik.http.routers.grafana-rtr.rule=Host(`grafana.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.grafana-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.grafana-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.grafana-rtr.service=grafana-svc"
       - "traefik.http.services.grafana-svc.loadbalancer.server.port=3000"

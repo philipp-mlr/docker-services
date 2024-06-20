@@ -30,8 +30,8 @@ services:
       - "traefik.http.routers.tautulli-rtr.rule=Host(`tautulli.$DOMAINNAME`)"
       - "traefik.http.routers.tautulli-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.tautulli-rtr-bypass.middlewares=chain-oauth@file"
-      - "traefik.http.routers.tautulli-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.tautulli-rtr-bypass.middlewares=chain-authelia@file"
+      - "traefik.http.routers.tautulli-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.tautulli-rtr.service=tautulli-svc"
       - "traefik.http.routers.tautulli-rtr-bypass.service=tautulli-svc"

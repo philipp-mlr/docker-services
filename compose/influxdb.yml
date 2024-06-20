@@ -21,7 +21,7 @@ services:
       - "traefik.http.routers.influxdb-rtr.entrypoints=https"
       - "traefik.http.routers.influxdb-rtr.rule=Host(`influxdb.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.influxdb-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.influxdb-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.influxdb-rtr.service=influxdb-svc"
       - "traefik.http.services.influxdb-svc.loadbalancer.server.port=8086"

@@ -25,7 +25,7 @@ services:
       - "traefik.http.routers.duplicati-rtr.entrypoints=https"
       - "traefik.http.routers.duplicati-rtr.rule=Host(`duplicati.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.duplicati-rtr.middlewares=chain-oauth@file"
+      - "traefik.http.routers.duplicati-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.duplicati-rtr.service=duplicati-svc"
       - "traefik.http.services.duplicati-svc.loadbalancer.server.port=8200"
