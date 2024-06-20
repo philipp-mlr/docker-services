@@ -2,6 +2,8 @@ services:
   # Authelia (Lite) - Self-Hosted Single Sign-On and Two-Factor Authentication
   authelia:
     container_name: authelia
+    depends_on:
+      - redis-authelia
     image: authelia/authelia:4.38.9
     security_opt:
       - no-new-privileges:true
