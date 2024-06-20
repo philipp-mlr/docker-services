@@ -43,7 +43,7 @@ http:
           - middlewares-rate-limit
           - middlewares-https-redirectscheme
           - middlewares-secure-headers
-          - middlewares-oauth
+          - middlewares-authelia
           - middlewares-compress
 
     chain-nextcloud-no-auth:
