@@ -12,7 +12,7 @@ services:
     ports:
       - "$AUTHELIA_PORT:9091"
     volumes:
-      - $APPDATADIR/appdata/authelia:/config
+      - $APPDATADIR/authelia:/config
     environment:
       - TZ=$TZ
       - PUID=$PUID
