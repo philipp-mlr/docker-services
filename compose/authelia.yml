@@ -9,8 +9,8 @@ services:
     networks:
       - t3_proxy
       - default
-    # ports:
-    #   - "9091:9091"
+    ports:
+      - "$AUTHELIA_PORT:9091"
     volumes:
       - $APPDATADIR/appdata/authelia:/config
     environment:
