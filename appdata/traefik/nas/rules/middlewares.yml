@@ -62,14 +62,6 @@ http:
         referrerPolicy: "same-origin"
         permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=()"
 
-    middlewares-oauth:
-      forwardAuth:
-        address: "http://oauth:4181" # Make sure you have the OAuth service in docker-compose.yml
-        trustForwardHeader: true
-        authResponseHeaders:
-          - "X-Forwarded-User"
-
-
     middlewares-authelia:
       forwardAuth:
         address: "http://authelia:9091/api/verify?rd=https://auth.{{env "DOMAINNAME"}}"
