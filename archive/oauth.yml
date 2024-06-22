@@ -5,7 +5,7 @@ services:
     container_name: oauth
     image: thomseddon/traefik-forward-auth:latest
     networks:
-      - t3_proxy
+      - t2_proxy
     security_opt:
       - no-new-privileges:true
     restart: always
@@ -30,7 +30,7 @@ services:
       - "traefik.http.routers.oauth-rtr.entrypoints=https"
       - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.oauth-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.oauth-rtr.middlewares=chain-oauth@file"
       ## HTTP Services
       - "traefik.http.routers.oauth-rtr.service=oauth-svc"
       - "traefik.http.services.oauth-svc.loadbalancer.server.port=4181"
