@@ -22,6 +22,7 @@ services:
       DB_DATABASE: $SPEEDTEST_DATABASE_NAME
       DB_USERNAME: $SPEEDTEST_DATABASE_USER
       DB_PASSWORD: $SPEEDTEST_DATABASE_PASSWORD
+      APP_KEY: $SPEEDTEST_APP_KEY
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
