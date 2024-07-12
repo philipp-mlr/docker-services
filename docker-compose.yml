@@ -144,6 +144,7 @@ include:
   - compose/factorio.yml
   - compose/valheim.yml
   - compose/minecraft-allthemods9.yml
+  - compose/palworld.yml
   # AI
   - compose/ollama.yml
   - compose/openwebui.yml
