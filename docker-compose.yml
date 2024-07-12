@@ -143,6 +143,7 @@ include:
   - compose/ttt.yml
   - compose/factorio.yml
   - compose/valheim.yml
+  - compose/minecraft-allthemods9.yml
   # AI
   - compose/ollama.yml
   - compose/openwebui.yml
