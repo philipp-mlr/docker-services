@@ -117,6 +117,7 @@ include:
   - compose/notifiarr.yml
   - compose/tika.yml
   - compose/gotenberg.yml
+  - compose/qdirstat.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
