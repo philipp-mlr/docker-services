@@ -20,3 +20,4 @@ services:
       PUID: $PUID
       PGID: $PGID
       RESTART_CRON: ""
+      SERVER_PUBLIC: false
