@@ -34,8 +34,8 @@ services:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
 
       # -- Auth --
-      ACCESS_TOKEN_SECRET: access_token_secret
-      REFRESH_TOKEN_SECRET: refresh_token_secret
+      ACCESS_TOKEN_SECRET: $REACTIVE_RESUME_ACCESS_TOKEN_SECRET
+      REFRESH_TOKEN_SECRET: $REACTIVE_RESUME_REFRESH_TOKEN_SECRET
 
       # -- Emails --
       MAIL_FROM: noreply@philipp.software
