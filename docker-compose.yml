@@ -121,7 +121,7 @@ include:
   - compose/gotenberg.yml
   - compose/qdirstat.yml
   - compose/chrome.yml
-  - compose/miniio.yml
+  - compose/minio.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
