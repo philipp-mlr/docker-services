@@ -1,6 +1,6 @@
 services:
   # Postgres - Open source object-relational database (Speedtest)
-  ostgres-reactive-resume:
+  postgres-reactive-resume:
     image: postgres:latest
     container_name: postgres-reactive-resume
     networks:
