@@ -55,7 +55,7 @@ services:
       # CROWDIN_PERSONAL_TOKEN:
 
       # -- Feature Flags (Optional) --
-      DISABLE_SIGNUPS: false
+      DISABLE_SIGNUPS: true
       DISABLE_EMAIL_AUTH: true
 
       # -- GitHub (Optional) --
