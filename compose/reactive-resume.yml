@@ -27,7 +27,7 @@ services:
       STORAGE_URL: https://minio.$DOMAINNAME
 
       # -- Printer (Chrome) --
-      CHROME_TOKEN: chrome_token
+      CHROME_TOKEN: $CHROME_TOKEN
       CHROME_URL: wss://printer.$DOMAINNAME
 
       # -- Database (Postgres) --
