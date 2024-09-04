@@ -31,7 +31,7 @@ services:
       CHROME_URL: wss://printer.$DOMAINNAME
 
       # -- Database (Postgres) --
-      DATABASE_URL: postgresql://postgres-reactive-resume:5432/reactive_resume?user=reactive_resume&password=${REACTIVE_RESUME_DATABASE_PASSWORD}
+      DATABASE_URL: postgresql://reactive_resume:${REACTIVE_RESUME_DATABASE_PASSWORD}@postgres-reactive-resume:5432/reactive_resume
 
       # -- Auth --
       ACCESS_TOKEN_SECRET: $REACTIVE_RESUME_ACCESS_TOKEN_SECRET
