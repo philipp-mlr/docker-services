@@ -1,7 +1,7 @@
 services:
   # Reactive Resume - A free and open source resume builder
   reactive-resume:
-    image: martadinata666/reactive-resume:latest
+    image: amruthpillai/reactive-resume:latest
     container_name: reactive-resume
     depends_on:
       - postgres-reactive-resume
