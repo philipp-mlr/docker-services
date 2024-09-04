@@ -15,6 +15,4 @@ services:
     environment:
       POSTGRES_DB: $REACTIVE_RESUME_DATABASE_NAME
       POSTGRES_USER: $REACTIVE_RESUME_DATABASE_USER
-      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-    secrets:
-      - postgres_password
+      POSTGRES_PASSWORD: $REACTIVE_RESUME_DATABASE_PASSWORD
