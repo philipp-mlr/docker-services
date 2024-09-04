@@ -1,0 +1,79 @@
+services:
+  # Reactive Resume - A free and open source resume builder
+  reactive-resume:
+    image: martadinata666/reactive-resume:latest
+    container_name: reactive-resume
+    depends_on:
+      - postgres-reactive-resume
+      - minio
+      - chrome
+    networks:
+      t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    ports:
+      - "$REACTIVE_RESUME_PORT:3000"
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      # -- Environment Variables --
+      PORT: 3000
+      NODE_ENV: production
+
+      # -- URLs --
+      PUBLIC_URL: https://resume.$PUBLIC_DOMAINNAME
+      STORAGE_URL: https://minio.$DOMAINNAME
+
+      # -- Printer (Chrome) --
+      CHROME_TOKEN: chrome_token
+      CHROME_URL: wss://printer.$DOMAINNAME
+
+      # -- Database (Postgres) --
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/postgres
+
+      # -- Auth --
+      ACCESS_TOKEN_SECRET: access_token_secret
+      REFRESH_TOKEN_SECRET: refresh_token_secret
+
+      # -- Emails --
+      MAIL_FROM: noreply@philipp.software
+      # SMTP_URL: smtp://user:pass@smtp:587 # Optional
+
+      # -- Storage (Minio) --
+      STORAGE_ENDPOINT: minio
+      STORAGE_PORT: 9000
+      STORAGE_BUCKET: default
+      STORAGE_ACCESS_KEY: $MINIO_ROOT_USER
+      STORAGE_SECRET_KEY: $MINIO_ROOT_PASSWORD
+      STORAGE_USE_SSL: false
+      STORAGE_SKIP_BUCKET_CHECK: false
+
+      # -- Crowdin (Optional) --
+      # CROWDIN_PROJECT_ID:
+      # CROWDIN_PERSONAL_TOKEN:
+
+      # -- Feature Flags (Optional) --
+      # DISABLE_SIGNUPS: false
+      # DISABLE_EMAIL_AUTH: false
+
+      # -- GitHub (Optional) --
+      # GITHUB_CLIENT_ID: github_client_id
+      # GITHUB_CLIENT_SECRET: github_client_secret
+      # GITHUB_CALLBACK_URL: https://example.com/api/auth/github/callback
+
+      # -- Google (Optional) --
+      # GOOGLE_CLIENT_ID: google_client_id
+      # GOOGLE_CLIENT_SECRET: google_client_secret
+      # GOOGLE_CALLBACK_URL: https://example.com/api/auth/google/callback
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.reactive-resume-rtr.entrypoints=https"
+      - "traefik.http.routers.reactive-resume-rtr.rule=Host(`resume.$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.reactive-resume-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.reactive-resume-rtr.service=reactive-resume-svc"
+      - "traefik.http.services.reactive-resume-svc.loadbalancer.server.port=3000"

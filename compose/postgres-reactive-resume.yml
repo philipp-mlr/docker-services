@@ -1,0 +1,20 @@
+services:
+  # Postgres - Open source object-relational database (Speedtest)
+  ostgres-reactive-resume:
+    image: postgres:latest
+    container_name: postgres-reactive-resume
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$POSTGRES_REACTIVE_RESUME_PORT:5432"
+    volumes:
+      - $APPDATADIR/postgres_reactive_resume/:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: $REACTIVE_RESUME_DATABASE_NAME
+      POSTGRES_USER: $REACTIVE_RESUME_DATABASE_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password

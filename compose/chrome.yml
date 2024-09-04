@@ -1,0 +1,29 @@
+services:
+  # Chrome - Headless Chrome (Reactive Resume)
+  chrome:
+    image: ghcr.io/browserless/chromium:latest
+    container_name: chrome
+    networks:
+      t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      PGID: $PGID
+      TIMEOUT: 10000
+      CONCURRENT: 10
+      TOKEN: $CHROME_TOKEN
+      EXIT_ON_HEALTH_FAILURE: true
+      PRE_REQUEST_HEALTH_CHECK: true
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.chrome-rtr.entrypoints=https"
+      - "traefik.http.routers.chrome-rtr.rule=Host(`printer.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.chrome-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.chrome-rtr.service=chrome-svc"
+      - "traefik.http.services.chrome-svc.loadbalancer.server.port=3000"
