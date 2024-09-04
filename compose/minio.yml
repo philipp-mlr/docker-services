@@ -8,10 +8,14 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
+    command: server /data
     ports:
       - "$MINIO_PORT:9000"
     volumes:
       - $APPDATADIR/minio/:/data
+    environment:
+      MINIO_ROOT_USER: $MINIO_ROOT_USER
+      MINIO_ROOT_PASSWORD: $MINIO_ROOT_PASSWORD
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
