@@ -4,7 +4,7 @@ services:
     image: ghcr.io/browserless/chromium:latest
     container_name: chrome
     networks:
-      t3_proxy
+      - t3_proxy
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
