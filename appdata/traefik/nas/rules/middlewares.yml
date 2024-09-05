@@ -47,6 +47,9 @@ http:
           - GET
           - OPTIONS
           - PUT
+          - POST
+          - DELETE
+          - PATCH
         accessControlMaxAge: 100
         hostsProxyHeaders:
           - "X-Forwarded-Host"
