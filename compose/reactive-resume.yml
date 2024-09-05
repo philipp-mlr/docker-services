@@ -28,7 +28,7 @@ services:
 
       # -- Printer (Chrome) --
       CHROME_TOKEN: $CHROME_TOKEN
-      CHROME_URL: ws://chrome:3000
+      CHROME_URL: wss://printer.$PUBLIC_DOMAINNAME
 
       # -- Database (Postgres) --
       DATABASE_URL: postgresql://reactive_resume:${REACTIVE_RESUME_DATABASE_PASSWORD}@postgres-reactive-resume:5432/reactive_resume
