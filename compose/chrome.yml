@@ -8,20 +8,12 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    ports:
-      - "$CHROME_PORT:3000"
+    #ports:
+    #  - "$CHROME_PORT:3000"
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
-      TIMEOUT: 60000
+      TIMEOUT: 10000
       CONCURRENT: 10
       TOKEN: $CHROME_TOKEN
-      #PROXY_HOST: printer.$PUBLIC_DOMAINNAME
-      #PROXY_PORT: 3000
-      #PROXY_SSL: false
-      #CORS: true
-      #CORS_ALLOW_ORIGIN: "*.${PUBLIC_DOMAINNAME}"
       EXIT_ON_HEALTH_FAILURE: true
       PRE_REQUEST_HEALTH_CHECK: true
     extra_hosts:

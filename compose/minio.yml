@@ -9,8 +9,8 @@ services:
       - no-new-privileges:true
     restart: unless-stopped
     command: server /data
-    ports:
-      - "$MINIO_PORT:9000"
+    #ports:
+    #  - "$MINIO_PORT:9000"
     volumes:
       - $APPDATADIR/minio/:/data
     environment:
