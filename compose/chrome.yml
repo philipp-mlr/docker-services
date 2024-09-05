@@ -20,8 +20,8 @@ services:
       #PROXY_HOST: printer.$PUBLIC_DOMAINNAME
       #PROXY_PORT: 3000
       #PROXY_SSL: false
-      CORS: true
-      CORS_ALLOW_ORIGIN: "*.${PUBLIC_DOMAINNAME}"
+      #CORS: true
+      #CORS_ALLOW_ORIGIN: "*.${PUBLIC_DOMAINNAME}"
       EXIT_ON_HEALTH_FAILURE: true
       PRE_REQUEST_HEALTH_CHECK: true
     labels:
