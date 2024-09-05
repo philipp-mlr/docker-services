@@ -16,6 +16,8 @@ services:
     environment:
       MINIO_ROOT_USER: $MINIO_ROOT_USER
       MINIO_ROOT_PASSWORD: $MINIO_ROOT_PASSWORD
+      MINIO_DOMAIN: minio.$PUBLIC_DOMAINNAME
+      MINIO_SERVER_URL: https://minio.$PUBLIC_DOMAINNAME
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
