@@ -14,7 +14,7 @@ services:
       TZ: $TZ
       PUID: $PUID
       PGID: $PGID
-      TIMEOUT: 30000
+      TIMEOUT: 10000
       CONCURRENT: 10
       TOKEN: $CHROME_TOKEN
       #PROXY_HOST: printer.$PUBLIC_DOMAINNAME
