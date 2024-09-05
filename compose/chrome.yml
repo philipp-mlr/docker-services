@@ -17,9 +17,9 @@ services:
       TIMEOUT: 10000
       CONCURRENT: 10
       TOKEN: $CHROME_TOKEN
-      PROXY_HOST: printer.$PUBLIC_DOMAINNAME
-      PROXY_PORT: 3000
-      PROXY_SSL: false
+      #PROXY_HOST: printer.$PUBLIC_DOMAINNAME
+      #PROXY_PORT: 3000
+      #PROXY_SSL: false
       CORS: true
       CORS_ALLOW_ORIGIN: "*.${PUBLIC_DOMAINNAME}"
       EXIT_ON_HEALTH_FAILURE: true
