@@ -25,7 +25,7 @@ services:
       WEBCRON_SECRET: $INVOICENINJA_WEBCRON_SECRET
       REQUIRE_HTTPS: false
       PHANTOMJS_PDF_GENERATION: false
-      PDF_GENERATOR: snappdf
+      PDF_GENERATOR: hosted_ninja
       TRUSTED_PROXIES: '*'
       QUEUE_CONNECTION: redis
       CACHE_DRIVER: redis
