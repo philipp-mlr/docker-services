@@ -1,7 +1,7 @@
 services:
   mysql-invoiceninja:
     image: mysql:8.0
-    container_name: mysql-wordpress
+    container_name: mysql-invoiceninja
     networks:
       - t3_proxy
     security_opt:
