@@ -10,8 +10,8 @@ services:
     expose:
       - 80
     volumes:
-      - $APPDATADIR/invoiceninja/public:/var/www/app/public:rw,delegated
-      - $APPDATADIR/invoiceninja/storage:/var/www/app/storage:rw,delegated
+      - $APPDATADIR/invoiceninja/public:/var/www/app/public
+      - $APPDATADIR/invoiceninja/storage:/var/www/app/storage
       - $APPDATADIR/invoiceninja/php/php.ini:/usr/local/etc/php/php.ini
       - $APPDATADIR/invoiceninja/php/php-cli.ini:/usr/local/etc/php/php-cli.ini
     environment:
