@@ -15,6 +15,7 @@ services:
       - $APPDATADIR/invoiceninja/php/php.ini:/usr/local/etc/php/php.ini
       - $APPDATADIR/invoiceninja/php/php-cli.ini:/usr/local/etc/php/php-cli.ini
     environment:
+      IS_DOCKER: true
       APP_NAME: "philipp.software Invoicing"
       APP_URL: https://invoice.$DOMAINNAME
       APP_KEY: $INVOICENINJA_APP_KEY
