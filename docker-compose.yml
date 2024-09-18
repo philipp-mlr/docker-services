@@ -95,6 +95,7 @@ include:
   - compose/glances.yml
   - compose/website.yml
   - compose/reactive-resume.yml
+  - compose/invoiceninja.yml
   # MONITORING
   - compose/uptime-kuma.yml
   - compose/grafana.yml
@@ -109,6 +110,8 @@ include:
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
   - compose/redis-authelia.yml
+  - compose/redis-invoiceninja.yml
+  - compose/mysql-invoiceninja.yml
   # UTILITY
   - compose/adguardhome.yml
   - compose/homeassistant.yml
