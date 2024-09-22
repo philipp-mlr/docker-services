@@ -1,0 +1,29 @@
+version: "3"
+services:
+  timetagger:
+    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    container_name: timetagger
+    restart: unless-stopped
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    expose:
+      - "80"
+    volumes:
+      - $APPDATADIR/timetagger:/opt/_timetagger
+    environment:
+      - TIMETAGGER_BIND: 0.0.0.0:80
+      - TIMETAGGER_DATADIR: /opt/_timetagger
+      - TIMETAGGER_LOG_LEVEL: info
+      - TIMETAGGER_CREDENTIALS: $TIMETAGGER_CREDENTIALS
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.timetagger-rtr.entrypoints=https"
+      - "traefik.http.routers.timetagger-rtr.rule=Host(`tracking.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.timetagger-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.timetagger-rtr.service=timetagger-svc"
+      - "traefik.http.services.timetagger-svc.loadbalancer.server.port=80"

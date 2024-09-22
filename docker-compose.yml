@@ -118,6 +118,7 @@ include:
   - compose/tika.yml
   - compose/gotenberg.yml
   - compose/qdirstat.yml
+  - compose/timetagger.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
