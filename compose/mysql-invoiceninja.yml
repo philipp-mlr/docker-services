@@ -1,0 +1,19 @@
+services:
+  mysql-invoiceninja:
+    image: mysql:8.0
+    container_name: mysql-invoiceninja
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    ports:
+      - "$MYSQL_INVOICENINJA_PORT:5432"
+    environment:
+      MYSQL_DATABASE: $INVOICENINJA_DATABASE_NAME
+      MYSQL_USER: $INVOICENINJA_DATABASE_USER
+      MYSQL_ROOT_PASSWORD: $INVOICENINJA_DATABASE_ROOT_PASSWORD
+      MYSQL_PASSWORD: $INVOICENINJA_DATABASE_PASSWORD
+    volumes:
+      - $APPDATADIR/mysql_invoiceninja/data:/var/lib/mysql
+      - $APPDATADIR/mysql_invoiceninja/backup:/backups:rw

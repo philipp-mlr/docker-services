@@ -94,6 +94,9 @@ include:
   - compose/s-pdf.yml
   - compose/glances.yml
   - compose/website.yml
+  - compose/reactive-resume.yml
+  - compose/invoiceninja.yml
+  - compose/nginx-invoiceninja.yml
   # MONITORING
   - compose/uptime-kuma.yml
   - compose/grafana.yml
@@ -104,9 +107,12 @@ include:
   - compose/postgres-nextcloud.yml
   - compose/postgres-recipes.yml
   - compose/postgres-speedtest.yml
+  - compose/postgres-reactive-resume.yml
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
   - compose/redis-authelia.yml
+  - compose/redis-invoiceninja.yml
+  - compose/mysql-invoiceninja.yml
   # UTILITY
   - compose/adguardhome.yml
   - compose/homeassistant.yml
@@ -119,6 +125,9 @@ include:
   - compose/gotenberg.yml
   - compose/qdirstat.yml
   - compose/timetagger.yml
+  - compose/chrome.yml
+  - compose/minio.yml
+  - compose/protonmail-bridge.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml

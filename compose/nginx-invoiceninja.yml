@@ -1,0 +1,24 @@
+services:
+  # nginx-invoiceninja - Application Dashboard
+  nginx-invoiceninja:
+    image: nginx
+    container_name: nginx-invoiceninja
+    networks:
+      - t3_proxy
+    security_opt:
+    - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/invoiceninja/nginx/in-vhost.conf:/etc/nginx/conf.d/in-vhost.conf:ro
+      - $APPDATADIR/invoiceninja/storage:/var/www/app/storage:ro
+      - $APPDATADIR/invoiceninja/public:/var/www/app/public:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.nginx-invoiceninja-rtr.entrypoints=https"
+      - "traefik.http.routers.nginx-invoiceninja-rtr.rule=Host(`invoice.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.nginx-invoiceninja-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.nginx-invoiceninja-rtr.service=nginx-invoiceninja-svc"
+      - "traefik.http.services.nginx-invoiceninja-svc.loadbalancer.server.port=80"

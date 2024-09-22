@@ -19,3 +19,5 @@ services:
       SERVER_PASS: $VALHEIM_PASSWORD
       PUID: $PUID
       PGID: $PGID
+      RESTART_CRON: ""
+      SERVER_PUBLIC: false

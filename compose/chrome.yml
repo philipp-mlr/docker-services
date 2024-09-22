@@ -1,0 +1,31 @@
+services:
+  # Chrome - Headless Chrome (Reactive Resume)
+  chrome:
+    image: ghcr.io/browserless/chromium:latest
+    container_name: chrome
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    #ports:
+    #  - "$CHROME_PORT:3000"
+    environment:
+      TIMEOUT: 10000
+      CONCURRENT: 10
+      TOKEN: $CHROME_TOKEN
+      EXIT_ON_HEALTH_FAILURE: true
+      HEALTH: true
+      DEBUG: "*"
+    extra_hosts:
+      - host.docker.internal:host-gateway      
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.chrome-rtr.entrypoints=https"
+      - "traefik.http.routers.chrome-rtr.rule=Host(`printer.$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.chrome-rtr.middlewares=chain-no-auth-public@file"
+      ## HTTP Services
+      - "traefik.http.routers.chrome-rtr.service=chrome-svc"
+      - "traefik.http.services.chrome-svc.loadbalancer.server.port=3000"

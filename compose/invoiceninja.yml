@@ -1,0 +1,61 @@
+services:
+  invoiceninja:
+    image: invoiceninja/invoiceninja:5
+    container_name: invoiceninja
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+    expose:
+      - 80
+    volumes:
+      - $APPDATADIR/invoiceninja/public:/var/www/app/public
+      - $APPDATADIR/invoiceninja/storage:/var/www/app/storage
+      - $APPDATADIR/invoiceninja/php/php.ini:/usr/local/etc/php/php.ini
+      - $APPDATADIR/invoiceninja/php/php-cli.ini:/usr/local/etc/php/php-cli.ini
+    environment:
+      LOCAL_DOWNLOAD: FALSE
+      IS_DOCKER: true
+      APP_NAME: "philipp.software Invoicing"
+      APP_URL: https://invoice.$DOMAINNAME
+      APP_KEY: $INVOICENINJA_APP_KEY
+      APP_DEBUG: true
+      API_SECRET: $INVOICENINJA_API_SECRET
+      WEBCRON_SECRET: $INVOICENINJA_WEBCRON_SECRET
+      REQUIRE_HTTPS: false
+      PHANTOMJS_PDF_GENERATION: false
+      PDF_GENERATOR: hosted_ninja
+      TRUSTED_PROXIES: '*'
+      QUEUE_CONNECTION: redis
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      REDIS_HOST: redis-invoiceninja
+      REDIS_PASSWORD: null
+      REDIS_PORT: $REDIS_INVOICENINJA_PORT
+      FILESYSTEM_DRIVER: local
+      DB_HOST: mysql-invoiceninja
+      DB_PORT: 3306
+      DB_DATABASE: $INVOICENINJA_DATABASE_NAME
+      DB_USERNAME: $INVOICENINJA_DATABASE_USER
+      DB_PASSWORD: $INVOICENINJA_DATABASE_PASSWORD
+      IN_USER_EMAIL: $INVOICENINJA_USER_EMAIL
+      IN_PASSWORD: $INVOICENINJA_USER_PASSWORD
+      MAIL_MAILER: smtp
+      MAIL_HOST: $INVOICENINJA_MAIL_HOST
+      MAIL_PORT: $INVOICENINJA_MAIL_PORT
+      MAIL_USERNAME: $INVOICENINJA_MAIL_USER
+      MAIL_PASSWORD: $INVOICENINJA_MAIL_PASSWORD
+      MAIL_ENCRYPTION: ssl
+      MAIL_FROM_ADDRESS: $INVOICENINJA_MAIL_FROM_ADDRESS
+      MAIL_FROM_NAME: $INVOICENINJA_MAIL_FROM_NAME
+    # labels:
+    #   - "traefik.enable=true"
+    #   ## HTTP Routers
+    #   - "traefik.http.routers.invoiceninja-rtr.entrypoints=https"
+    #   - "traefik.http.routers.invoiceninja-rtr.rule=Host(`invoice.$DOMAINNAME`)"
+    #   ## Middlewares
+    #   - "traefik.http.routers.invoiceninja-rtr.middlewares=chain-authelia@file"
+    #   ## HTTP Services
+    #   - "traefik.http.routers.invoiceninja-rtr.service=invoiceninja-svc"
+    #   - "traefik.http.services.invoiceninja-svc.loadbalancer.server.port=80"

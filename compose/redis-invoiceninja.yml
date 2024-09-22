@@ -1,0 +1,15 @@
+services:
+  # redis - In memory key-value store - (InvoiceNinja - Task scheduler and advanced features)
+  redis-invoiceninja:
+    image: redis:latest
+    container_name: redis-invoiceninja
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: --port $REDIS_INVOICENINJA_PORT
+    ports:
+      - "$REDIS_INVOICENINJA_PORT:$REDIS_INVOICENINJA_PORT"
+    volumes:
+      - $APPDATADIR/redis_invoiceninja/:/data
