@@ -18,7 +18,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.mk-website-rtr.entrypoints=https"
-      - "traefik.http.routers.mk-website-rtr.rule=Host(`mk-kuststofftechnik.$PUBLIC_DOMAINNAME`)"
+      - "traefik.http.routers.mk-website-rtr.rule=Host(`mk.$PUBLIC_DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.mk-website-rtr.middlewares=chain-no-auth-public@file"
       ## HTTP Services
