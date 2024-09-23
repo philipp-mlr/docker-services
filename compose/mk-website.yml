@@ -20,7 +20,7 @@ services:
       - "traefik.http.routers.mk-website-rtr.entrypoints=https"
       - "traefik.http.routers.mk-website-rtr.rule=Host(`mk.$PUBLIC_DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.mk-website-rtr.middlewares=chain-no-auth-public@file"
+      - "traefik.http.routers.mk-website-rtr.middlewares.basicauth.users=admin:$$2y$$10$$SE8Omz35IjYykLBtnNFMpu1iofitUil97yrWLl5NP7CBaH/fD1gY"
       ## HTTP Services
       - "traefik.http.routers.mk-website-rtr.service=mk-website-svc"
       - "traefik.http.services.mk-website-svc.loadbalancer.server.port=1323"
