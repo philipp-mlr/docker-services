@@ -124,6 +124,7 @@ include:
   - compose/tika.yml
   - compose/gotenberg.yml
   - compose/qdirstat.yml
+  - compose/timetagger.yml
   - compose/chrome.yml
   - compose/minio.yml
   - compose/protonmail-bridge.yml
