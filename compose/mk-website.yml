@@ -1,0 +1,26 @@
+services:
+  mk-website:
+    image: ghcr.io/philipp-mlr/mk-website:main
+    container_name: mk-website
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    expose:
+      - 1323
+    environment:
+      PUID: $PUID
+      PGID: $PGID
+      TZ: $TZ
+      #CF_TURNSTILE_SECRET: $CF_TURNSTILE_SECRET
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.mk-website-rtr.entrypoints=https"
+      - "traefik.http.routers.mk-website-rtr.rule=Host(`mk-kuststofftechnik.$PUBLIC_DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.mk-website-rtr.middlewares=chain-no-auth-public@file"
+      ## HTTP Services
+      - "traefik.http.routers.mk-website-rtr.service=mk-website-svc"
+      - "traefik.http.services.mk-website-svc.loadbalancer.server.port=1323"

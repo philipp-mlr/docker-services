@@ -160,3 +160,5 @@ include:
   - compose/ollama.yml
   - compose/openwebui.yml
   - compose/comfyui.yml
+  # DEV
+  - compose/mk-website.yml
