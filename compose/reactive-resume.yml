@@ -38,8 +38,8 @@ services:
       REFRESH_TOKEN_SECRET: $REACTIVE_RESUME_REFRESH_TOKEN_SECRET
 
       # -- Emails --
-      MAIL_FROM: noreply@philipp.software
-      # SMTP_URL: smtp://user:pass@smtp:587 # Optional
+      MAIL_FROM: $REACTIVE_RESUME_EMAIL_USER
+      SMTP_URL: smtp://$REACTIVE_RESUME_EMAIL_USER:$REACTIVE_RESUME_EMAIL_PASSWORD@smtp.protonmail.ch:587 # Optional
 
       # -- Storage (Minio) --
       STORAGE_ENDPOINT: minio
