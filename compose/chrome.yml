@@ -17,6 +17,7 @@ services:
       EXIT_ON_HEALTH_FAILURE: true
       HEALTH: true
       DEBUG: "*"
+      PROXY_HOST: printer.$PUBLIC_DOMAINNAME
     extra_hosts:
       - host.docker.internal:host-gateway      
     labels:
