@@ -8,8 +8,8 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    #ports:
-    #  - "$CHROME_PORT:3000"
+    ports:
+     - "$CHROME_PORT:3000"
     environment:
       TIMEOUT: 10000
       CONCURRENT: 10
