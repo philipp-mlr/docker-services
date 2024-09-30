@@ -1,7 +1,7 @@
 services:
   # Postgres - Open source object-relational database (Reactive Resume)
   postgres-reactive-resume:
-    image: postgres:latest
+    image: postgres:16
     container_name: postgres-reactive-resume
     networks:
       - t3_proxy
