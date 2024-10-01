@@ -17,11 +17,11 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.calibre-web-rtr.tls=true"
-      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
-      - "traefik.http.routers.calibre-web-rtr.rule=Host(`draw.$DOMAINNAME`)"
+      - "traefik.http.routers.excalidraw-rtr.tls=true"
+      - "traefik.http.routers.excalidraw-rtr.entrypoints=https"
+      - "traefik.http.routers.excalidraw-rtr.rule=Host(`draw.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.excalidraw-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
-      - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
-      - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=80"
+      - "traefik.http.routers.excalidraw-rtr.service=excalidraw-svc"
+      - "traefik.http.services.excalidraw-svc.loadbalancer.server.port=80"
