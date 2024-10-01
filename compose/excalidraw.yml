@@ -12,6 +12,8 @@ services:
       TZ: $TZ
       PUID: $PUID
       PGID: $PGID
+    expose:
+      - 80
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
