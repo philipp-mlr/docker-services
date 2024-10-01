@@ -97,6 +97,7 @@ include:
   - compose/reactive-resume.yml
   - compose/invoiceninja.yml
   - compose/nginx-invoiceninja.yml
+  - compose/excalidraw.yml
   # MONITORING
   - compose/uptime-kuma.yml
   - compose/grafana.yml
