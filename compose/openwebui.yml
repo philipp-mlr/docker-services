@@ -15,7 +15,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers API
       - "traefik.http.routers.openwebui-rtr-bypass.entrypoints=https"
-      - "traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`)"
+      - "traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`))"
       - "traefik.http.routers.openwebui-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.openwebui-rtr.entrypoints=https"
