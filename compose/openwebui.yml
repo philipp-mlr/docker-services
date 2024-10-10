@@ -13,11 +13,17 @@ services:
       - "host.docker.internal:host-gateway"
     labels:
       - "traefik.enable=true"
+      ## HTTP Routers API
+      - "traefik.http.routers.openwebui-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`)"
+      - "traefik.http.routers.openwebui-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.openwebui-rtr.entrypoints=https"
       - "traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
+      - "traefik.http.routers.openwebui-rtr.priority=99"
       ## Middlewares
       - "traefik.http.routers.openwebui-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.openwebui-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.openwebui-rtr.service=openwebui-svc"
       - "traefik.http.services.openwebui-svc.loadbalancer.server.port=8080"
