@@ -22,7 +22,7 @@ services:
       - "traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
       - "traefik.http.routers.openwebui-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.openwebui-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.openwebui-rtr-bypass.middlewares=chain-no-auth@file"
       - "traefik.http.routers.openwebui-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.openwebui-rtr.service=openwebui-svc"
