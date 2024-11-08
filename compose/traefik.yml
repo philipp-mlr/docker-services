@@ -28,7 +28,7 @@ services:
       - --entrypoints.web.http.redirections.entrypoint.scheme=https
       - --entrypoints.web.http.redirections.entrypoint.permanent=true
       # Allow these IPs to set the X-Forwarded-* headers - Cloudflare IPs: https://www.cloudflare.com/ips/
-      - --entrypoints.https.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
+      - --entrypoints.websecure.forwardedHeaders.trustedIPs=$CLOUDFLARE_IPS,$LOCAL_IPS
       - --api=true
       - --api.dashboard=true
       - --ping=true
@@ -41,14 +41,14 @@ services:
       - --accessLog.filePath=/logs/access.log
       - --accessLog.bufferingSize=100 # Configuring a buffer of 100 lines
       - --accessLog.filters.statusCodes=204-299,400-499,500-599
-      # - --entrypoints.https.http.middlewares=chain-authelia@file
-      - --entrypoints.https.http.tls.options=tls-opts@file
+      # - --entrypoints.websecure.http.middlewares=chain-authelia@file
+      - --entrypoints.websecure.http.tls.options=tls-opts@file
       # Add dns-cloudflare as default certresolver for all services. Also enables TLS and no need to specify on individual services
-      - --entrypoints.https.http.tls.certresolver=dns-cloudflare
-      - --entrypoints.https.http.tls.domains[0].main=$DOMAINNAME
-      - --entrypoints.https.http.tls.domains[0].sans=*.$DOMAINNAME
-      - --entrypoints.https.http.tls.domains[1].main=$PUBLIC_DOMAINNAME
-      - --entrypoints.https.http.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME
+      - --entrypoints.websecure.http.tls.certresolver=dns-cloudflare
+      - --entrypoints.websecure.http.tls.domains[0].main=$DOMAINNAME
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.$DOMAINNAME
+      - --entrypoints.websecure.http.tls.domains[1].main=$PUBLIC_DOMAINNAME
+      - --entrypoints.websecure.http.tls.domains[1].sans=*.$PUBLIC_DOMAINNAME
       - --providers.docker=true
       # Automatically set Host rule for services
       # - --providers.docker.defaultrule=Host(`{{ index .Labels "com.docker.compose.service" }}.$DOMAINNAME`)
