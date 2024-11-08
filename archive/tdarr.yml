@@ -31,7 +31,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.tdarr-rtr.entrypoints=https"
+      - "traefik.http.routers.tdarr-rtr.entrypoints=websecure"
       - "traefik.http.routers.tdarr-rtr.rule=Host(`tdarr.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.tdarr-rtr.middlewares=chain-authelia@file"

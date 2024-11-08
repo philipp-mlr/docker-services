@@ -24,7 +24,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth
-      - "traefik.http.routers.readarr-rtr.entrypoints=https"
+      - "traefik.http.routers.readarr-rtr.entrypoints=websecure"
       - "traefik.http.routers.readarr-rtr.rule=Host(`readarr.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.readarr-rtr.middlewares=chain-authelia@file"

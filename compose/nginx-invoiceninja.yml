@@ -15,7 +15,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.nginx-invoiceninja-rtr.entrypoints=https"
+      - "traefik.http.routers.nginx-invoiceninja-rtr.entrypoints=websecure"
       - "traefik.http.routers.nginx-invoiceninja-rtr.rule=Host(`invoice.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.nginx-invoiceninja-rtr.middlewares=chain-authelia@file"

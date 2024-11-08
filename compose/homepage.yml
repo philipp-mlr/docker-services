@@ -28,7 +28,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      - "traefik.http.routers.homepage-rtr.entrypoints=websecure"
       - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"

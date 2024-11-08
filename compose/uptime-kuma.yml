@@ -14,7 +14,7 @@
       labels:
         - "traefik.enable=true"
         ## HTTP Routers
-        - "traefik.http.routers.uptime-kuma-rtr.entrypoints=https"
+        - "traefik.http.routers.uptime-kuma-rtr.entrypoints=websecure"
         - "traefik.http.routers.uptime-kuma-rtr.rule=Host(`kuma.$DOMAINNAME`)"
         ## Middlewares
         - "traefik.http.routers.uptime-kuma-rtr.middlewares=chain-authelia@file"

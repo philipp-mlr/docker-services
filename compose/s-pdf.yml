@@ -13,7 +13,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.spdf-rtr.entrypoints=https"
+      - "traefik.http.routers.spdf-rtr.entrypoints=websecure"
       - "traefik.http.routers.spdf-rtr.rule=Host(`pdf.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.spdf-rtr.middlewares=chain-authelia@file"

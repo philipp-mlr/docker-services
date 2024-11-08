@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.chrome-rtr.entrypoints=https"
+      - "traefik.http.routers.chrome-rtr.entrypoints=websecure"
       - "traefik.http.routers.chrome-rtr.rule=Host(`printer.$PUBLIC_DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.chrome-rtr.middlewares=chain-no-auth-public@file"

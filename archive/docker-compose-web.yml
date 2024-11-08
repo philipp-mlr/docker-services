@@ -187,7 +187,7 @@ services:
       - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
       # HTTP Routers
-      - "traefik.http.routers.traefik-rtr.entrypoints=https"
+      - "traefik.http.routers.traefik-rtr.entrypoints=websecure"
       - "traefik.http.routers.traefik-rtr.rule=Host(`traefik.$DOMAINNAME`)"
       - "traefik.http.routers.traefik-rtr.tls=true" # Some people had 404s without this
       - "traefik.http.routers.traefik-rtr.tls.certresolver=dns-cloudflare" # Comment out this line after first run of traefik to force the use of wildcard certs
@@ -269,7 +269,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.portainer-rtr.entrypoints=https"
+      - "traefik.http.routers.portainer-rtr.entrypoints=websecure"
       - "traefik.http.routers.portainer-rtr.rule=Host(`portainer.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.portainer-rtr.middlewares=chain-authelia@file"
@@ -295,7 +295,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.homepage-rtr.entrypoints=https"
+      - "traefik.http.routers.homepage-rtr.entrypoints=websecure"
       - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`,`www.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
@@ -327,7 +327,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.oauth-rtr.tls=true"
-      - "traefik.http.routers.oauth-rtr.entrypoints=https"
+      - "traefik.http.routers.oauth-rtr.entrypoints=websecure"
       - "traefik.http.routers.oauth-rtr.rule=Host(`oauth.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.oauth-rtr.middlewares=chain-authelia@file"
@@ -427,7 +427,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.prometheus-rtr.entrypoints=https"
+      - "traefik.http.routers.prometheus-rtr.entrypoints=websecure"
       - "traefik.http.routers.prometheus-rtr.rule=Host(`prom.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.prometheus-rtr.middlewares=chain-authelia@file"
@@ -452,7 +452,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.grafana-rtr.entrypoints=https"
+      - "traefik.http.routers.grafana-rtr.entrypoints=websecure"
       - "traefik.http.routers.grafana-rtr.rule=Host(`grafana.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.grafana-rtr.middlewares=chain-authelia@file"
@@ -479,7 +479,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.webdav-rtr.entrypoints=https"
+      - "traefik.http.routers.webdav-rtr.entrypoints=websecure"
       - "traefik.http.routers.webdav-rtr.rule=Host(`webdav.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.webdav-rtr.middlewares=middlewares-basic-auth@file"

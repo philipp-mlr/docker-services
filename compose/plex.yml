@@ -42,7 +42,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.plexms-rtr.entrypoints=https"
+      - "traefik.http.routers.plexms-rtr.entrypoints=websecure"
       - "traefik.http.routers.plexms-rtr.rule=Host(`plex.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.plexms-rtr.middlewares=chain-no-auth@file"

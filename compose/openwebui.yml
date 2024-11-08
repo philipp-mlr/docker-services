@@ -14,11 +14,11 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers API
-      - "traefik.http.routers.openwebui-rtr-bypass.entrypoints=https"
+      - "traefik.http.routers.openwebui-rtr-bypass.entrypoints=websecure"
       - "traefik.http.routers.openwebui-rtr-bypass.rule=Host(`ai.$DOMAINNAME`) && (PathPrefix(`/api`))"
       - "traefik.http.routers.openwebui-rtr-bypass.priority=100"
       ## HTTP Routers
-      - "traefik.http.routers.openwebui-rtr.entrypoints=https"
+      - "traefik.http.routers.openwebui-rtr.entrypoints=websecure"
       - "traefik.http.routers.openwebui-rtr.rule=Host(`ai.$DOMAINNAME`)"
       - "traefik.http.routers.openwebui-rtr.priority=99"
       ## Middlewares

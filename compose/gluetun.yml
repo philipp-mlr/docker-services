@@ -42,7 +42,7 @@ services:
       - "traefik.http.services.gluetun-svc.loadbalancer.server.port=8000"
       #### qBittorrent
       ## HTTP Routers
-      - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=https"
+      - "traefik.http.routers.gluetun-qbitorrent-rtr.entrypoints=websecure"
       - "traefik.http.routers.gluetun-qbitorrent-rtr.rule=Host(`qbit.$DOMAINNAME`)" # qBittorrent
       ## Middlewares
       - "traefik.http.routers.gluetun-qbitorrent-rtr.middlewares=chain-authelia@file" # qBittorrent
@@ -51,7 +51,7 @@ services:
       - "traefik.http.services.gluetun-bitorrent-svc.loadbalancer.server.port=8095" # qBittorrent
       #### NZBGET
       ## HTTP Routers Auth
-      - "traefik.http.routers.nzbget-rtr.entrypoints=https"
+      - "traefik.http.routers.nzbget-rtr.entrypoints=websecure"
       - "traefik.http.routers.nzbget-rtr.rule=Host(`nzbget.$DOMAINNAME`)"
       - "traefik.http.routers.nzbget-rtr.priority=99"
       ## Middlewares
@@ -63,7 +63,7 @@ services:
       - "traefik.http.services.nzbget-svc.loadbalancer.server.port=6789"
       #### SABnzbd
       ## HTTP Routers Auth
-      - "traefik.http.routers.sabnzbd-rtr.entrypoints=https"
+      - "traefik.http.routers.sabnzbd-rtr.entrypoints=websecure"
       - "traefik.http.routers.sabnzbd-rtr.rule=Host(`sabnzbd.$DOMAINNAME`)"
       - "traefik.http.routers.sabnzbd-rtr.priority=99"
       ## Middlewares

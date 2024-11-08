@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.website-rtr.entrypoints=https"
+      - "traefik.http.routers.website-rtr.entrypoints=websecure"
       - "traefik.http.routers.website-rtr.rule=Host(`$PUBLIC_DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.website-rtr.middlewares=chain-no-auth-public@file"

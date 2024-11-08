@@ -26,7 +26,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.onlyoffice-rtr.tls=true"
-      - "traefik.http.routers.onlyoffice-rtr.entrypoints=https"
+      - "traefik.http.routers.onlyoffice-rtr.entrypoints=websecure"
       - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"

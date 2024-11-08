@@ -13,7 +13,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.it-tools-rtr.entrypoints=https"
+      - "traefik.http.routers.it-tools-rtr.entrypoints=websecure"
       - "traefik.http.routers.it-tools-rtr.rule=Host(`it-tools.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.it-tools-rtr.middlewares=chain-authelia@file"

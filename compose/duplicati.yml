@@ -22,7 +22,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.duplicati-rtr.entrypoints=https"
+      - "traefik.http.routers.duplicati-rtr.entrypoints=websecure"
       - "traefik.http.routers.duplicati-rtr.rule=Host(`duplicati.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.duplicati-rtr.middlewares=chain-authelia@file"

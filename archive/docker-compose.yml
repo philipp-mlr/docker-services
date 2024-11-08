@@ -11,7 +11,7 @@
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.collabora-rtr.tls=true"
-      - "traefik.http.routers.collabora-rtr.entrypoints=https"
+      - "traefik.http.routers.collabora-rtr.entrypoints=websecure"
       - "traefik.http.routers.collabora-rtr.rule=Host(`collabora.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.collabora-rtr.middlewares=chain-no-auth@file"

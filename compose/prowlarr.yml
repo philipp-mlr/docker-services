@@ -21,7 +21,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.prowlarr-rtr.entrypoints=https"
+      - "traefik.http.routers.prowlarr-rtr.entrypoints=websecure"
       - "traefik.http.routers.prowlarr-rtr.rule=Host(`prowlarr.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.prowlarr-rtr.middlewares=chain-authelia@file"

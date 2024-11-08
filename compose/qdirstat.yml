@@ -27,7 +27,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.qdirstat-rtr.entrypoints=https"
+      - "traefik.http.routers.qdirstat-rtr.entrypoints=websecure"
       - "traefik.http.routers.qdirstat-rtr.rule=Host(`qdirstat.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.qdirstat-rtr.middlewares=chain-authelia@file"

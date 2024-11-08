@@ -19,7 +19,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.timetagger-rtr.entrypoints=https"
+      - "traefik.http.routers.timetagger-rtr.entrypoints=websecure"
       - "traefik.http.routers.timetagger-rtr.rule=Host(`tracking.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.timetagger-rtr.middlewares=chain-authelia@file"

@@ -70,7 +70,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.reactive-resume-rtr.entrypoints=https"
+      - "traefik.http.routers.reactive-resume-rtr.entrypoints=websecure"
       - "traefik.http.routers.reactive-resume-rtr.rule=Host(`resume.$PUBLIC_DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.reactive-resume-rtr.middlewares=chain-no-auth-public@file"

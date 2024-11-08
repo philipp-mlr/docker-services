@@ -22,7 +22,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.calibre-rtr.tls=true"
-      - "traefik.http.routers.calibre-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-rtr.entrypoints=websecure"
       - "traefik.http.routers.calibre-rtr.rule=Host(`calibre.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.calibre-rtr.middlewares=chain-authelia@file"

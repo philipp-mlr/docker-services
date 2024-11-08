@@ -24,7 +24,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.calibre-web-rtr.tls=true"
-      - "traefik.http.routers.calibre-web-rtr.entrypoints=https"
+      - "traefik.http.routers.calibre-web-rtr.entrypoints=websecure"
       - "traefik.http.routers.calibre-web-rtr.rule=Host(`books.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.calibre-web-rtr.middlewares=chain-authelia@file"

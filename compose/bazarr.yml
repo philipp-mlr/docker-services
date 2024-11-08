@@ -20,7 +20,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers Auth
-      - "traefik.http.routers.bazarr-rtr.entrypoints=https"
+      - "traefik.http.routers.bazarr-rtr.entrypoints=websecure"
       - "traefik.http.routers.bazarr-rtr.rule=Host(`bazarr.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.bazarr-rtr.middlewares=chain-authelia@file"

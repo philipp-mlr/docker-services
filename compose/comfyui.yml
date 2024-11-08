@@ -23,7 +23,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.comfyui-rtr.entrypoints=https"
+      - "traefik.http.routers.comfyui-rtr.entrypoints=websecure"
       - "traefik.http.routers.comfyui-rtr.rule=Host(`gen.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.comfyui-rtr.middlewares=chain-authelia@file"

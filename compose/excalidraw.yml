@@ -18,7 +18,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.excalidraw-rtr.tls=true"
-      - "traefik.http.routers.excalidraw-rtr.entrypoints=https"
+      - "traefik.http.routers.excalidraw-rtr.entrypoints=websecure"
       - "traefik.http.routers.excalidraw-rtr.rule=Host(`draw.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.excalidraw-rtr.middlewares=chain-authelia@file"

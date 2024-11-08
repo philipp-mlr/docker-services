@@ -65,7 +65,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.paperless-rtr.tls=true"
-      - "traefik.http.routers.paperless-rtr.entrypoints=https"
+      - "traefik.http.routers.paperless-rtr.entrypoints=websecure"
       - "traefik.http.routers.paperless-rtr.rule=Host(`dms.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.paperless-rtr.middlewares=chain-authelia@file"

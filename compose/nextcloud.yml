@@ -44,12 +44,12 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers Auth Bypass
       #- "traefik.http.routers.nextcloud-rtr-bypass.tls=true"
-      #- "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=https"
+      #- "traefik.http.routers.nextcloud-rtr-bypass.entrypoints=websecure"
       #- "traefik.http.routers.nextcloud-rtr-bypass.rule=Host(`$DOMAINNAME`) && (PathPrefix(`/remote.php/dav/files`) || PathPrefix(`/apps/onlyoffice`))"
       #- "traefik.http.routers.nextcloud-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.nextcloud-rtr.tls=true"
-      - "traefik.http.routers.nextcloud-rtr.entrypoints=https"
+      - "traefik.http.routers.nextcloud-rtr.entrypoints=websecure"
       - "traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)"
       #- "traefik.http.routers.nextcloud-rtr.priority=99"
       ## Middlewares

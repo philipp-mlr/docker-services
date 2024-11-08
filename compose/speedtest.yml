@@ -26,7 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
-      - "traefik.http.routers.speedtest-rtr.entrypoints=https"
+      - "traefik.http.routers.speedtest-rtr.entrypoints=websecure"
       - "traefik.http.routers.speedtest-rtr.rule=Host(`speedtest.$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.speedtest-rtr.middlewares=chain-authelia@file"
