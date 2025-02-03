@@ -36,8 +36,8 @@ services:
       DN_READARR_0_URL: http://readarr:$READARR_PORT
       DN_READARR_0_API_KEY: $READARR_API_KEY
       # Plex
-      DN_PLEX_URL: http://plex:$PLEX_PORT
-      DN_PLEX_TOKEN: 
+      # DN_PLEX_URL: http://plex:$PLEX_PORT
+      # DN_PLEX_TOKEN: 
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
