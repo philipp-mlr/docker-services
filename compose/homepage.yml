@@ -35,7 +35,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.homepage-rtr.entrypoints=websecure"
-      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.$DOMAINNAME`)"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
