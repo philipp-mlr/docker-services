@@ -143,8 +143,7 @@ include:
   - compose/plexmm.yml
   - compose/tautulli.yml
   # MAINTAINANCE
-  - compose/cloudddns-cloud.yml
-  - compose/cloudddns-public.yml
+  - compose/cloudflare-ddns.yml
   - compose/dockergc.yml
   - compose/watchtower.yml
   - compose/deunhealth.yml
