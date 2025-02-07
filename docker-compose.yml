@@ -126,7 +126,6 @@ include:
   - compose/timetagger.yml
   - compose/chrome.yml
   - compose/minio.yml
-  - compose/protonmail-bridge.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
