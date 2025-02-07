@@ -1,7 +1,7 @@
 services:
   # Cloudflare DDNS - Dynamic DNS Updater
   cloudflare-ddns:
-    container_name: cloudddns
+    container_name: cloudflare-ddns
     image: favonia/cloudflare-ddns:latest
     networks:
       - t3_proxy
