@@ -15,9 +15,9 @@ services:
       - $APPDATADIR/valheim/data:/opt/valheim
       - $APPDATADIR/valheim/config:/config
     environment:
-      SERVER_NAME: "VALHEIM on ATHENA"
+      SERVER_NAME: "VALHEIM on AKATOSH"
       SERVER_PASS: $VALHEIM_PASSWORD
       PUID: $PUID
       PGID: $PGID
-      RESTART_CRON: ""
-      SERVER_PUBLIC: false
+      RESTART_CRON: "0 5 * * *"
+      SERVER_PUBLIC: true
