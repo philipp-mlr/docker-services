@@ -158,4 +158,5 @@ include:
   - compose/openwebui.yml
   - compose/comfyui.yml
   # DISCORD
-  - compose/redbot.yml
+  - compose/discord-redbot.yml
+  - compose/discord-gsm.yml

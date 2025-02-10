@@ -1,0 +1,18 @@
+services:
+  # Discord GSM - Game server monitor
+  discord-gsm:
+    container_name: discord-gsm
+    image: discordgsm/discord-game-server-monitor:latest
+    networks:
+      t3_proxy:
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/discord-gsm:/usr/src/app/data
+    command: 'python main.py'
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      WHITELIST_GUILDS: $DISCORD_GSM_GUILDS
+      APP_TOKEN: $DISCORD_GSM_TOKEN

@@ -1,7 +1,7 @@
 services:
   # Redbot - Discord Bot
-  redbot:
-    container_name: redbot
+  discord-redbot:
+    container_name: discord-redbot
     image: phasecorex/red-discordbot:latest
     networks:
       t3_proxy:
@@ -9,7 +9,7 @@ services:
       - no-new-privileges:true
     restart: always
     volumes:
-      - $APPDATADIR/redbot:/data
+      - $APPDATADIR/discord-redbot:/data
     environment:
       TZ: $TZ
       PUID: $PUID
