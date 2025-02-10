@@ -147,6 +147,7 @@ include:
   - compose/watchtower.yml
   - compose/deunhealth.yml
   # GAMES
+  - compose/cloudflared.yml
   - compose/playit.yml
   - compose/ttt.yml
   - compose/factorio.yml
