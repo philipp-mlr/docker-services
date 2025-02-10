@@ -157,3 +157,5 @@ include:
   - compose/ollama.yml
   - compose/openwebui.yml
   - compose/comfyui.yml
+  # DISCORD
+  - compose/redbot.yml

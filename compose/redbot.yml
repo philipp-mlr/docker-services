@@ -1,0 +1,17 @@
+services:
+  # Redbot - Discord Bot
+  redbot:
+    container_name: redbot
+    image: phasecorex/red-discordbot:latest
+    networks:
+      t3_proxy:
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/redbot:/data
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      TOKEN: $DISCORD_REDBOT_TOKEN
+      PREFIX: .
