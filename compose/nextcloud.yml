@@ -50,7 +50,7 @@ services:
       ## HTTP Routers
       - "traefik.http.routers.nextcloud-rtr.tls=true"
       - "traefik.http.routers.nextcloud-rtr.entrypoints=websecure"
-      - "traefik.http.routers.nextcloud-rtr.rule=Host(`$DOMAINNAME`) || Host(`www.$DOMAINNAME`)"
+      - "traefik.http.routers.nextcloud-rtr.rule=Host(`cloud.$DOMAINNAME`) || Host(`www.cloud.$DOMAINNAME`)"
       #- "traefik.http.routers.nextcloud-rtr.priority=99"
       ## Middlewares
       #- "traefik.http.routers.nextcloud-rtr-bypass.middlewares=chain-nextcloud-no-auth@file"

@@ -1,0 +1,11 @@
+services:
+  # Cloudflared - Tunnel
+  cloudflared:
+    container_name: cloudflared
+    image: cloudflare/cloudflared:latest
+    networks:
+      t3_proxy:
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    command: tunnel --no-autoupdate run --token $CLOUDFLARED_TOKEN

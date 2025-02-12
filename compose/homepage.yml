@@ -13,6 +13,7 @@ services:
     #  - "$HOMEPAGE_PORT:3000"
     volumes:
       - $APPDATADIR/homepage:/app/config
+      - $APPDATADIR/homepage/icons:/app/public/icons
     environment:
       TZ: $TZ
       PUID: $PUID
@@ -35,7 +36,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers
       - "traefik.http.routers.homepage-rtr.entrypoints=websecure"
-      - "traefik.http.routers.homepage-rtr.rule=Host(`homepage.$DOMAINNAME`)"
+      - "traefik.http.routers.homepage-rtr.rule=Host(`$DOMAINNAME`)"
       ## Middlewares
       - "traefik.http.routers.homepage-rtr.middlewares=chain-authelia@file"
       ## HTTP Services

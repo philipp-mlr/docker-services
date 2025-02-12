@@ -126,7 +126,6 @@ include:
   - compose/timetagger.yml
   - compose/chrome.yml
   - compose/minio.yml
-  - compose/protonmail-bridge.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
@@ -143,8 +142,7 @@ include:
   - compose/plexmm.yml
   - compose/tautulli.yml
   # MAINTAINANCE
-  - compose/cloudddns-cloud.yml
-  - compose/cloudddns-public.yml
+  - compose/cloudflare-ddns.yml
   - compose/dockergc.yml
   - compose/watchtower.yml
   - compose/deunhealth.yml
@@ -159,5 +157,6 @@ include:
   - compose/ollama.yml
   - compose/openwebui.yml
   - compose/comfyui.yml
-  # DEV
-  - compose/mk-website.yml
+  # DISCORD
+  - compose/discord-redbot.yml
+  - compose/discord-gsm.yml
