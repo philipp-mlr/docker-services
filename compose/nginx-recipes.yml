@@ -10,8 +10,8 @@ services:
     restart: always
     volumes:
       - $APPDATADIR/recipes/nginx/:/etc/nginx/conf.d:ro
-      - $APPDATADIR/recipes/mediafiles:/static:ro
-      - $APPDATADIR/recipes/staticfiles:/media:ro
+      - $APPDATADIR/recipes/mediafiles:/media:ro
+      - $APPDATADIR/recipes/staticfiles:/static:ro
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
