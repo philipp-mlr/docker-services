@@ -10,8 +10,8 @@ services:
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
-    ports:
-        - $RECIPES_PORT:8080
+    # ports:
+    #     - $RECIPES_PORT:8080
     environment:
       TZ: $TZ
       PUID: $PUID
@@ -24,18 +24,7 @@ services:
       DB_ENGINE: django.db.backends.postgresql
       SECRET_KEY: $RECIPES_SECRET_KEY
       DEBUG: 0
-      GUNICORN_MEDIA: 1
+      ALLOWED_HOSTS: recipes.$DOMAINNAME
     volumes:
         - $APPDATADIR/recipes/mediafiles:/opt/recipes/mediafiles
         - $APPDATADIR/recipes/staticfiles:/opt/recipes/staticfiles
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.recipes-rtr.tls=true"
-      - "traefik.http.routers.recipes-rtr.entrypoints=websecure"
-      - "traefik.http.routers.recipes-rtr.rule=Host(`recipes.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.recipes-rtr.middlewares=chain-authelia@file"
-      ## HTTP Services
-      - "traefik.http.routers.recipes-rtr.service=recipes-svc"
-      - "traefik.http.services.recipes-svc.loadbalancer.server.port=8080"

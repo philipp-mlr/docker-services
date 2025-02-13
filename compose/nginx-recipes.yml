@@ -1,0 +1,25 @@
+services:
+  # nginx-recipes - Application Dashboard
+  nginx-recipes:
+    image: nginx:mainline-alpine
+    container_name: nginx-recipes
+    networks:
+      - t3_proxy
+    security_opt:
+    - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/recipes/nginx/:/etc/nginx/conf.d:ro
+      - $APPDATADIR/recipes/mediafiles:/static:ro
+      - $APPDATADIR/recipes/staticfiles:/media:ro
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.recipes-rtr.tls=true"
+      - "traefik.http.routers.recipes-rtr.entrypoints=websecure"
+      - "traefik.http.routers.recipes-rtr.rule=Host(`recipes.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.recipes-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.recipes-rtr.service=recipes-svc"
+      - "traefik.http.services.recipes-svc.loadbalancer.server.port=80"
