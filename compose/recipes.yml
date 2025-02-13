@@ -1,7 +1,7 @@
 services:
   # Recipes - recipe manager that allows you to manage your ever growing collection of digital recipes
   recipes:
-    image: vabene1111/recipes
+    image: vabene1111/recipes:latest
     container_name: recipes
     depends_on:
       - postgres-recipes
