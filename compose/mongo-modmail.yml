@@ -11,4 +11,4 @@ services:
       MONGO_INITDB_ROOT_USERNAME: $MONGO_MODMAIL_INITDB_ROOT_USERNAME
       MONGO_INITDB_ROOT_PASSWORD: $MONGO_MODMAIL_INITDB_ROOT_PASSWORD
     volumes:
-      - $APPDATA/mongo_modmail:/data/db
+      - $APPDATADIR/mongo_modmail:/data/db
