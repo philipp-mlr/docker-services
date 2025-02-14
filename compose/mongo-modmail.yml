@@ -1,7 +1,7 @@
 services:
   mongo-modmail:
-    image: mongo
-    container_name: mongo
+    image: mongo-modmail
+    container_name: mongo-modmail
     networks:
       - t3_proxy
     security_opt:
