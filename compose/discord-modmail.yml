@@ -12,7 +12,6 @@ services:
       - mongo-modmail
     volumes:
       - $APPDATADIR/discord-gsm:/usr/src/app/data
-    command: 'python main.py'
     environment:
       TZ: $TZ
       TOKEN: $DISCORD_MODMAIL_TOKEN
