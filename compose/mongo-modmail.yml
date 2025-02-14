@@ -1,0 +1,14 @@
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_MODMAIL_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_MODMAIL_INITDB_ROOT_PASSWORD
+    volumes:
+      - $APPDATA/mongo_modmail:/data/db

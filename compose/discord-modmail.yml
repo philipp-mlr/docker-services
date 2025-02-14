@@ -1,0 +1,23 @@
+services:
+  # Modmail - Discord modmail bot
+  discord-gsm:
+    container_name: discord-modmail
+    image: ghcr.io/modmail-dev/modmail:master
+    networks:
+      t3_proxy:
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    depends_on:
+      - mongo-modmail
+    volumes:
+      - $APPDATADIR/discord-gsm:/usr/src/app/data
+    command: 'python main.py'
+    environment:
+      TZ: $TZ
+      PUID: $PUID
+      TOKEN: $DISCORD_MODMAIL_TOKEN
+      #LOG_URL: https://logs.mymodmailbot.com/
+      GUILD_ID: $DISCORD_MODMAIL_GUILD
+      OWNERS: $DISCORD_MODMAIL_OWNERS
+      CONNECTION_URI: $DISCORD_MODMAIL_MONGODB_CONNECTION_URI
