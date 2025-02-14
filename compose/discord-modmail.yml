@@ -1,6 +1,6 @@
 services:
   # Modmail - Discord modmail bot
-  discord-gsm:
+  discord-modmail:
     container_name: discord-modmail
     image: ghcr.io/modmail-dev/modmail:master
     networks:
