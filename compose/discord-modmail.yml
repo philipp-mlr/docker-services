@@ -15,7 +15,6 @@ services:
     command: 'python main.py'
     environment:
       TZ: $TZ
-      PUID: $PUID
       TOKEN: $DISCORD_MODMAIL_TOKEN
       #LOG_URL: https://logs.mymodmailbot.com/
       GUILD_ID: $DISCORD_MODMAIL_GUILD
