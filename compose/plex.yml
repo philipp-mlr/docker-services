@@ -23,13 +23,13 @@ services:
       - "$PLEX_WEB_TOOLS_PORT:33400"
     volumes:
       - $APPDATADIR/plexms:/config
-      - $MEDIADIR/downloads:/data/downloads
+      - $DOWNLOADDIR:/data/downloads
       - $MEDIADIR:/data/media
       - /dev/shm:/transcode # Offload transcoding to RAM if you have enough RAM
       # Optional. See why the folders below are mounted as volumes https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $MEDIADIR/temp/appdata/plexms/Cache:/config/Library/Application Support/Plex Media Server/Cache
-      - $MEDIADIR/temp/appdata/plexms/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
-      - $MEDIADIR/temp/appdata/plexms/Media:/config/Library/Application Support/Plex Media Server/Media
+      - $MEDIADIR/metadata/plex/Cache:/config/Library/Application Support/Plex Media Server/Cache
+      - $MEDIADIR/metadata/plex/Metadata:/config/Library/Application Support/Plex Media Server/Metadata
+      - $MEDIADIR/metadata/plex/Media:/config/Library/Application Support/Plex Media Server/Media
     environment:
       TZ: $TZ
       HOSTNAME: "plex"

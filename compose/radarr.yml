@@ -15,10 +15,9 @@ services:
     volumes:
       - $APPDATADIR/radarr:/config
       # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
-      - $MEDIADIR/temp/appdata/radarr/MediaCover:/config/MediaCover
-      - $MEDIADIR:/data
-      # - $MEDIADIR/downloads:/data/downloads
-      # - $MEDIADIR/downloads/torrents:/data/downloads/torrents
+      - $MEDIADIR/metadata/radarr:/config/MediaCover
+      - $MEDIADIR/movies:/data
+      - $DOWNLOADDIR:/data/download
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       TZ: $TZ

@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     volumes:
       - $APPDATADIR/qbittorrent:/config
-      - $MEDIADIR/torrents:/data/torrents # Ensure that downloads folder is set to /data/downloads in qBittorrent
+      - $DOWNLOADDIR/torrents:/data/torrents
     environment:
       PUID: 0
       GUID: 0
