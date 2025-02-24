@@ -1,0 +1,24 @@
+services:
+  # Borgmatic - Borg Backup Automation
+  borgmatic:
+    container_name: borgmatic
+    image: ghcr.io/borgmatic-collective/borgmatic
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    volumes:
+      - $APPDATADIR/borgmatic/.state/borgmatic:/root/.local/state/borgmatic
+      - $APPDATADIR/borgmatic/.cache/borg:/root/.cache/borg
+      - $APPDATADIR/borgmatic/.ssh:/root/.ssh
+      - $APPDATADIR/borgmatic/.config/borg:/root/.config/borg
+      - $APPDATADIR/borgmatic/borgmatic.d:/etc/borgmatic.d/
+      - $APPDATADIR/borgmatic/repository:/mnt/borg-repository
+      - /mnt/cache:/mnt/source:ro
+    environment:
+      - TZ: $TZ
+      - BACKUP_CRON: "0 1 * * *" # Daily at 1am
+      - DOCKERCLI: true
+      - BORG_RSH: "ssh -i /root/.ssh/id_ed25519 -p 23"
+      - FILE__BORG_PASSPHRASE: /run/secrets/borg_passphrase
+    secrets:
+      - borg_passphrase

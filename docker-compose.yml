@@ -50,6 +50,9 @@ secrets:
     file: $SECRETSDIR/authelia_session_secret
   authelia_session_redis_password:
     file: $SECRETSDIR/authelia_session_redis_password
+  # Borgmatic
+  borg_passphrase:
+    file: $SECRETSDIR/borg_passphrase
   # Paperless
   paperless_user:
     file: $SECRETSDIR/paperless_user
@@ -119,6 +122,7 @@ include:
   - compose/gluetun.yml
   - compose/calibre.yml
   - compose/duplicati.yml
+  - compose/borgmatic.yml
   - compose/onlyoffice.yml
   - compose/notifiarr.yml
   - compose/tika.yml
