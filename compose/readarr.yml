@@ -13,7 +13,10 @@ services:
       - "$READARR_PORT:8787"
     volumes:
       - $APPDATADIR/readarr:/config
-      - $MEDIADIR:/data
+      # Optional. See why MediaCover is mounted as volume https://github.com/htpcBeginner/docker-traefik/discussions/147
+      - $MEDIADIR/metadata/readarr:/config/MediaCover
+      - $MEDIADIR/books:/data
+      - $DOWNLOADDIR:/data/download
       - "/etc/localtime:/etc/localtime:ro"
     environment:
       TZ: $TZ
