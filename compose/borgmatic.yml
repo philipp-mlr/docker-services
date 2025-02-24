@@ -15,10 +15,10 @@ services:
       - $APPDATADIR/borgmatic/repository:/mnt/borg-repository
       - /mnt/cache:/mnt/source:ro
     environment:
-      - TZ: $TZ
-      - BACKUP_CRON: "0 1 * * *" # Daily at 1am
-      - DOCKERCLI: true
-      - BORG_RSH: "ssh -i /root/.ssh/id_ed25519 -p 23"
-      - FILE__BORG_PASSPHRASE: /run/secrets/borg_passphrase
+      TZ: $TZ
+      BACKUP_CRON: "0 1 * * *" # Daily at 1am
+      DOCKERCLI: true
+      BORG_RSH: "ssh -i /root/.ssh/id_ed25519 -p 23"
+      FILE__BORG_PASSPHRASE: /run/secrets/borg_passphrase
     secrets:
       - borg_passphrase
