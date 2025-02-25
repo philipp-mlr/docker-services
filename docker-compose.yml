@@ -91,7 +91,6 @@ include:
   - compose/nginx-recipes.yml
   - compose/overseerr.yml
   - compose/homepage.yml
-  - compose/speedtest.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
   - compose/glances.yml
@@ -109,7 +108,6 @@ include:
   - compose/postgres-paperless.yml
   - compose/postgres-nextcloud.yml
   - compose/postgres-recipes.yml
-  - compose/postgres-speedtest.yml
   - compose/postgres-reactive-resume.yml
   - compose/redis-paperless.yml
   - compose/redis-nextcloud.yml
