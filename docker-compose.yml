@@ -84,23 +84,23 @@ include:
   # FRONTEND
   - compose/filebrowser.yml
   - compose/calibre-web.yml
-  - compose/portainer.yml
+  #- compose/portainer.yml
   - compose/nextcloud.yml
   - compose/paperless.yml
   - compose/recipes.yml
   - compose/nginx-recipes.yml
   - compose/overseerr.yml
-  - compose/homepage.yml
+  #- compose/homepage.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
-  - compose/glances.yml
+  #- compose/glances.yml
   - compose/website.yml
   - compose/reactive-resume.yml
   - compose/invoiceninja.yml
   - compose/nginx-invoiceninja.yml
   - compose/excalidraw.yml
   # MONITORING
-  - compose/uptime-kuma.yml
+  #- compose/uptime-kuma.yml
   - compose/grafana.yml
   # DATABASE
   - compose/influxdb.yml
@@ -115,7 +115,7 @@ include:
   - compose/redis-invoiceninja.yml
   - compose/mysql-invoiceninja.yml
   # UTILITY
-  - compose/adguardhome.yml
+  #- compose/adguardhome.yml
   - compose/homeassistant.yml
   - compose/gluetun.yml
   - compose/calibre.yml
@@ -146,9 +146,9 @@ include:
   - compose/tautulli.yml
   # MAINTAINANCE
   - compose/cloudflare-ddns.yml
-  - compose/dockergc.yml
-  - compose/watchtower.yml
-  - compose/deunhealth.yml
+  #- compose/dockergc.yml
+  #- compose/watchtower.yml
+  #- compose/deunhealth.yml
   # GAMES
   - compose/playit.yml
   - compose/ttt.yml
