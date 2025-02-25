@@ -6,7 +6,7 @@ services:
     container_name: sonarr-anime
     networks:
       t3_proxy:
-        ipv4_address: 192.168.90.168
+        ipv4_address: 10.0.0.168
     security_opt:
       - no-new-privileges:true
     restart: always

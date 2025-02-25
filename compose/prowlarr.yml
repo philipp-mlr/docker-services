@@ -5,7 +5,7 @@ services:
     container_name: prowlarr
     networks:
       t3_proxy:
-        ipv4_address: 192.168.90.162
+        ipv4_address: 10.0.0.162
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped

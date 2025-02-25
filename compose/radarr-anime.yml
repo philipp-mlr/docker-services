@@ -6,7 +6,7 @@ services:
     container_name: radarr-anime
     networks:
       t3_proxy:
-        ipv4_address: 192.168.90.165
+        ipv4_address: 10.0.0.165
     security_opt:
       - no-new-privileges:true
     restart: always
