@@ -15,15 +15,15 @@ networks:
         - subnet: 10.1.0.0/24
   default:
     driver: bridge
-  socket_proxy:
-    name: socket_proxy
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.91.0/24
-  dockeripvlan:
-    external: true
-    name: br0
+  # socket_proxy:
+  #   name: socket_proxy
+  #   driver: bridge
+  #   ipam:
+  #     config:
+  #       - subnet: 192.168.91.0/24
+  # dockeripvlan:
+  #   external: true
+  #   name: br0
 
 ########################### SECRETS
 
@@ -75,7 +75,7 @@ secrets:
 include:
   # CORE
   - compose/traefik.yml
-  - compose/socket-proxy.yml
+  #- compose/socket-proxy.yml
   - compose/authelia.yml
   # SECURITY
   - compose/crowdsec.yml
