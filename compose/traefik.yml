@@ -12,7 +12,7 @@ services:
     networks:
       t3_proxy:
         ipv4_address: 192.168.90.254 # You can specify a static IP
-      socket_proxy:
+      #socket_proxy:
     security_opt:
       - no-new-privileges:true
     restart: always
