@@ -11,7 +11,7 @@ services:
     image: traefik:latest
     networks:
       t3_proxy:
-        ipv4_address: 10.1.0.254 # You can specify a static IP
+        ipv4_address: 10.0.0.254 # You can specify a static IP
       #socket_proxy:
     security_opt:
       - no-new-privileges:true
