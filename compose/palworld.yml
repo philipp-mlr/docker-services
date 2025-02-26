@@ -4,7 +4,7 @@ services:
     container_name: palworld
     networks:
       games:
-        ipv4_address: 10.1.0.7
+        ipv4_address: 10.0.2.7
     expose:
       - $PALWORLD_PORT/udp        
     restart: unless-stopped

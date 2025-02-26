@@ -34,7 +34,7 @@ services:
       NEXTCLOUD_ADMIN_USER_FILE: /run/secrets/nextcloud_admin_user
       NEXTCLOUD_ADMIN_PASSWORD_FILE: /run/secrets/nextcloud_admin_password
       # Etc
-      TRUSTED_PROXIES: 10.2.0.0/24 $DOMAINNAME
+      TRUSTED_PROXIES: 10.0.1.0/24 $DOMAINNAME
       OVERWRITEPROTOCOL: https
       NEXTCLOUD_TRUSTED_DOMAINS: $DOMAINNAME
       NEXTCLOUD_INIT_HTACCESS: true

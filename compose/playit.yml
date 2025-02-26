@@ -5,7 +5,7 @@ services:
     container_name: playit
     networks:
       games:
-        ipv4_address: 10.1.0.2
+        ipv4_address: 10.0.2.2
     restart: unless-stopped
     volumes:
       - $APPDATADIR/playit/:/etc/playit

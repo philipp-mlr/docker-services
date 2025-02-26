@@ -5,7 +5,7 @@ services:
     container_name: factorio
     networks:
       games:
-        ipv4_address: 10.1.0.4
+        ipv4_address: 10.0.2.4
     expose:
       - $FACTORIO_PORT/udp
     restart: unless-stopped
