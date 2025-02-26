@@ -5,7 +5,7 @@ services:
     container_name: valheim
     networks:
       games:
-        ipv4_address: 10.0.2.6
+        ipv4_address: 10.1.0.6
     cap_add:
       - SYS_NICE
     expose:

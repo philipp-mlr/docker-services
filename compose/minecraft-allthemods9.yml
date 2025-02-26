@@ -5,7 +5,7 @@ services:
     container_name: minecraft-allthemods9
     networks:
       games:
-        ipv4_address: 10.0.2.5
+        ipv4_address: 10.1.0.5
     expose:
       - $MINECRAFT_ALLTHEMODS9_PORT/tcp
     restart: unless-stopped
