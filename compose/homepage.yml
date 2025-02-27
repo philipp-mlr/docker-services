@@ -13,7 +13,7 @@ services:
     volumes:
       - $APPDATADIR/homepage:/app/config
       - $APPDATADIR/homepage/icons:/app/public/icons
-      - /run/user/1000/podman/podman.sock:/var/run/docker.sock
+      - /run/user/1000/podman/podman.sock:/var/run/podman.sock
     environment:
       TZ: $TZ
       PUID: $PUID
