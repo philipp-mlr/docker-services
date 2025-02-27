@@ -3,8 +3,6 @@ services:
   portainer:
     image: portainer/portainer-ee:latest
     container_name: portainer
-    depends_on:
-      - socket-proxy
     networks:
       - t3_proxy
       - socket_proxy
