@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     volumes:
       - $APPDATADIR/qbittorrent:/config
-      - $DOWNLOADDIR/torrents:/data/torrents
+      - $DOWNLOADDIR/torrents:/downloads/torrents
     environment:
       PUID: $PUID
       GUID: $PGID
