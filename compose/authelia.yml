@@ -4,13 +4,13 @@ services:
     container_name: authelia
     depends_on:
       - redis-authelia
-    image: authelia/authelia:4.38.9
+    image: authelia/authelia:latest
     security_opt:
       - no-new-privileges:true
     restart: unless-stopped
     networks:
       - t3_proxy
-      - default
+      #- default
     ports:
       - "$AUTHELIA_PORT:9091"
     volumes:
