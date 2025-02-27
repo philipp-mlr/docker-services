@@ -12,8 +12,8 @@ services:
       - $APPDATADIR/qbittorrent:/config
       - $DOWNLOADDIR/torrents:/data/torrents
     environment:
-      PUID: 0
-      GUID: 0
+      PUID: $PUID
+      GUID: $PGID
       UMASK_SET: 002
       WEBUI_PORT: $QBITTORRENT_PORT
     healthcheck: # https://github.com/qdm12/gluetun/issues/641#issuecomment-933856220
