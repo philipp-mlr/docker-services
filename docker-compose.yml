@@ -84,7 +84,7 @@ include:
   # FRONTEND
   - compose/filebrowser.yml
   - compose/calibre-web.yml
-  #- compose/portainer.yml
+  - compose/portainer.yml
   - compose/nextcloud.yml
   - compose/paperless.yml
   - compose/recipes.yml
@@ -93,7 +93,7 @@ include:
   #- compose/homepage.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
-  #- compose/glances.yml
+  - compose/glances.yml
   - compose/website.yml
   - compose/reactive-resume.yml
   - compose/invoiceninja.yml

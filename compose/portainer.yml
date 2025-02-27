@@ -11,11 +11,11 @@ services:
     security_opt:
     - no-new-privileges:true
     restart: always
-    command: -H tcp://socket-proxy:2375
     ports:
       - "$PORTAINER_PORT:9000"
     volumes:
       - $APPDATADIR/portainer/data:/data # Change to local directory if you want to save/transfer config locally
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
     environment:
       TZ: $TZ
       PUID: $PUID
