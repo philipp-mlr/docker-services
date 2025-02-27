@@ -93,8 +93,8 @@ services:
       - TZ=$TZ
       - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
       - HTPASSWD_FILE=/run/secrets/htpasswd # HTPASSWD_FILE can be whatever as it is not used/called anywhere.
-      - DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
-      - PUBLIC_DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
+      - DOMAINNAME=$DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
+      - PUBLIC_DOMAINNAME=$PUBLIC_DOMAINNAME # Passing the domain name to traefik container to be able to use the variable in rules.
     secrets:
       - cf_token
       - htpasswd
