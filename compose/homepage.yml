@@ -8,6 +8,8 @@ services:
     security_opt:
     - no-new-privileges:true
     restart: always
+    expose:
+      - 3000    
     volumes:
       - $APPDATADIR/homepage:/app/config
       - $APPDATADIR/homepage/icons:/app/public/icons
