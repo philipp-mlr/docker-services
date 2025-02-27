@@ -5,7 +5,6 @@ services:
     container_name: portainer
     networks:
       - t3_proxy
-      - socket_proxy
     security_opt:
     - no-new-privileges:true
     restart: always
