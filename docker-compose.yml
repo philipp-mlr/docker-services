@@ -90,7 +90,7 @@ include:
   - compose/recipes.yml
   - compose/nginx-recipes.yml
   - compose/overseerr.yml
-  #- compose/homepage.yml
+  - compose/homepage.yml
   - compose/it-tools.yml
   - compose/s-pdf.yml
   - compose/glances.yml

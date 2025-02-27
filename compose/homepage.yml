@@ -5,12 +5,9 @@ services:
     container_name: homepage
     networks:
       - t3_proxy
-      - socket_proxy
     security_opt:
     - no-new-privileges:true
     restart: always
-    # ports:
-    #  - "$HOMEPAGE_PORT:3000"
     volumes:
       - $APPDATADIR/homepage:/app/config
       - $APPDATADIR/homepage/icons:/app/public/icons
