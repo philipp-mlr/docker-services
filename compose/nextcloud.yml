@@ -1,7 +1,7 @@
 services:
   # Nextcloud - A suite of client-server software for creating and using file hosting services
   nextcloud:
-    image: lscr.io/linuxserver/nextcloud:latest
+    image: nextcloud:latest
     container_name: nextcloud
     depends_on:
       - redis-nextcloud
@@ -22,9 +22,6 @@ services:
       - nextcloud_admin_user
       - postgres_password
     environment:
-      TZ: $TZ
-      PUID: $PUID
-      PGID: $PGID
       # Postgres
       POSTGRES_HOST: postgres-nextcloud
       POSTGRES_DB: $NEXTCLOUD_DATABASE_NAME
