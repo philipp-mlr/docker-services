@@ -8,7 +8,7 @@ services:
     security_opt:
       - no-new-privileges:true
     expose:
-      - "80"
+      - "8080"
     volumes:
       - $APPDATADIR/timetagger:/opt/_timetagger
     environment:
