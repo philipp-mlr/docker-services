@@ -12,6 +12,7 @@ services:
     volumes:
       - $APPDATADIR/timetagger:/opt/_timetagger
     environment:
+      TIMETAGGER_BIND: 0.0.0.0:80    
       TIMETAGGER_DATADIR: /opt/_timetagger
       TIMETAGGER_LOG_LEVEL: info
       TIMETAGGER_CREDENTIALS: $TIMETAGGER_CREDENTIALS
@@ -24,4 +25,4 @@ services:
       - "traefik.http.routers.timetagger-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.timetagger-rtr.service=timetagger-svc"
-      - "traefik.http.services.timetagger-svc.loadbalancer.server.port=8080"
+      - "traefik.http.services.timetagger-svc.loadbalancer.server.port=80"
