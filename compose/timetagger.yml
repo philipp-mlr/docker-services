@@ -1,6 +1,6 @@
 services:
   timetagger:
-    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    image: ghcr.io/almarklein/timetagger:latest
     container_name: timetagger
     restart: unless-stopped
     networks:
