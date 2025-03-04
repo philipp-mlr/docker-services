@@ -10,6 +10,8 @@ services:
     restart: always
     expose:
       - 3000    
+    cap_add:
+      - NET_RAW
     volumes:
       - $APPDATADIR/homepage:/app/config
       - $APPDATADIR/homepage/icons:/app/public/icons
