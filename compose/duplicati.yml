@@ -17,7 +17,7 @@ services:
       - SYS_ADMIN
     volumes:
       - $APPDATADIR/duplicati/config:/config
-      - /mnt/user/:/shares
+      - /mnt/cache/:/shares
       - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"

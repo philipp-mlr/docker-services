@@ -33,6 +33,8 @@ services:
       WIREGUARD_PRIVATE_KEY: $WIREGUARD_PRIVATE_KEY
       WIREGUARD_PRESHARED_KEY: $WIREGUARD_PRESHARED_KEY
       WIREGUARD_ADDRESSES: $WIREGUARD_ADDRESSES
+      PUID: $PUID
+      PGID: $PGID
     labels:
       - "traefik.enable=true"
       ## Gluetun Built-in HTTP control server

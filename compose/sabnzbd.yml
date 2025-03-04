@@ -11,7 +11,7 @@ services:
     restart: unless-stopped
     volumes:
       - $APPDATADIR/sabnzbd:/config
-      - $DOWNLOADDIR/usenet:/data/usenet
+      - $DOWNLOADDIR/usenet:/downloads/usenet
     environment:
       TZ: $TZ
       PUID: $PUID

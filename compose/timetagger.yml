@@ -1,6 +1,6 @@
 services:
   timetagger:
-    image: ghcr.io/almarklein/timetagger:v23.9.2-nonroot
+    image: ghcr.io/almarklein/timetagger:latest
     container_name: timetagger
     restart: unless-stopped
     networks:
@@ -12,7 +12,7 @@ services:
     volumes:
       - $APPDATADIR/timetagger:/opt/_timetagger
     environment:
-      TIMETAGGER_BIND: 0.0.0.0:80
+      TIMETAGGER_BIND: 0.0.0.0:80    
       TIMETAGGER_DATADIR: /opt/_timetagger
       TIMETAGGER_LOG_LEVEL: info
       TIMETAGGER_CREDENTIALS: $TIMETAGGER_CREDENTIALS

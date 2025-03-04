@@ -5,7 +5,6 @@ services:
     container_name: glances
     networks:
       - t3_proxy
-      - socket_proxy
       - default
     security_opt:
       - no-new-privileges:true
@@ -16,12 +15,11 @@ services:
     volumes:
       #- $APPDATADIR/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
       - $MEDIADIR:/data/data:ro
-      # - /var/run/docker.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
+      - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
     environment:
       # GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
       # GLANCES_OPT: "--export influxdb"
       GLANCES_OPT: "-w"
-      DOCKER_HOST: tcp://socket-proxy:2375
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
