@@ -1,6 +1,6 @@
 services:
   openwebui:
-    image: "ghcr.io/open-webui/open-webui:main"
+    image: "ghcr.io/open-webui/open-webui:cuda"
     container_name: open-webui
     networks:
       - t3_proxy
@@ -9,8 +9,6 @@ services:
       - "$OPENWEBUI_PORT:8080"
     volumes:
       - "$APPDATADIR/open_webui:/app/backend/data"
-    extra_hosts:
-      - slirp4netns:allow_host_loopback=true
     labels:
       - "traefik.enable=true"
       ## HTTP Routers API
