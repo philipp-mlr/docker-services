@@ -2,6 +2,8 @@ services:
   #Ollama - The easiest way to get up and running with large language models.
   ollama:
     image: ollama/ollama:latest
+    networks:
+      - t3_proxy
     container_name: ollama
     ports:
       - "$OLLAMA_PORT:11434"
