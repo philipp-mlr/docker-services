@@ -9,7 +9,7 @@ services:
       - "$OPENWEBUI_PORT:8080"
     volumes:
       - "$APPDATADIR/open_webui:/app/backend/data"
-    network_mode: "slirp4netns:allow_host_loopback=true"
+    #network_mode: "slirp4netns:allow_host_loopback=true"
     labels:
       - "traefik.enable=true"
       ## HTTP Routers API
