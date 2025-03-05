@@ -118,7 +118,6 @@ include:
   #- compose/adguardhome.yml
   - compose/homeassistant.yml
   - compose/gluetun.yml
-  - compose/calibre.yml
   - compose/duplicati.yml
   - compose/borgmatic.yml
   - compose/onlyoffice.yml
