@@ -13,5 +13,5 @@ services:
       - $APPDATADIR/minecraft_allthemods9:/data
     environment:
       EULA: true
-      MOTD: "ALL THE MODS 9 on ATHENA"
+      MOTD: "ALL THE MODS 9 on AKATOSH"
       JVM_OPTS: "-Xms2G -Xmx24G"

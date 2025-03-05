@@ -26,7 +26,7 @@ services:
       SPAWN_ANIMALS: "true" # Determines if animals will be able to spawn.
       SPAWN_MONSTERS: "true" # Determines if monsters will be spawned.
       SPAWN_NPCS: "true" # Determines if villagers will be spawned.
-      MOTD: "CRAZY CRAFT UPDATED on ATHENA" # The message of the day, shown below each server entry in the UI
+      MOTD: "CRAZY CRAFT UPDATED on AKATOSH" # The message of the day, shown below each server entry in the UI
       MAX_PLAYERS: 420
       CONSOLE: "true"
       LEVEL: world
