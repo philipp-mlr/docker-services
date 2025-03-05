@@ -10,7 +10,7 @@ services:
     volumes:
       - "$APPDATADIR/open_webui:/app/backend/data"
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - slirp4netns:allow_host_loopback=true
     labels:
       - "traefik.enable=true"
       ## HTTP Routers API
