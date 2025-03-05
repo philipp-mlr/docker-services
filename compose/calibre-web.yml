@@ -18,7 +18,7 @@ services:
       OAUTHLIB_RELAX_TOKEN_SCOPE: 1 #optional
     volumes:
       - $APPDATADIR/calibre_web/config:/config
-      - $APPDATADIR/calibre_web/calibre:/books
+      - $APPDATADIR/calibre_web/library:/books
       - $MEDIADIR/books:/books
     labels:
       - "traefik.enable=true"
