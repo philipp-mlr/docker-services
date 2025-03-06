@@ -26,7 +26,7 @@ services:
       - "traefik.http.routers.calibre-web-rtr.entrypoints=websecure"
       - "traefik.http.routers.calibre-web-rtr.rule=Host(`books.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-authelia@file"
+      - "traefik.http.routers.calibre-web-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.calibre-web-rtr.service=calibre-web-svc"
       - "traefik.http.services.calibre-web-svc.loadbalancer.server.port=8083"
