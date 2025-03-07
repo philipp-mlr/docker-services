@@ -1,0 +1,9 @@
+http:
+  middlewares:
+    chain-authelia:
+      chain:
+        middlewares:
+          - middlewares-traefik-bouncer
+          - middlewares-rate-limit
+          - middlewares-secure-headers
+          - middlewares-authelia
