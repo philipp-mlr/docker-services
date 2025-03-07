@@ -85,7 +85,7 @@ services:
         protocol: tcp
         mode: host
     volumes:
-      - $APPDATADIR/traefik/nas/rules/:/rules # file provider directory
+      - $APPDATADIR/traefik/rules/:/rules # file provider directory
       - $APPDATADIR/traefik/acme/acme.json:/acme.json # cert location - you must create this emtpy file and change permissions to 600
       - $SERVICEDIR/logs/traefik:/logs # for fail2ban or crowdsec
       - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro
