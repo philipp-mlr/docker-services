@@ -31,11 +31,18 @@ services:
       - postgres_password
     labels:
       - "traefik.enable=true"
+      ## HTTP Routers API
+      #- "traefik.http.routers.immich-rtr-bypass.entrypoints=websecure"
+      #- "traefik.http.routers.immich-rtr-bypass.rule=Host(`photos.$DOMAINNAME`) && (PathPrefix(`/api`) || PathPrefix(`/server`) || /.well-known)"
+      #- "traefik.http.routers.immich-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.immich-rtr.entrypoints=websecure"
       - "traefik.http.routers.immich-rtr.rule=Host(`photos.$DOMAINNAME`)"
+      - "traefik.http.routers.immich-rtr.priority=99"
       ## Middlewares
-      - "traefik.http.routers.immich-rtr.middlewares=chain-no-auth@file"
+      #- "traefik.http.routers.immich-rtr-bypass.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.immich-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
+      #- "traefik.http.routers.immich-rtr-bypass.service=immich-svc"
       - "traefik.http.routers.immich-rtr.service=immich-svc"
       - "traefik.http.services.immich-svc.loadbalancer.server.port=2283"
