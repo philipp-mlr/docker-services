@@ -31,10 +31,16 @@ services:
       - postgres_password
     labels:
       - "traefik.enable=true"
+      ## HTTP Routers API
+      - "traefik.http.routers.immich-rtr-bypass.entrypoints=websecure"
+      - "traefik.http.routers.immich-rtr-bypass.rule=Host(`photos.$DOMAINNAME`) && (PathPrefix(`/api`))"
+      - "traefik.http.routers.immich-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.immich-rtr.entrypoints=websecure"
       - "traefik.http.routers.immich-rtr.rule=Host(`photos.$DOMAINNAME`)"
+      - "traefik.http.routers.immich-rtr-bypass.priority=99"
       ## Middlewares
+      - "traefik.http.routers.immich-rtr-bypass.middlewares=chain-no-auth@file"
       - "traefik.http.routers.immich-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.immich-rtr.service=immich-svc"
