@@ -15,7 +15,7 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - $APPDATA/immich/machine-learning:/cache
+      - $APPDATADIR/immich/machine-learning:/cache
     restart: always
     healthcheck:
       disable: false
