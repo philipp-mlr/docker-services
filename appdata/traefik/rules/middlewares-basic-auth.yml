@@ -1,0 +1,6 @@
+http:
+  middlewares:
+    middlewares-basic-auth:
+      basicAuth:
+        usersFile: "/run/secrets/htpasswd"
+        realm: "Traefik 2 Basic Auth"

@@ -45,7 +45,7 @@ services:
       - "traefik.http.routers.plexms-rtr.entrypoints=websecure"
       - "traefik.http.routers.plexms-rtr.rule=Host(`plex.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.plexms-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.plexms-rtr.middlewares=chain-no-auth-compress@file"
       ## HTTP Servicesnoauth
       - "traefik.http.routers.plexms-rtr.service=plexms-svc"
       - "traefik.http.services.plexms-svc.loadbalancer.server.port=32400"

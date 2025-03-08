@@ -1,7 +1,7 @@
 services:
   openwebui:
-    image: "ghcr.io/open-webui/open-webui:main"
-    container_name: open-webui
+    image: "ghcr.io/open-webui/open-webui:cuda"
+    container_name: openwebui
     networks:
       - t3_proxy
     restart: always
@@ -9,8 +9,7 @@ services:
       - "$OPENWEBUI_PORT:8080"
     volumes:
       - "$APPDATADIR/open_webui:/app/backend/data"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    #network_mode: "slirp4netns:allow_host_loopback=true"
     labels:
       - "traefik.enable=true"
       ## HTTP Routers API

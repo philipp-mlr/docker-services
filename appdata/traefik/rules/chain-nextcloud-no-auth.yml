@@ -1,0 +1,8 @@
+http:
+  middlewares:
+    chain-nextcloud-no-auth:
+      chain:
+        middlewares:
+          - middlewares-traefik-bouncer
+          - middlewares-nextcloud
+          - middlewares-nextcloud-redirect
