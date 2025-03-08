@@ -33,7 +33,7 @@ services:
       - "traefik.enable=true"
       ## HTTP Routers API
       - "traefik.http.routers.immich-rtr-bypass.entrypoints=websecure"
-      - "traefik.http.routers.immich-rtr-bypass.rule=Host(`photos.$DOMAINNAME`) && (PathPrefix(`/api`))"
+      - "traefik.http.routers.immich-rtr-bypass.rule=Host(`photos.$DOMAINNAME`) && (PathPrefix(`/api`) || PathPrefix(`/server`) || /.well-known)"
       - "traefik.http.routers.immich-rtr-bypass.priority=100"
       ## HTTP Routers
       - "traefik.http.routers.immich-rtr.entrypoints=websecure"
