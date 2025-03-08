@@ -1,5 +1,5 @@
 services:
-  immich:
+  immich-server:
     container_name: immich-server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     networks:
