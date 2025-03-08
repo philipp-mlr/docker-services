@@ -1,0 +1,41 @@
+services:
+  immich:
+    container_name: immich-server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    expose:
+      - 2283
+    devices:
+     - /dev/dri:/dev/dri # for harware transcoding
+    volumes:
+      - $APPDATADIR/immich/server:/home/runner
+      - $MEDIADIR/photos:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - redis-immich
+      - postgres-immich
+    environment:
+      IMMICH_TRUSTED_PROXIES: 10.0.0.0/8,photos.$DOMAINNAME
+      DB_HOSTNAME: postgres-immich
+      DB_PORT: 5432
+      DB_USERNAME: $IMMICH_DATABASE_USER
+      DB_PASSWORD_FILE: /run/secrets/postgres_password
+      DB_DATABASE_NAME: $IMMICH_DATABASE_NAME
+      REDIS_HOSTNAME: redis-immich
+      REDIS_PORT: 6379
+    secrets:
+      - postgres_password
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.immich-rtr.entrypoints=websecure"
+      - "traefik.http.routers.immich-rtr.rule=Host(`photos.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.immich-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.immich-rtr.service=immich-svc"
+      - "traefik.http.services.immich-svc.loadbalancer.server.port=2283"

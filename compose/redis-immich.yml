@@ -1,0 +1,16 @@
+services:
+  # redis - In memory key-value store - (Immich: performance)
+  redis-immich:
+    image: docker.io/redis:6.2-alpine@sha256:148bb5411c184abd288d9aaed139c98123eeb8824c5d3fce03cf721db58066d8
+    container_name: redis-immich
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    expose:
+      - 6379
+    healthcheck:
+      test: redis-cli ping || exit 1
+    volumes:
+      - $APPDATADIR/redis_immich/:/data

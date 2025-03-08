@@ -165,3 +165,8 @@ include:
   - compose/discord-gsm.yml
   - compose/discord-modmail.yml
   - compose/mongo-modmail.yml
+  # IMMICH
+  - compose/immich-server.yml
+  - compose/immich-machine-learning.yml
+  - compose/postgres-immich.yml
+  - compose/redis-immich.yml
