@@ -19,7 +19,7 @@ services:
       - redis-immich
       - postgres-immich
     environment:
-      IMMICH_TRUSTED_PROXIES: 10.0.0.0/8,photos.$DOMAINNAME
+      IMMICH_TRUSTED_PROXIES: 10.0.0.0/8
       DB_HOSTNAME: postgres-immich
       DB_PORT: 5432
       DB_USERNAME: $IMMICH_DATABASE_USER
