@@ -75,7 +75,6 @@ secrets:
 include:
   # CORE
   - compose/traefik.yml
-  #- compose/socket-proxy.yml
   - compose/authelia.yml
   # SECURITY
   - compose/crowdsec.yml
