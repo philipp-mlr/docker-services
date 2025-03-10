@@ -1,0 +1,36 @@
+services:
+  scrutiny:
+    image: ghcr.io/analogj/scrutiny:master-omnibus
+    container_name: scrutiny
+    devices:
+        - /dev/sda
+        - /dev/sdb
+        - /dev/sdc
+        - /dev/sdd    
+        - /dev/sde
+        - /dev/sdf
+        - /dev/nvme0n1
+        - /dev/nvme1n1
+    networks:
+      - t3_proxy
+    cap_add:
+        - SYS_RAWIO
+        - SYS_ADMIN #NVMe support
+    security_opt:
+      - no-new-privileges:true
+    restart: always
+    expose:
+      - 8086
+      - 8080
+    volumes:
+      - $APPDATADIR/scrutiny:/opt/scrutiny/config
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.scrutiny-rtr.entrypoints=websecure"
+      - "traefik.http.routers.scrutiny-rtr.rule=Host(`scrutiny.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.scrutiny-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.scrutiny-rtr.service=scrutiny-svc"
+      - "traefik.http.services.scrutiny-svc.loadbalancer.server.port=8080"
