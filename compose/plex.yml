@@ -37,6 +37,7 @@ services:
       PLEX_UID: $PUID
       PLEX_GID: $PGID
       ADVERTISE_IP: "http://localhost:32400,http://$SERVER_IP:32400/,https://plex.$DOMAINNAME"
+      ALLOWED_NETWORKS: 192.168.0.0/16
     secrets:
       - plex_claim
     labels:
