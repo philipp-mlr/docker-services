@@ -16,7 +16,7 @@ services:
       - $APPDATADIR/immich/backup:/appdata/backups
       - $MEDIADIR/photos/assets:/appdata/upload
       - $MEDIADIR/photos/thumbnails:/appdata/thumbnails
-      - $MEDIADIR/photos/encoded-videos:/appdata/encoded-videos
+      - $MEDIADIR/photos/encoded-video:/appdata/encoded-video
       - $MEDIADIR/photos/profiles:/appdata/profiles
       - /etc/localtime:/etc/localtime:ro
     depends_on:
@@ -33,7 +33,7 @@ services:
       REDIS_PORT: 6379
       UPLOAD_LOCATION: /appdata/upload
       THUMB_LOCATION: /appdata/thumbnails
-      ENCODED_VIDEO_LOCATION: /appdata/encoded-videos
+      ENCODED_VIDEO_LOCATION: /appdata/encoded-video
       PROFILE_LOCATION: /appdata/profiles
       BACKUP_LOCATION: /appdata/backups
     secrets:
