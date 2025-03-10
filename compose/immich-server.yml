@@ -13,7 +13,11 @@ services:
      - /dev/dri:/dev/dri # for harware transcoding
     volumes:
       - $APPDATADIR/immich/server:/home/runner
-      - $MEDIADIR/photos:/usr/src/app/upload
+      - $APPDATADIR/immich/backup:/appdata/backups
+      - $MEDIADIR/photos/assets:/appdata/upload
+      - $MEDIADIR/photos/thumbnails:/appdata/thumbnails
+      - $MEDIADIR/photos/encoded-videos:/appdata/encoded-videos
+      - $MEDIADIR/photos/profiles:/appdata/profiles
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - redis-immich
@@ -27,6 +31,11 @@ services:
       DB_DATABASE_NAME: $IMMICH_DATABASE_NAME
       REDIS_HOSTNAME: redis-immich
       REDIS_PORT: 6379
+      UPLOAD_LOCATION: /appdata/upload
+      THUMB_LOCATION: /appdata/thumbnails
+      ENCODED_VIDEO_LOCATION: /appdata/encoded-videos
+      PROFILE_LOCATION: /appdata/profiles
+      BACKUP_LOCATION: /appdata/backups
     secrets:
       - postgres_password
     labels:
