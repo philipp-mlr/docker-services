@@ -11,13 +11,12 @@ services:
         - /dev/sdf
         - /dev/nvme0n1
         - /dev/nvme1n1
+    priviliged: true
     networks:
       - t3_proxy
     cap_add:
         - SYS_RAWIO
         - SYS_ADMIN #NVMe support
-    security_opt:
-      - no-new-privileges:true
     restart: always
     expose:
       - 8086
