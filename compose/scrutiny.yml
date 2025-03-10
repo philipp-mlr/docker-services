@@ -18,11 +18,11 @@ services:
         - SYS_RAWIO
         - SYS_ADMIN #NVMe support
     restart: always
-    expose:
-      - 8086
-      - 8080
+    ports:
+      - $SCRUTINY_PORT:8080
     volumes:
       - $APPDATADIR/scrutiny:/opt/scrutiny/config
+      - /run/udev:/run/udev:ro
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
