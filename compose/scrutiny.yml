@@ -9,8 +9,8 @@ services:
         - /dev/sdd    
         - /dev/sde
         - /dev/sdf
-        - /dev/nvme0n1
-        - /dev/nvme1n1
+        - /dev/nvme0
+        - /dev/nvme1
     priviliged: true
     networks:
       - podman
