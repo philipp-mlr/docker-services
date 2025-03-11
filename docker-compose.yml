@@ -116,6 +116,7 @@ include:
   # UTILITY
   #- compose/adguardhome.yml
   - compose/scrutiny.yml
+  - compose/peanut.yml
   - compose/homeassistant.yml
   - compose/gluetun.yml
   - compose/duplicati.yml

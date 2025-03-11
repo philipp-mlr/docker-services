@@ -1,0 +1,21 @@
+services:
+  # Peanut - The easiest way to get up and running with large language models.
+  peanut:
+    image: brandawg93/peanut:latest
+    container_name: peanut
+    networks:
+      - t3_proxy
+    expose:
+      - 8080
+    volumes:
+      - "$APPDATADIR/peanut:/root/.peanut"
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.peanut-rtr.entrypoints=websecure"
+      - "traefik.http.routers.peanut-rtr.rule=Host(`peanut.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.peanut-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.peanut-rtr.service=peanut-svc"
+      - "traefik.http.services.peanut-svc.loadbalancer.server.port=8080"
