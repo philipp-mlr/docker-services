@@ -13,7 +13,7 @@ services:
         - /dev/nvme1n1
     priviliged: true
     networks:
-      - t3_proxy
+      - podman
     cap_add:
         - SYS_RAWIO
         - SYS_ADMIN #NVMe support
@@ -23,13 +23,7 @@ services:
     volumes:
       - $APPDATADIR/scrutiny:/opt/scrutiny/config
       - /run/udev:/run/udev:ro
-    labels:
-      - "traefik.enable=true"
-      ## HTTP Routers
-      - "traefik.http.routers.scrutiny-rtr.entrypoints=websecure"
-      - "traefik.http.routers.scrutiny-rtr.rule=Host(`scrutiny.$DOMAINNAME`)"
-      ## Middlewares
-      - "traefik.http.routers.scrutiny-rtr.middlewares=chain-authelia@file"
-      ## HTTP Services
-      - "traefik.http.routers.scrutiny-rtr.service=scrutiny-svc"
-      - "traefik.http.services.scrutiny-svc.loadbalancer.server.port=8080"
+
+networks:
+  podman:
+    external: true
