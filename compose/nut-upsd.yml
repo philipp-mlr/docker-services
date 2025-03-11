@@ -1,0 +1,16 @@
+services:
+  nut-upsd:
+    image: instantlinux/nut-upsd
+    container_name: nut-upsd
+    devices:
+      - /dev/bus/usb # Give container access to USB devices
+    ports:
+      - "$NUT_UPSD_PORT:3493"  # Expose port 3493 to allow access from other devices (for example, I use it to add the UPS to Home Assistant for persistant data tracking, instead of using Influx DB and Grafana)
+    environment:
+      - API_USER=$NUT_UPSD_API_USERNAME #default user, change if desired
+      - API_PASSWORD=$NUT_UPSD_API_PASSWORD # your password, change to your own
+      - DRIVER=usbhid-ups  # Default driver, change if needed
+      - NAME=akatosh # name of the ups, and is now required by the nut-upsd container if I understand correctly. 
+      - DESCRIPTION=Akatosh's epic desk # description of the UPS, I usually put where it is located here.
+      - SERVER=master #default, script priority
+    restart: unless-stopped
