@@ -1,0 +1,29 @@
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    networks:
+      - t3_proxy
+    security_opt:
+      - no-new-privileges:true
+    restart: always    
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - PROXY_DOMAIN=code.$DOMAINNAME #optional
+      - DEFAULT_WORKSPACE=/config/workspace #optional
+    volumes:
+      - $APPDATADIR/code_server:/config
+    expose:
+      - 8443
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.code-rtr.entrypoints=websecure"
+      - "traefik.http.routers.code-rtr.rule=Host(`code.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.code-rtr.middlewares=chain-authelia@file"
+      ## HTTP Services
+      - "traefik.http.routers.code-rtr.service=code-svc"
+      - "traefik.http.services.code-svc.loadbalancer.server.port=8200"
