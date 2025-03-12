@@ -15,6 +15,7 @@ services:
       - DEFAULT_WORKSPACE=/config/workspace #optional
     volumes:
       - $APPDATADIR/code_server:/config
+      - $APPDATADIR:/appdata
     expose:
       - 8443
     labels:
