@@ -15,8 +15,6 @@ services:
     volumes:
       - $APPDATADIR/homepage:/app/config
       - $APPDATADIR/homepage/icons:/app/public/icons
-      - /mnt/disks/:/mnt/disks:ro
-      - /mnt/cache/:/mnt/cache:ro
       - /run/user/1000/podman/podman.sock:/var/run/docker.sock
     environment:
       TZ: $TZ

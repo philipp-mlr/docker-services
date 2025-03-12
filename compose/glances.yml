@@ -14,12 +14,21 @@ services:
     pid: host
     volumes:
       #- $APPDATADIR/glances/glances.conf:/glances/conf/glances.conf # Use this if you want to add a glances.conf file
-      - $MEDIADIR:/data/data:ro
+      #- $MEDIADIR:/data/data:ro
+      - /mnt/disks/:/mnt/disks:ro
+      - /mnt/cache/:/mnt/cache:ro
       - /run/user/1000/podman/podman.sock:/var/run/docker.sock:ro # Use Docker Socket Proxy instead for improved security
     environment:
       # GLANCES_OPT: "-C /glances/conf/glances.conf --quiet --export influxdb"
       # GLANCES_OPT: "--export influxdb"
       GLANCES_OPT: "-w"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     labels:
       - "traefik.enable=true"
       ## HTTP Routers
