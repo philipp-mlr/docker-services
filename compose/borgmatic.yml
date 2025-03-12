@@ -13,7 +13,8 @@ services:
       - $APPDATADIR/borgmatic/.config/borg:/root/.config/borg
       - $APPDATADIR/borgmatic/borgmatic.d:/etc/borgmatic.d/
       - $APPDATADIR/borgmatic/repository:/mnt/borg-repository
-      - /mnt/cache:/mnt/source:ro
+      - /mnt/cache:/mnt/cache:ro
+      - $MEDIA_DIR:/mnt/media:ro
     environment:
       TZ: $TZ
       BACKUP_CRON: "0 1 * * *" # Daily at 1am
