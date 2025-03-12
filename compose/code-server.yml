@@ -26,4 +26,4 @@ services:
       - "traefik.http.routers.code-rtr.middlewares=chain-authelia@file"
       ## HTTP Services
       - "traefik.http.routers.code-rtr.service=code-svc"
-      - "traefik.http.services.code-svc.loadbalancer.server.port=8200"
+      - "traefik.http.services.code-svc.loadbalancer.server.port=8443"
