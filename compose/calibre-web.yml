@@ -1,7 +1,7 @@
 services:
   # calibre-web - a web app that offers a clean and intuitive interface for browsing, reading, and downloading eBooks
   calibre-web:
-    image: lscr.io/linuxserver/calibre-web:latest
+    image: crocodilestick/calibre-web-automated:latest
     container_name: calibre-web
     networks:
       - t3_proxy
@@ -17,7 +17,8 @@ services:
       DOCKER_MODS: linuxserver/mods:universal-calibre #optional
     volumes:
       - $APPDATADIR/calibre_web/config:/config
-      - $APPDATADIR/calibre_web/library:/library
+      - $APPDATADIR/calibre_web/library:/calibre-library
+      - $APPDATADIR/calibre_web/consume//cwa-book-ingest
       - $MEDIADIR/books:/books
     labels:
       - "traefik.enable=true"
