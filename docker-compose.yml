@@ -130,7 +130,7 @@ include:
   - compose/timetagger.yml
   - compose/chrome.yml
   - compose/minio.yml
-  - compose/code.yml
+  - compose/code-server.yml
   # PVR
   - compose/radarr.yml
   - compose/radarr-anime.yml
