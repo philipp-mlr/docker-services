@@ -18,7 +18,7 @@ services:
     volumes:
       - $APPDATADIR/calibre_web/config:/config
       - $APPDATADIR/calibre_web/library:/calibre-library
-      - $APPDATADIR/calibre_web/consume//cwa-book-ingest
+      - $APPDATADIR/calibre_web/consume:/cwa-book-ingest
       - $MEDIADIR/books:/books
     labels:
       - "traefik.enable=true"
