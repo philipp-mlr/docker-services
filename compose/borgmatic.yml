@@ -17,7 +17,7 @@ services:
       - $MEDIADIR:/mnt/disks/media:ro
     environment:
       TZ: $TZ
-      BACKUP_CRON: "0 1 * * *" # Daily at 1am
+      BACKUP_CRON: "0 */6 * * *" # Every 6 hours
       DOCKERCLI: true
       BORG_RSH: "ssh -i /root/.ssh/id_ed25519 -p 23"
       FILE__BORG_PASSPHRASE: /run/secrets/borg_passphrase
