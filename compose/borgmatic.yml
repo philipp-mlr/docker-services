@@ -20,6 +20,4 @@ services:
       BACKUP_CRON: "0 */6 * * *" # Every 6 hours
       DOCKERCLI: true
       BORG_RSH: "ssh -i /root/.ssh/id_ed25519 -p 23"
-      FILE__BORG_PASSPHRASE: /run/secrets/borg_passphrase
-    secrets:
-      - borg_passphrase
+      BORG_PASSPHRASE: $BORG_PASSPHRASE # I coudn't get this to work with a secret
