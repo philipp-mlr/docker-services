@@ -15,7 +15,9 @@ services:
       - DEFAULT_WORKSPACE=/config/workspace #optional
     volumes:
       - $APPDATADIR/code_server:/config
-      - $APPDATADIR:/appdata
+      - $APPDATADIR:/config/workspace/appdata
+      - $SERVICEDIR:/config/workspace/service
+      - /home/philipp/nixos-config:/config/workspace/nixos-config # my nixos config
     expose:
       - 8443
     labels:
