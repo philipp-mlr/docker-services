@@ -25,4 +25,4 @@ services:
       - "traefik.http.routers.paperless-ai-rtr.middlewares=chain-no-auth@file"
       ## HTTP Services
       - "traefik.http.routers.paperless-ai-rtr.service=paperless-ai-svc"
-      - "traefik.http.services.paperless-ai-svc.loadbalancer.server.port=5055"
+      - "traefik.http.services.paperless-ai-svc.loadbalancer.server.port=3000"
