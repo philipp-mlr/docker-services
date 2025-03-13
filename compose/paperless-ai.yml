@@ -1,0 +1,28 @@
+services:
+  paperless-ai:
+    image: clusterzx/paperless-ai
+    container_name: paperless-ai
+    networks:
+      - t3_proxy
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges=true
+    environment:
+      - PUID=1000
+      - PGID=1000
+    expose:
+      - 3000
+    volumes:
+      - $APPDATADIR/paperless_ai:/app/data
+    labels:
+      - "traefik.enable=true"
+      ## HTTP Routers
+      - "traefik.http.routers.paperless-ai-rtr.entrypoints=websecure"
+      - "traefik.http.routers.paperless-ai-rtr.rule=Host(`ai-dms.$DOMAINNAME`)"
+      ## Middlewares
+      - "traefik.http.routers.paperless-ai-rtr.middlewares=chain-no-auth@file"
+      ## HTTP Services
+      - "traefik.http.routers.paperless-ai-rtr.service=paperless-ai-svc"
+      - "traefik.http.services.paperless-ai-svc.loadbalancer.server.port=5055"

@@ -86,6 +86,7 @@ include:
   - compose/portainer.yml
   - compose/nextcloud.yml
   - compose/paperless.yml
+  - compose/paperless-ai.yml
   - compose/recipes.yml
   - compose/nginx-recipes.yml
   - compose/overseerr.yml
