@@ -6,8 +6,6 @@ services:
     container_name: tautulli
     networks:
       - t3_proxy
-    security_opt:
-      - no-new-privileges:true
     restart: always
     ports:
       - "$TAUTULLI_PORT:8181"
