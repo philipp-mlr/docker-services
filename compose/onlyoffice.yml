@@ -29,7 +29,7 @@ services:
       - "traefik.http.routers.onlyoffice-rtr.entrypoints=websecure"
       - "traefik.http.routers.onlyoffice-rtr.rule=Host(`onlyoffice.$DOMAINNAME`)"
       ## Middlewares
-      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-no-auth@file"
+      - "traefik.http.routers.onlyoffice-rtr.middlewares=chain-onlyoffice@file"
       ## HTTP Services
       - "traefik.http.routers.onlyoffice-rtr.service=onlyoffice-svc"
       - "traefik.http.services.onlyoffice-svc.loadbalancer.server.port=80"
