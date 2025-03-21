@@ -2,7 +2,7 @@ http:
   middlewares:
     middlewares-nextcloud:
       headers: 
-        customFrameOptionsValue: "ALLOW-FROM https://{{env "DOMAINNAME"}}"
+        customFrameOptionsValue: "ALLOW-FROM https://cloud.{{env "DOMAINNAME"}}"
         contentSecurityPolicy: "frame-ancestors 'self' {{env "DOMAINNAME"}} *.{{env "DOMAINNAME"}}"
         stsSeconds: 15552011 
         stsIncludeSubdomains: true 

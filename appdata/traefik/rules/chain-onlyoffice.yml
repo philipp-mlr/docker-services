@@ -1,0 +1,8 @@
+http:
+  middlewares:
+    chain-onlyoffice:
+      chain:
+        middlewares:
+          - middlewares-traefik-bouncer # leave this out if you are not using CrowdSec
+          - middlewares-rate-limit
+          - middlewares-secure-headers-onlyoffice # disables the X-Frame-Options header to allow OnlyOffice to be embedded in an iframe in Nextcloud
