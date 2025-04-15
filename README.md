@@ -1,3 +1,9 @@
+# Migrated to podman
+
+You can still use everything in this repo and it will (probably) work!
+
+[More information](https://github.com/philipp-mlr/docker-services/issues/4).
+
 # General
 
 This repository is heavily inspired by the work in [this](https://github.com/htpcBeginner/docker-traefik) repository by htpcBeginner.
